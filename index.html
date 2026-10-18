@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作文招式闯关</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;background:#fff8f0;color:#222;font-size:18px;line-height:1.6}
+header{background:#c62828;color:#fff;padding:14px 16px;position:sticky;top:0;z-index:5}
+header h1{margin:0;font-size:22px;display:inline}
+#starBox{float:right;font-size:18px;margin-top:2px}
+header a{color:#fff;text-decoration:none}
+main{max-width:760px;margin:0 auto;padding:14px}
+.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+h2{font-size:21px;margin:0 0 8px;color:#c62828}
+h3{font-size:18px;margin:10px 0 6px;color:#1e5aa8}
+.tip{color:#666;font-size:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lv{display:block;background:#fff;border-radius:16px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:3px solid transparent;cursor:pointer;color:#222;text-decoration:none}
+.lv.done{border-color:#2e7d4f}
+.lv.lock{opacity:.45;cursor:not-allowed}
+.lv .n{font-size:14px;color:#888}.lv .t{font-size:20px;font-weight:bold}.lv .s{font-size:14px;color:#666}
+.steps{display:flex;gap:6px;margin:6px 0 14px}
+.steps span{flex:1;text-align:center;padding:6px 0;border-radius:10px;background:#eee;font-size:15px}
+.steps span.on{background:#c62828;color:#fff}.steps span.ok{background:#2e7d4f;color:#fff}
+.btn{display:inline-block;margin:10px 8px 0 0;padding:11px 18px;font-size:18px;border:0;border-radius:12px;background:#1e5aa8;color:#fff;cursor:pointer}
+.btn.alt{background:#888}.btn.go{background:#2e7d4f}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:12px;font-size:17px;border:2px solid #ddd;border-radius:12px;background:#fff;cursor:pointer}
+.opt.right{border-color:#2e7d4f;background:#e8f6ec}.opt.wrong{border-color:#c62828;background:#ffecec}
+input[type=text],textarea{width:100%;font-size:18px;padding:10px;border:2px solid #ddd;border-radius:10px;font-family:inherit}
+textarea{min-height:140px;line-height:1.7}
+.fb{margin-top:12px;padding:12px;border-radius:12px;background:#eef4fc}
+.fb.good{background:#e8f6ec}.fb.warn{background:#fff4e0}
+.ex{background:#fff3e6;border-left:5px solid #f0a060;padding:10px 12px;border-radius:8px;margin:8px 0}
+ul{padding-left:22px;margin:6px 0}
+.chips span{display:inline-block;margin:4px;padding:5px 12px;background:#ffecec;color:#c62828;border-radius:20px;font-size:16px;cursor:pointer}
+nav.tools{display:flex;gap:8px;flex-wrap:wrap}
+nav.tools a{flex:1 1 45%;text-align:center;padding:12px;background:#fff3e6;border:2px solid #f0c9a8;border-radius:12px;color:#222;text-decoration:none;font-size:17px}
+.review{background:#fff4e0;border:2px solid #f0b040}
+input[type=range]{width:100%}
+svg{width:100%;height:170px;background:#fff;border-radius:12px}
+.small{font-size:14px;color:#888}
+</style>
+</head>
+<body>
+<header><a href="#home"><h1>作文招式闯关</h1></a><span id="starBox">⭐ 0</span></header>
+<main id="app"></main>
+
+<script>
+/* ============ 关卡数据 ============ */
+const LEVELS = [
+{id:'say', name:'先说后写', tag:'写不出来？先讲给爸爸听',
+ learn:['写不出来，常常不是不会写，是没想好。先用嘴说，比直接写容易得多。',
+        '用三句话说清楚一件事：<b>这件事是什么</b>；<b>我的心情从什么变成了什么</b>；<b>我发现（明白）了什么</b>。',
+        '说完这三句，作文的开头、中间、结尾就都有了。'],
+ ex:'这件事是两天军训。我的心情从期待变成了累，最后变成了骄傲。我明白了，班级优秀靠的是每个人都认真。',
+ quiz:[
+  {q:'写作文卡住、不知道写什么的时候，第一步最好做什么？',o:['先查一篇范文抄下来','先用三句话讲给爸爸听','先想一个好听的开头'],a:1,e:'先说出来，内容就有了。好听的开头可以最后再想。'},
+  {q:'“三句话”里的第二句要说什么？',o:['那天的天气','我的心情从什么变成了什么','去了哪些地方'],a:1,e:'心情的变化，就是作文中间最重要的部分。'},
+  {q:'下面哪一句最像“第三句：我发现了什么”？',o:['我们去了公园，又去了商场。','原来，摔倒了再站起来并不难。','今天天气晴朗。'],a:1,e:'第三句是你自己的发现，常用“原来……”“我明白了……”。'}],
+ rewrite:[
+  {p:'把下面这句流水账，改成“我的心情从……变成了……”：<br><b>我们去了游乐园，玩了过山车，又玩了旋转木马，然后回家了。</b>',checks:[{re:'从[\\s\\S]{1,10}变成|从[\\s\\S]{1,10}到',msg:'有“从……变成……”'}],min:10}],
+ write:{p:'想一件这周发生的事，写出你的三句话（每句一行）。',checks:[{re:'这件事|这次|那天|那次',msg:'第一句：说出是什么事'},{re:'从[\\s\\S]{1,12}(变成|到)',msg:'第二句：心情从……变成……'},{re:'明白|发现|原来|知道了|懂得',msg:'第三句：我发现（明白）了……'}],min:25},
+ tell:'把你的三句话，一字不差地读给爸爸听。'},
+
+{id:'sense', name:'五感观察', tag:'看、听、闻、摸、尝',
+ learn:['写东西不只用眼睛。耳朵、鼻子、手、舌头也能帮你写。',
+        '<b>看</b>到颜色、形状；<b>听</b>到声音；<b>闻</b>到气味；<b>摸</b>到软硬冷热；<b>尝</b>到酸甜苦辣。',
+        '一段话里用上三种感觉，读的人就像站在你旁边。'],
+ ex:'橘子剥开，“嗤”的一声，一股酸酸甜甜的香味冒了出来。橘瓣软软的，凉凉的，放进嘴里一咬，汁水甜得我眯起了眼。',
+ quiz:[
+  {q:'“锅里的油‘滋啦’一声响”用的是哪种感觉？',o:['看','听','尝'],a:1,e:'“滋啦”是声音，用的是耳朵。'},
+  {q:'哪一句用了“摸”的感觉？',o:['小狗的毛软软的，暖乎乎的','小狗是黄色的','小狗汪汪叫'],a:0,e:'软软的、暖乎乎的，是手摸到的。'},
+  {q:'写“食堂的饭很香”，怎样改更好？',o:['食堂的饭非常非常香','红烧肉的香味飘过来，我的肚子“咕噜”叫了一声','食堂的饭特别好吃'],a:1,e:'写出闻到什么、肚子有什么反应，比说“很香”更有画面。'}],
+ rewrite:[
+  {p:'把这句改得有画面，至少用两种感觉：<br><b>下雨了。</b>',checks:[{re:'哗|滴|嗒|沙|声|响',msg:'用了“听”'},{re:'凉|冷|湿|打在|落在|冰',msg:'用了“摸”或身体感觉'},{re:'灰|白|亮|暗|看|水花|雾',msg:'用了“看”'}],need:2,min:12}],
+ write:{p:'写一种你喜欢的水果或零食，写 60 字以上，至少用上三种感觉。',checks:[{re:'红|黄|绿|紫|圆|颜色|亮|看',msg:'看'},{re:'声|咔|嘎|嗤|响|听',msg:'听'},{re:'香|味|闻',msg:'闻'},{re:'软|硬|滑|凉|冰|毛|摸|黏',msg:'摸'},{re:'甜|酸|苦|辣|咸|尝',msg:'尝'}],need:3,min:60},
+ tell:'读给爸爸听，让爸爸闭上眼睛猜：你写的是什么？'},
+
+{id:'zoom', name:'镜头放大', tag:'把一个瞬间写成一段',
+ learn:['流水账是“去了 A，又去了 B”，像快进。好作文是把一个瞬间放慢，像慢镜头。',
+        '放大一个瞬间，问自己五个问题：<b>我看到了什么？听到了什么？身体有什么感觉？有人说了什么？我做了什么？</b>',
+        '一篇作文，只要放大两个镜头就够了。'],
+ ex:'教官喊：“站好，不许动！”太阳照在脸上，一滴汗顺着我的额头往下流，痒痒的。我咬着牙，手指紧紧贴着裤缝，一动也不敢动。',
+ quiz:[
+  {q:'哪一段是“镜头放大”，不是流水账？',o:['我们去了动物园，看了熊猫，看了猴子，又看了老虎。','熊猫抱着竹子“咔嚓咔嚓”地啃，嘴边沾满了碎叶子。我趴在栏杆上，笑得停不下来。','动物园里的动物很多，很好玩。'],a:1,e:'第二段只写看熊猫那一会儿，有声音、有动作、有我。'},
+  {q:'一篇 400 字的作文，最好放大几个镜头？',o:['一个也不用','两个','五个以上'],a:1,e:'两个镜头写细，别的一句带过。'},
+  {q:'放大镜头时，下面哪一项最能让人觉得“真”？',o:['有人说的一句原话','一个好听的成语','一句“这真是难忘的一天”'],a:0,e:'原话最真实，一读就有现场感。'}],
+ rewrite:[
+  {p:'下面是流水账。只挑其中一个瞬间，把它放大：<br><b>运动会上，我跑了 60 米，又跳了远，最后拿了奖状。</b>',checks:[{re:'“|”|"|说|喊|叫',msg:'有人说的话'},{re:'手|脚|腿|心跳|心怦|脸|汗|眼|嗓|喘',msg:'身体的感觉'}],min:20}],
+ write:{p:'挑最近一件事里最难忘的一个瞬间，写 80 字以上。要有：原话、动作、身体感觉。',checks:[{re:'“|”|"|说|喊|叫',msg:'有人说的原话'},{re:'抓|握|跑|跳|推|拉|咬|踩|抬|低|转|扔|拍|捏|攥',msg:'有动作'},{re:'手|脚|腿|心跳|心怦|脸|汗|眼|嗓|喘|膝|背',msg:'有身体感觉'}],min:80},
+ tell:'读给爸爸听，问爸爸：你听完，脑子里有画面了吗？'},
+
+{id:'feel', name:'感受钥匙', tag:'不写“我很……”，写出来让人看得见',
+ learn:['<b>钥匙 1：用身体代替“我很……”</b>。我很紧张 → 手心冒汗，心怦怦直跳。',
+        '<b>钥匙 2：我以为……没想到……</b>。先写本来怎么想，再写真实发生了什么。',
+        '<b>钥匙 3：别人怎么样 → 我怎么样</b>。看到同学被批评，我把背挺得更直了。',
+        '<b>钥匙 4：外面……心里……</b>。我们没有欢呼，可我心里像揣了一团火。'],
+ ex:'我以为上台很简单，没想到一走到台中间，腿就软了。我看见台下的妈妈朝我点头，深吸一口气，终于开口了。',
+ quiz:[
+  {q:'哪一句用了“钥匙 1：用身体代替我很……”？',o:['我很害怕。','我的腿一下子软了，手心全是汗。','我非常非常害怕。'],a:1,e:'腿软、出汗，是身体在说话。'},
+  {q:'“我以为考试会很难，没想到题目都练过”用的是哪把钥匙？',o:['钥匙 1','钥匙 2','钥匙 4'],a:1,e:'“我以为……没想到……”就是钥匙 2，让文章有个转弯。'},
+  {q:'“大家都在笑，可我心里一点也笑不出来”用的是哪把钥匙？',o:['钥匙 2','钥匙 3','钥匙 4'],a:2,e:'外面在笑，心里笑不出来，是钥匙 4“外面……心里……”。'},
+  {q:'下面哪一句最不像感受句？',o:['我的脸“唰”地红了','这真是快乐的一天','我攥紧了拳头'],a:1,e:'“快乐的一天”是套话，看不见画面。'}],
+ rewrite:[
+  {p:'把“<b>我很紧张。</b>”改成用身体写的感受句：',checks:[{re:'手|脚|腿|心跳|心怦|心扑通|脸|汗|眼|嗓|牙|攥|抖|咬',msg:'写了身体的动作'},{re:'^(?![\\s\\S]*很紧张)',msg:'没有再写“很紧张”'}],min:8},
+  {p:'用“我以为……没想到……”写一句话（场景随你）：',checks:[{re:'以为',msg:'有“我以为”'},{re:'没想到|结果|谁知',msg:'有“没想到”'}],min:10}],
+ write:{p:'写一个“心跳最快”的瞬间，80 字以上，至少用两把钥匙。',checks:[{re:'手|脚|腿|心跳|心怦|心扑通|脸|汗|眼泪|嗓|牙|攥|抖',msg:'钥匙 1：身体'},{re:'以为[\\s\\S]{0,40}(没想到|结果|谁知)',msg:'钥匙 2：我以为……没想到'},{re:'看到|看见|听到|发现[\\s\\S]{0,30}我',msg:'钥匙 3：别人 → 我'},{re:'心里',msg:'钥匙 4：心里……'}],need:2,min:80},
+ tell:'读给爸爸听，再告诉爸爸：你用了哪两把钥匙？'},
+
+{id:'frame', name:'三段结构', tag:'开头期待，中间镜头，结尾变化',
+ learn:['<b>开头</b>：写事前的心情，期待、好奇或者紧张，两三句就够。',
+        '<b>中间</b>：放大两个镜头，一个最难的时候，一个转折或者最高兴的时候，这部分最长。',
+        '<b>结尾</b>：写心情的变化，再加一句感悟。',
+        '先写提纲：开头一句、镜头一一句、镜头二一句、结尾一句，再动笔。'],
+ ex:'开头：去军训前，我天天在网上看别人的军训，很期待。<br>镜头一：第一天踩错拍子，手心冒汗。<br>镜头二：宣布一等奖，我们没欢呼，心里却像揣了一团火。<br>结尾：从慌张到骄傲，我明白了优秀靠大家。',
+ quiz:[
+  {q:'三段结构里，哪一部分应该写得最长？',o:['开头','中间','结尾'],a:1,e:'中间放大两个镜头，是最精彩的部分。'},
+  {q:'开头最适合写什么？',o:['事前的心情','整件事的结果','我明白了什么'],a:0,e:'开头写期待或紧张，为后面的变化做铺垫。'},
+  {q:'结尾要有哪两样？',o:['天气和时间','心情的变化 + 一句感悟','去过的所有地方'],a:1,e:'变化让文章完整，感悟让文章有深度。'}],
+ rewrite:[
+  {p:'下面四句顺序乱了。按“开头—中间—中间—结尾”重新排好（写 A、B、C、D 的顺序）：<br>A. 原来，摔倒了也没关系。<br>B. 爸爸一松手，我竟然骑出去好远！<br>C. 我盼着学会骑车，盼了一整个夏天。<br>D. 刚骑上去，“哐”的一声我就摔倒了。',checks:[{re:'^\\s*C\\s*[，,、\\s-]*D\\s*[，,、\\s-]*B\\s*[，,、\\s-]*A\\s*$',msg:'顺序是 C D B A'}],min:4}],
+ write:{p:'给最近的一件事写一个提纲，四行：开头、镜头一、镜头二、结尾。',checks:[{re:'开头',msg:'有开头'},{re:'镜头一|镜头1|中间一|第一个镜头',msg:'有镜头一'},{re:'镜头二|镜头2|中间二|第二个镜头',msg:'有镜头二'},{re:'结尾[\\s\\S]*(明白|原来|发现|懂得|知道)',msg:'结尾有感悟'}],min:40},
+ tell:'拿着提纲讲给爸爸听，每一行说一两句。'},
+
+{id:'ends', name:'开头结尾', tag:'开头不写天气，结尾不说套话',
+ learn:['<b>开头两招</b>：用一个动作开头，或者用一句原话开头。不写“今天天气晴朗”。',
+        '例：“立正！”教官一声吼，我的腿一下子绷直了。',
+        '<b>结尾两招</b>：“我终于明白，……不是……，而是……。”或者“原来，……。”',
+        '不写：“我明白了坚持的重要性”“这真是难忘的一天”。要写<b>你自己的</b>发现。'],
+ ex:'开头：“我们家要来一只小猫啦！”妈妈一说完，我就跳了起来。<br>结尾：原来，照顾一只小猫，比我想的累，也比我想的快乐。',
+ quiz:[
+  {q:'哪个开头更好？',o:['今天天气晴朗，阳光明媚。','“快点！要迟到了！”妈妈在门口喊。','今天是一个难忘的日子。'],a:1,e:'用一句原话开头，一下子就把人拉进现场。'},
+  {q:'哪个结尾更像“自己的发现”？',o:['我明白了坚持的重要性。','这真是难忘的一天。','原来，最难的不是跑完，是跑到一半还不放弃。'],a:2,e:'第三句是你自己从这件事里想到的，别人写不出来。'},
+  {q:'“我终于明白，……不是……，而是……”这个公式适合放在哪里？',o:['开头','结尾','标题'],a:1,e:'这是感悟句，放在结尾。'}],
+ rewrite:[
+  {p:'把这个开头改掉，用一个动作或一句原话开头：<br><b>今天天气晴朗，我们去春游。</b>',checks:[{re:'^(?![\\s\\S]*(天气|晴朗|阳光明媚))',msg:'没有写天气'},{re:'“|”|"|说|喊|跑|跳|背|拉|冲|抓',msg:'用了原话或动作'}],min:8},
+  {p:'用“我终于明白，……不是……，而是……”给一件事写结尾：',checks:[{re:'明白',msg:'有“我终于明白”'},{re:'不是[\\s\\S]+而是',msg:'有“不是……而是……”'},{re:'^(?![\\s\\S]*重要性)',msg:'没有“……的重要性”这种套话'}],min:12}],
+ write:{p:'给一件事写一个开头和一个结尾（分两行）。开头不写天气，结尾写你自己的发现。',checks:[{re:'^(?![\\s\\S]*(天气|晴朗|阳光明媚|万里无云))',msg:'开头没写天气'},{re:'“|”|"|说|喊',msg:'用了原话（或动作）'},{re:'明白|原来|发现|懂得',msg:'结尾有自己的发现'},{re:'^(?![\\s\\S]*(重要性|难忘的一天|很开心))',msg:'没有套话'}],need:4,min:30},
+ tell:'把开头和结尾读给爸爸听，问爸爸：想不想知道中间发生了什么？'}
+];
+
+const TOPICS=['第一次＿＿（游泳 / 上台 / 自己买东西）','那一次，我好紧张','我学会了＿＿','一次失败的尝试','运动会上的我','我当了一回小老师','和爸爸妈妈的一次比赛','被误会的那一天','一次难忘的考试','我终于做到了','记一次游戏','我的心儿怦怦跳'];
+const BODY=['手','脚','腿','心跳','心怦','心扑通','脸','眼','泪','汗','嗓','嘴','牙','低头','抬头','背','肩','膝','鼻','耳','抖','咬','攥','握','跺','缩','屏住','发麻','发软','直冒','打转','蹦','喘'];
+
+/* ============ 存档 ============ */
+const KEY='kidWriting.v1';
+let S=JSON.parse(localStorage.getItem(KEY)||'{}'); S.lv=S.lv||{}; S.stars=S.stars||0;
+const save=()=>{localStorage.setItem(KEY,JSON.stringify(S));document.getElementById('starBox').textContent='⭐ '+S.stars};
+const star=n=>{S.stars+=n;save()};
+const today=()=>new Date().toISOString().slice(0,10);
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)};
+const lvState=id=>S.lv[id]=S.lv[id]||{step:0,done:false};
+save();
+
+/* ============ 工具 ============ */
+const $=id=>document.getElementById(id);
+const app=$('app');
+function runChecks(text,checks,need){
+  const res=checks.map(c=>({msg:c.msg,ok:new RegExp(c.re).test(text)}));
+  const n=res.filter(r=>r.ok).length;
+  return {res,pass:n>=(need||checks.length),n};
+}
+function fbHtml(r,min,len){
+  let h='<ul>'+r.res.map(x=>`<li>${x.ok?'✅':'⬜'} ${x.msg}</li>`).join('')+'</ul>';
+  if(len<min) h+=`<div>还差一点：至少写 ${min} 个字（现在 ${len} 个字）。</div>`;
+  return h;
+}
+const hanLen=t=>(t.match(/[一-龥A-Za-z0-9]/g)||[]).length;
+
+/* ============ 页面 ============ */
+function home(){
+  const due=LEVELS.filter(L=>{const s=S.lv[L.id];return s&&s.done&&s.review&&s.review.some(d=>d<=today())});
+  let h='';
+  if(due.length) h+=`<div class="card review"><h2>今天要复习</h2>${due.map(L=>`<a class="btn" href="#review/${L.id}">${L.name}</a>`).join('')}<div class="small">只做一道改写题，2 分钟。</div></div>`;
+  h+='<div class="card"><h2>六个招式</h2><div class="tip">每个招式五步：学 → 辨 → 改 → 写 → 讲。过关一个，才开下一个。</div></div><div class="grid">';
+  LEVELS.forEach((L,i)=>{
+    const s=S.lv[L.id]; const unlocked=i===0||(S.lv[LEVELS[i-1].id]||{}).done;
+    h+=`<a class="lv ${s&&s.done?'done':''} ${unlocked?'':'lock'}" ${unlocked?`href="#lv/${L.id}"`:''}><div class="n">第 ${i+1} 招 ${s&&s.done?'✅':''}</div><div class="t">${L.name}</div><div class="s">${L.tag}</div></a>`;
+  });
+  h+='</div><div class="card" style="margin-top:14px"><h2>工具</h2><nav class="tools"><a href="#coaster">心情过山车</a><a href="#check">作文自查</a><a href="#topic">抽个题目</a><a href="#parent">给爸爸妈妈</a></nav></div>';
+  app.innerHTML=h;
+}
+
+const STEPS=['学','辨','改','写','讲'];
+function level(id){
+  const L=LEVELS.find(x=>x.id===id); const s=lvState(id);
+  const bar=`<div class="steps">${STEPS.map((t,i)=>`<span class="${i<s.step?'ok':i===s.step?'on':''}">${t}</span>`).join('')}</div>`;
+  let h=`<div class="card"><h2>${L.name}</h2><div class="tip">${L.tag}</div>${bar}`;
+  const step=s.done?5:s.step;
+  if(step===0){
+    h+=`<h3>学一学</h3><ul>${L.learn.map(x=>`<li>${x}</li>`).join('')}</ul><div class="ex">例子：${L.ex}</div><button class="btn" onclick="next('${id}',1)">我看懂了</button>`;
+  }else if(step===1){
+    h+=`<h3>辨一辨</h3><div id="quiz"></div>`;
+  }else if(step===2){
+    h+=`<h3>改一改</h3><div id="rw"></div>`;
+  }else if(step===3){
+    h+=`<h3>写一写</h3><div>${L.write.p}</div><textarea id="wt"></textarea><div class="chips" id="bodyChips"></div><button class="btn" onclick="checkWrite('${id}')">检查</button><div id="wf"></div>`;
+  }else if(step===4){
+    h+=`<h3>讲一讲</h3><div class="ex">${L.tell}</div><button class="btn go" onclick="finish('${id}')">我讲完了，爸爸听懂了</button>`;
+  }else{
+    h+=`<div class="fb good"><b>这一招你过关啦！</b>第 1、3、7 天回来复习一下就记牢了。</div><a class="btn" href="#home">回到首页</a> <button class="btn alt" onclick="redo('${id}')">再练一遍</button>`;
+  }
+  h+='</div>';
+  app.innerHTML=h;
+  if(step===1) quiz(L,0,0);
+  if(step===2) rewrite(L,0);
+  if(step===3) $('bodyChips').innerHTML=['手心冒汗','心怦怦直跳','腿一下子软了','脸唰地红了','眼泪在眼眶里打转','咬着嘴唇','攥紧了拳头','嗓子发干'].map(w=>`<span onclick="$('wt').value+='${w}'">${w}</span>`).join('');
+}
+function next(id,st){lvState(id).step=st;save();level(id);window.scrollTo(0,0)}
+function redo(id){S.lv[id].step=0;S.lv[id].done=false;save();level(id)}
+function finish(id){const s=lvState(id);s.done=true;s.step=5;const t=today();s.review=[addDays(t,1),addDays(t,3),addDays(t,7)];star(1);save();level(id)}
+
+function quiz(L,i,right){
+  const box=$('quiz'); if(!box) return;
+  if(i>=L.quiz.length){
+    const ok=right>=L.quiz.length-1;
+    box.innerHTML=`<div class="fb ${ok?'good':'warn'}">答对 ${right} / ${L.quiz.length} 题。${ok?'很好，下一步！':'再试一次，看看解析。'}</div>`+(ok?`<button class="btn" onclick="next('${L.id}',2)">下一步：改一改</button>`:`<button class="btn alt" onclick="quiz(LEVELS.find(x=>x.id==='${L.id}'),0,0)">再试一次</button>`);
+    if(ok) star(right);
+    return;
+  }
+  const Q=L.quiz[i];
+  box.innerHTML=`<div class="small">第 ${i+1} / ${L.quiz.length} 题</div><div><b>${Q.q}</b></div>`+Q.o.map((o,k)=>`<button class="opt" data-k="${k}">${o}</button>`).join('')+'<div id="qe"></div>';
+  box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    const k=+b.dataset.k, ok=k===Q.a;
+    box.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(+x.dataset.k===Q.a)x.classList.add('right')});
+    if(!ok)b.classList.add('wrong');
+    $('qe').innerHTML=`<div class="fb ${ok?'good':'warn'}">${ok?'答对了！':'再想想：'}${Q.e}</div><button class="btn" id="qn">下一题</button>`;
+    $('qn').onclick=()=>quiz(L,i+1,right+(ok?1:0));
+  });
+}
+function rewrite(L,i){
+  const box=$('rw'); const R=L.rewrite[i];
+  if(!R){box.innerHTML=`<div class="fb good">改得好！</div><button class="btn" onclick="next('${L.id}',3)">下一步：写一写</button>`;return}
+  box.innerHTML=`<div class="small">第 ${i+1} / ${L.rewrite.length} 题</div><div>${R.p}</div><input type="text" id="ri"><button class="btn" id="rb">检查</button><div id="rf"></div>`;
+  $('rb').onclick=()=>{
+    const t=$('ri').value.trim(); const r=runChecks(t,R.checks,R.need); const len=hanLen(t);
+    const ok=r.pass&&len>=(R.min||0);
+    $('rf').innerHTML=`<div class="fb ${ok?'good':'warn'}">${fbHtml(r,R.min||0,len)}${ok?'<b>改得好！（+2 ⭐）</b>':'差一点，按没打勾的地方再改改。'}</div>`+(ok?'<button class="btn" id="rn">下一题</button>':'');
+    if(ok){star(2);$('rn').onclick=()=>rewrite(L,i+1)}
+  };
+}
+function checkWrite(id){
+  const L=LEVELS.find(x=>x.id===id); const t=$('wt').value.trim(); const r=runChecks(t,L.write.checks,L.write.need); const len=hanLen(t);
+  const ok=r.pass&&len>=L.write.min;
+  $('wf').innerHTML=`<div class="fb ${ok?'good':'warn'}">${fbHtml(r,L.write.min,len)}${ok?'<b>写得真好！（+3 ⭐）</b>把最满意的一句抄到“好句子收集”里。':'没打勾的地方，<b>只改一处</b>就好。'}</div>`+(ok?`<button class="btn" onclick="next('${id}',4)">下一步：讲一讲</button>`:'');
+  if(ok) star(3);
+}
+function review(id){
+  const L=LEVELS.find(x=>x.id===id); const R=L.rewrite[Math.floor(Math.random()*L.rewrite.length)];
+  app.innerHTML=`<div class="card review"><h2>复习：${L.name}</h2><div class="ex">${L.learn[0]}</div><div>${R.p}</div><input type="text" id="ri"><button class="btn" id="rb">检查</button><div id="rf"></div></div>`;
+  $('rb').onclick=()=>{
+    const t=$('ri').value.trim(); const r=runChecks(t,R.checks,R.need); const len=hanLen(t); const ok=r.pass&&len>=(R.min||0);
+    $('rf').innerHTML=`<div class="fb ${ok?'good':'warn'}">${fbHtml(r,R.min||0,len)}${ok?'复习完成！（+1 ⭐）':'再改改。'}</div>`+(ok?'<a class="btn" href="#home">回首页</a>':'');
+    if(ok){const s=S.lv[id];s.review=(s.review||[]).filter(d=>d>today());star(1)}
+  };
+}
+
+/* 心情过山车 */
+const PTS=['事前','刚开始','最难的时候','转折','结果'];
+const MOOD={'-5':'难受极了','-4':'很难受','-3':'失落','-2':'有点慌','-1':'不太好','0':'平平','1':'还行','2':'有点开心','3':'开心','4':'很开心','5':'骄傲极了'};
+function coaster(){
+  app.innerHTML=`<div class="card"><h2>心情过山车</h2><div class="tip">拖动滑块给每个时候的心情打分，再写一句“这时候我在做什么”。</div>`+
+  PTS.map((p,i)=>`<div style="margin:10px 0"><b>${p}：<span id="cm${i}">平平</span></b><input type="range" min="-5" max="5" value="0" id="cr${i}" oninput="drawC()"><input type="text" id="ct${i}" placeholder="这时候我在做什么？"></div>`).join('')+
+  `<svg id="cs" viewBox="0 0 500 170"></svg><button class="btn" onclick="doneC()">生成作文骨架</button><div id="co"></div></div>`;
+  drawC();
+}
+function drawC(){
+  const v=PTS.map((_,i)=>+$('cr'+i).value); v.forEach((x,i)=>$('cm'+i).textContent=MOOD[x]);
+  const p=v.map((x,i)=>[40+i*105,85-x*14]);
+  $('cs').innerHTML=`<line x1="20" y1="85" x2="480" y2="85" stroke="#ddd" stroke-dasharray="4"/><polyline points="${p.map(a=>a.join(',')).join(' ')}" fill="none" stroke="#c62828" stroke-width="4"/>`+p.map((a,i)=>`<circle cx="${a[0]}" cy="${a[1]}" r="7" fill="#1e5aa8"/><text x="${a[0]}" y="164" font-size="14" text-anchor="middle">${PTS[i]}</text>`).join('');
+}
+function doneC(){
+  const v=PTS.map((_,i)=>+$('cr'+i).value), t=PTS.map((_,i)=>$('ct'+i).value.trim());
+  const lo=v.indexOf(Math.min(...v)),hi=v.indexOf(Math.max(...v));
+  if(Math.max(...v)===Math.min(...v)){$('co').innerHTML='<div class="fb warn">过山车是一条直线哦。哪一刻最难受？哪一刻最开心？拉开一点。</div>';return}
+  if(t.filter(Boolean).length<3){$('co').innerHTML='<div class="fb warn">至少写 3 句“这时候我在做什么”。</div>';return}
+  star(2);
+  $('co').innerHTML=`<div class="fb good"><b>你的作文骨架（+2 ⭐）</b><br><b>开头：</b>${t[0]||'（写写事前的心情）'}<br><b>镜头一（${PTS[lo]}）：</b>${t[lo]||'（补一句）'}<br><b>镜头二（${PTS[hi]}）：</b>${t[hi]||'（补一句）'}<br><b>结尾：</b>心情从“${MOOD[v[0]]}”到“${MOOD[v[lo]]}”，最后是“${MOOD[v[4]]}”，再加一句感悟。</div>`;
+}
+
+/* 作文自查 */
+function check(){
+  app.innerHTML=`<div class="card"><h2>作文自查</h2><div class="tip">把写好的作文打进来（或让爸爸帮忙打），点检查。没打勾的地方，只改一处。</div><textarea id="et" style="min-height:240px"></textarea><button class="btn" onclick="doCheck()">检查</button><div id="eo"></div></div>`;
+}
+function doCheck(){
+  const t=$('et').value.trim(), n=(t.match(/[一-龥]/g)||[]).length;
+  if(n<50){$('eo').innerHTML='<div class="fb warn">作文太短了，或者还没打进来。</div>';return}
+  const sents=t.split(/[。！？!?\n]/).filter(s=>s.trim()), body=sents.filter(s=>BODY.some(w=>s.includes(w))).length;
+  const cl=['很开心','很难忘','终身难忘','重要性','天气晴朗','难忘的一天','万里无云','阳光明媚'].filter(w=>t.includes(w));
+  const it=[['字数（'+n+' 字，四年级 350 字以上）',n>=350,'再补一个镜头的细节。'],
+    ['开头没写天气',!/天气|晴朗|阳光明媚|万里无云/.test(t.slice(0,25)),'第一句换成期待、动作或原话。'],
+    ['至少 2 句身体感受句（找到 '+body+' 句）',body>=2,'找一句“我很……”，改成身体的动作。'],
+    ['用了“我以为……没想到”或“心里……”',/以为[\s\S]{0,40}没想到|心里/.test(t),'中间加一句“我以为……没想到……”。'],
+    ['有人说的原话',/[“"「]/.test(t)||/说[:：]/.test(t),'写一句别人说的原话。'],
+    ['结尾有感悟',/明白|原来|发现|懂得|知道了/.test(t.slice(-90)),'结尾加“我终于明白……”或“原来……”。']];
+  const pass=it.filter(x=>x[1]).length, f=it.find(x=>!x[1]);
+  let h='<div class="fb"><ul>'+it.map(x=>`<li>${x[1]?'✅':'⬜'} ${x[0]}</li>`).join('')+'</ul></div>';
+  if(cl.length) h+=`<div class="fb warn">套话：${cl.join('、')}，换成你自己的话。</div>`;
+  h+=f?`<div class="fb warn"><b>这次只改一处：</b>${f[2]}</div>`:'<div class="fb good"><b>全部通过！</b>读给爸爸妈妈听吧。</div>';
+  star(pass); $('eo').innerHTML=h+`<div class="small">本次 +${pass} ⭐</div>`;
+}
+
+/* 抽题目 */
+function topic(){
+  app.innerHTML=`<div class="card"><h2>抽个题目</h2><div id="tt" style="font-size:24px;font-weight:bold;color:#1e5aa8;margin:10px 0">点按钮抽一个</div><button class="btn" onclick="$('tt').textContent=TOPICS[Math.floor(Math.random()*TOPICS.length)]">抽题目</button>
+  <div class="fb"><b>按五步来：</b><br>1. 先说不写，讲给爸爸听（5 分钟）<br>2. 画心情过山车（3 分钟）<br>3. 挑两个镜头放大（5 分钟）<br>4. 三段搭起来（20 分钟）<br>5. 读给爸爸听，用“作文自查”检查（5 分钟）</div></div>`;
+}
+
+/* 家长页 */
+function parent(){
+  const prog=LEVELS.map(L=>{const s=S.lv[L.id];return `<li>${L.name}：${s&&s.done?'✅ 已过关':s?'进行中（第 '+(s.step+1)+' 步）':'未开始'}</li>`}).join('');
+  app.innerHTML=`<div class="card"><h2>给爸爸妈妈</h2>
+  <h3>进度</h3><ul>${prog}</ul><div class="small">共 ${S.stars} 颗星</div>
+  <h3>节奏</h3><ul><li>每周 3 次，每次 15 分钟，练一个招式</li><li>每两周写一篇整篇，配合学校的习作单元</li><li>过关后第 1、3、7 天，首页会提醒复习</li></ul>
+  <h3>问孩子的时候</h3><ul><li><b>一次只问一个问题</b>，问完心里默数 10 秒，不催</li><li>卡住了就降难度：开放题 → 二选一 → 问画面（“那一下你的脚停了没有？”）</li><li><b>先问身体，再问心里</b></li><li>她说一句，你复述一句，抓一个词往下问</li><li>不问“有什么印象深刻的”“有什么感受”，问“哪一刻、谁、说了什么、你做了什么”</li></ul>
+  <h3>评价只看四样，每样 1–3 颗星</h3><ul><li>内容具体</li><li>感受真实</li><li>结构清楚</li><li>语言通顺</li></ul><div class="tip">只夸具体的一句，只改一处；只跟她自己比。</div>
+  <button class="btn alt" onclick="if(confirm('确定清空所有进度？')){localStorage.removeItem(KEY);location.hash='#home';location.reload()}">清空进度</button></div>`;
+}
+
+/* 路由 */
+function route(){
+  const h=location.hash.slice(1)||'home'; const [p,id]=h.split('/');
+  ({home,coaster,check,topic,parent}[p]||(p==='lv'?()=>level(id):p==='review'?()=>review(id):home))();
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route); route();
+</script>
+</body>
+</html>
