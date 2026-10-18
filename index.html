@@ -84,6 +84,80 @@ svg.chart{height:auto;max-height:260px}
 .printcard{background:#fffdf5;border:2px solid #eee;border-radius:12px;padding:10px;margin:10px 0}
 .printcard table{font-size:13px}.printcard td,.printcard th{white-space:normal}
 @media print{body *{visibility:hidden}.printcard,.printcard *{visibility:visible}.printcard{position:absolute;left:0;top:0;width:100%;border:0}.printcard .btn{display:none}}
+
+/* ===== v1.2 ===== */
+.ladderStrip{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.lv.mini{flex:1 1 30%;padding:8px 6px;text-align:center;min-width:84px}
+.lv.mini .n{font-size:20px;margin:0}
+.lv.mini .t{font-size:13px;font-weight:700;margin:2px 0 0}
+.taskwhere{font-size:13px;color:#666;margin-top:8px}
+.card.map,.card.tourcard,.card.draft{display:block;text-decoration:none;color:inherit}
+.card.map{background:#eef4fb;border-color:#1e5aa8}
+.card.tourcard{background:#fff8e6;border-color:#f0a020}
+.card.draft{background:#fdf2e7;border-color:#e08a2a}
+.homefoot nav.tools a{font-size:14px}
+.mapHead{background:#f6f6f6}
+.stageHead{margin:14px 0 6px;padding:6px 8px;border-radius:8px;background:#f0f0f0;font-size:14px}
+.stageHead.now{background:#eef4fb;box-shadow:inset 0 0 0 2px #1e5aa8}
+.stageHead.pass{background:#eaf6ee}
+.gateTip{font-size:12px;color:#777;margin:4px 0 2px}
+.mline{display:flex;flex-wrap:wrap;gap:8px}
+.mnode{flex:1 1 30%;min-width:92px;box-sizing:border-box;padding:10px 6px;border:2px solid #ddd;border-radius:12px;text-align:center;text-decoration:none;color:inherit;background:#fff;position:relative}
+.mnode .em{font-size:22px;display:block}
+.mnode b{display:block;font-size:14px}
+.mnode i{display:block;font-size:11px;color:#777;font-style:normal}
+.mnode.sm{flex:1 1 22%;min-width:76px}
+.mnode.now{border-color:#1e5aa8;box-shadow:0 0 0 3px #d8e5f5;animation:breathe 2.4s ease-in-out infinite}
+.mnode.done{border-color:#2e7d4f;background:#f4fbf6}
+.mnode.due{border-color:#f0a020;background:#fff8e6}
+.mnode.lock{opacity:.6;background:#f5f5f5;cursor:pointer}
+.mnode.m3{box-shadow:inset 0 -4px 0 #2e7d4f}
+.mnode.m4{box-shadow:inset 0 -4px 0 #f0a020}
+.mlock{font-size:11px;color:#c62828}
+.stagebar{margin:4px 0;background:#eee;border-radius:6px;position:relative;height:20px;overflow:hidden}
+.stagebar .small{position:absolute;left:6px;top:2px;z-index:2;font-size:12px}
+.stagebar span{display:block;height:100%;background:#cfe3f5}
+.stagebar i{position:absolute;right:6px;top:2px;font-size:12px;font-style:normal}
+.rhetbar{height:18px;background:#eee;border-radius:6px;position:relative;overflow:hidden;margin:4px 0}
+.rhetbar span{display:block;height:100%;background:#2e7d4f}
+.rhetbar em{position:absolute;left:60%;top:0;bottom:0;width:2px;background:#c62828}
+.pair.cmp .bad{text-decoration:none}
+.hint1{border-left:4px solid #f0a020}
+.fb.tic{background:#fff8e6}
+.oneoff{margin:4px 0}
+details.rest summary{cursor:pointer;font-size:13px;color:#555}
+.tourArt{display:flex;gap:6px;justify-content:center;margin:12px 0}
+.tourArt i{width:22px;height:22px;border-radius:50%;background:#cfe3f5;display:block}
+.tourArt.art2 i{border-radius:4px;background:#e7eef7}
+.tourArt.art3 i{background:#eaf6ee}
+.card.tour{text-align:center}
+.cheerBadge{display:block;font-size:56px;text-align:center;animation:pop .5s ease-out}
+.conf{position:relative;height:40px;overflow:hidden}
+.conf i{position:absolute;top:-12px;width:7px;height:12px;display:block;animation:fall 1.6s linear infinite}
+@keyframes pop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes fall{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(52px) rotate(240deg)}}
+@keyframes breathe{0%,100%{box-shadow:0 0 0 3px #d8e5f5}50%{box-shadow:0 0 0 6px #e8f0fa}}
+@media (prefers-reduced-motion:reduce){.cheerBadge,.conf i,.mnode.now{animation:none}}
+.toolCard{display:block;padding:10px;border:1px solid #ddd;border-radius:10px;text-decoration:none;color:inherit;background:#fafafa;margin:4px 0}
+.toolCard b{font-size:15px}
+.toolWhen{font-size:12px;color:#777}
+nav.tools2{display:block}
+.card.tg h4{margin:4px 0 6px;font-size:15px}
+.ladder3{padding-left:20px}
+.ladder3 li{margin:8px 0}
+.bankItem{border:1px solid #e3e3e3;border-radius:10px;padding:8px;margin:8px 0;background:#fafafa}
+.tagRow{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+.tagChip{border:1px solid #bbb;border-radius:12px;padding:3px 8px;font-size:12px;background:#fff;cursor:pointer}
+.tagChip.sel{background:#1e5aa8;color:#fff;border-color:#1e5aa8}
+.imitBox{margin-top:6px}
+.imitBox input{width:100%;box-sizing:border-box}
+.step4{display:inline-flex;gap:3px;vertical-align:middle}
+.step4 i{width:9px;height:9px;border-radius:50%;background:#ddd;display:block}
+.step4 i.on{background:#2e7d4f}
+.parseList li{margin:8px 0}
+.parseList summary{cursor:pointer;font-size:13px;color:#1e5aa8}
+label.blk{display:block;margin:6px 0;font-size:14px}
+@media (max-width:420px){.mnode{flex:1 1 44%}.mnode.sm{flex:1 1 44%}.lv.mini .t{font-size:12px}}
 </style>
 </head>
 <body>
@@ -151,8 +225,8 @@ const LEVELS = [
  learn:['<b>钥匙 1：用身体代替“我很……”</b>。我很紧张 → 手心冒汗，心怦怦直跳。',
         '<b>钥匙 2：我以为……没想到……</b>。先写本来怎么想，再写真实发生了什么。',
         '<b>钥匙 3：别人怎么样 → 我怎么样</b>。看到同学被批评，我把背挺得更直了。',
-        '<b>钥匙 4：外面……心里……</b>。我们没有欢呼，可我心里像揣了一团火。'],
- pairs:[{bad:'我很紧张。', good:'我的手心冒出了汗，心怦怦直跳。', why:'不说“紧张”两个字，读的人也感觉到了。'},{bad:'拿到第一名，我很开心。', good:'我们安静地坐着，没有欢呼，可我心里像揣了一团火。', why:'外面安静、心里热，反差让感受更真。'}],
+        '<b>钥匙 4：外面……心里……</b>。我们没有欢呼，可我心里像装了一团火。'],
+ pairs:[{bad:'我很紧张。', good:'我的手心冒出了汗，心怦怦直跳。', why:'不说“紧张”两个字，读的人也感觉到了。'},{bad:'拿到第一名，我很开心。', good:'我们安静地坐着，没有欢呼，可我心里像装了一团火。', why:'外面安静、心里热，反差让感受更真。'}],
  ex:'我以为上台很简单，没想到一走到台中间，腿就软了。我看见台下的妈妈朝我点头，深吸一口气，终于开口了。',
  quiz:[
   {q:'哪一句用了“钥匙 1：用身体代替我很……”？',o:['我很害怕。','我的腿一下子软了，手心全是汗。','我非常非常害怕。'],a:1,e:'腿软、出汗，是身体在说话。'},
@@ -173,7 +247,7 @@ const LEVELS = [
         '<b>结尾</b>：写心情的变化，再加一句感悟。',
         '先写提纲：开头一句、镜头一一句、镜头二一句、结尾一句，再动笔。'],
  pairs:[{bad:'早上我们去春游，中午吃饭，下午回家，很开心。', good:'开头：出发前一晚，我兴奋得睡不着。镜头一：爬山爬到一半，腿像灌了铅。镜头二：登上山顶，风一吹，所有的累都不见了。结尾：原来，最美的风景在最累之后。', why:'有期待、有两个镜头、有变化和感悟。'}],
- ex:'开头：去军训前，我天天在网上看别人的军训，很期待。<br>镜头一：第一天踩错拍子，手心冒汗。<br>镜头二：宣布一等奖，我们没欢呼，心里却像揣了一团火。<br>结尾：从慌张到骄傲，我明白了优秀靠大家。',
+ ex:'开头：去军训前，我天天在网上看别人的军训，很期待。<br>镜头一：第一天踩错拍子，手心冒汗。<br>镜头二：宣布一等奖，我们没欢呼，心里却像装了一团火。<br>结尾：从慌张到骄傲，我明白了优秀靠大家。',
  quiz:[
   {q:'三段结构里，哪一部分应该写得最长？',o:['开头','中间','结尾'],a:1,e:'中间放大两个镜头，是最精彩的部分。'},
   {q:'开头最适合写什么？',o:['事前的心情','整件事的结果','我明白了什么'],a:0,e:'开头写期待或紧张，为后面的变化做铺垫。'},
@@ -333,12 +407,346 @@ const RANKS = [[0,'见习小作家'],[30,'小作家'],[80,'优秀小作家'],[16
 const DIMS = [['content','内容具体','有画面：有原话、动作或细节'],['feel','感受真实','读的人能感觉到你的心情'],['struct','结构清楚','开头、中间、结尾分得清'],['lang','语言通顺','读起来不卡，没有错别字']];
 const CLICHES = ['很开心','很难忘','终身难忘','重要性','天气晴朗','难忘的一天','万里无云','阳光明媚'];
 const CHANGELOG = [
+ ['1.2','新增学习地图（17 关分 4 阶，解锁按前置招式判断）、新手引导、阶段过关庆祝与阶段徽章；新增修辞岛 4 关（比喻／拟人／排比／夸张），修辞按“调料”限量，堆砌会被提醒；范文改为“晚给、拆开给、给完就撤”——写前只给一句示范（可计数），写完给好坏两篇对照，家长页可切换三个阶段；好句子升级为句子银行（摘→标→仿→用，每周 3 句，达标毕业）；工具箱分组并新增心情词梯、口头禅检查、审题拆解器、连接词卡、朗读；成长报告新增求助趋势、修辞恰当使用率、句子银行漏斗。'],
  ['1.1','新增 7 个题材专项关、整篇写作工坊（含二稿只改一处）、四维星级评价、坏句好句对比卡、小作家等级与徽章、每日任务与连续打卡、星星兑换、进度备份恢复；“今天 3 分钟”微挑战、句子排序题、语音输入提示、录音回放、屏幕外练习卡；招式掌握四级、写作心情记录、摸底与月度测评、成长报告与周报；修复复习日期按 UTC 计算的问题。'],
  ['1.0','6 个通用招式闯关；爸爸陪 / 自己练两种模式；先想后写；写完再看例文；练习记录导出；好句子收集。']
 ];
 
+/* 排比检测用的收紧正则（原 (..) 反向引用会把“我的…我的…我的”误判成排比） */
+const PB_REP = '((?=[一-龥]{2})[^的了是就很也个一们你我他她它那这，。！？；：、“”\\n]{2})[^。！？!?；;\\n]{1,24}\\1[^。！？!?；;\\n]{1,24}\\1';
+/* “有……的，有……的，有……的”“有的……有的……有的”“……得……，……得……，……得……”
+   这三种是四年级最常用的排比句式，PB_REP 的虚词黑名单正好把它们挡在外面，所以单列。 */
+const PB_YOU = '有[^。！？!?；;，,、\\n]{1,14}的[，,、][^。！？!?；;\\n]{0,4}有[^。！？!?；;，,、\\n]{1,14}的[，,、][^。！？!?；;\\n]{0,4}有';
+const PB_YOUDE3 = '有的[^。！？!?；;\\n]{1,30}有的[^。！？!?；;\\n]{1,30}有的';
+const PB_DE3 = '得[^。！？!?；;，,、\\n]{1,6}[，,、][^。！？!?；;，,、\\n]{0,10}得[^。！？!?；;，,、\\n]{1,6}[，,、][^。！？!?；;，,、\\n]{0,10}得';
+/* 关卡「写一写」判定排比用这一条：四种句式任意一种算过（宁可宽松，也不能把对的句子判错） */
+const PB_ANY = '(?:' + PB_REP + ')|(?:' + PB_YOU + ')|(?:' + PB_YOUDE3 + ')|(?:' + PB_DE3 + ')';
+
+/* 拟人动词表：关卡判定和 app3.js 的整篇扫描器共用这一张表，防止两边走偏 */
+const RN_ACT = '(?:唱|笑|哭|说|喊|叫|嚷|吵|闹|点头|摇头|招手|打招呼|伸手|伸长|伸懒腰|伸|弯腰|挺起|挺着|挺|低下头|低着头|低头|抬起头|眨|睁|闭上|张望|探头|守|趴|躲|藏|蹦|跳舞|跳|跑|爬|钻|散步|走|生气|着急|害羞|害怕|得意|懒|睡着|睡|打盹|醒|喝|吃|尝|穿|披|戴|梳|洗脸|起床|不肯|不想|不理|催|等不及|等|陪|歇|休息|停下来|回头|打了个哈欠|哈欠|敲|拽|扯|挠|捂|抱|搂|举|端|提|背|抖|喘|哼|吐|鼓着|顶|掀|发脾气|咕哝|不耐烦)';
+
+/* 夸张判定：要有“夸张的框子”或“不可能的数量”，不能只凭“都／能／连／像”这种高频字 */
+const KZ_W = '(?:简直|恨不得|快要|都快|就要|差点|真想|快得|累得|饿得|冷得|急得|烫得|疼得|笑得)[^。！？!?；;，,、\\n]{0,8}(?:掉|飞|炸|化|断|没了|不见|冒|成了|说不出|站不住|抬不起|吃下|睡着|停不下|散架|直不起|睁不开|喘不上|动不了)|一头牛|一头大象|一座山|一万|一百遍|一千遍|三天三夜|半个教室|半座|比山还|比天还|不像自己|不是自己|冒绿光|冒火星';
+
+/* v1.2 新增数据：修辞岛 4 关 + 学习阶梯 + 范文片段 + 写作小工具（原创内容，面向小学四年级） */
+
+/* ================= 1. 修辞岛（4 关） =================
+   设计原则：修辞是“调料”不是“主菜”。每关都讲清“用来干什么 / 用在作文哪里 / 用量 1–2 处”，
+   write 的 checks 里一定有一条“上限检查”（否定前瞻），堆砌就过不了。 */
+const RHETORIC_LEVELS = [
+
+{id:'metaphor', group:'rhetoric', badge:'🪄', name:'比喻', tag:'把看不见的，说成看得见的',
+ learn:['比喻就是“A 像 B”。<b>用来干什么</b>：把读的人没见过的样子，换成他见过的东西，他一下就看见了。',
+        '<b>怎么找</b>：先想清楚你要说的那<b>一点</b>是什么（软？快？亮？吵？），再找一样也有这一点的东西。腿很软 → 腿像两根煮过的面条。',
+        '<b>用在哪里</b>：放进你放大的镜头里，写最关键的那个样子或感觉。别放在开头凑字数。',
+        '<b>用量</b>：一篇只用 1–2 处。连着三四个“像”，读的人反而看不清你写的到底是什么。'],
+ pairs:[
+  {bad:'他跑得很快。', good:'他跑起来像一阵风，“嗖”地从我身边过去了。', why:'“快”看不见，“一阵风”看得见。'},
+  {bad:'月亮像盘子，像眼睛，像银币，像一只亮亮的船，挂在像黑布一样的天上。', good:'月亮像一只亮亮的小船，停在楼顶上。', why:'这是“堆砌”。五个“像”挤在一起，反而看不清月亮到底什么样。一处就够。'},
+  {bad:'她笑起来像一台拖拉机。', good:'她笑起来像一串小铃铛，叮叮叮地停不下来。', why:'笑声和拖拉机没有真正像的那一点，读的人只会觉得你在笑话她。比喻要先找准那一点；写人的时候，还要注意别把人写难看。'}],
+ ex:'下课铃一响，走廊里的人就像一群放出笼的小鸟，一下子涌了出来。小雨被挤在中间，书包带子勒着肩。她踮起脚，一眼看见操场那头的老槐树，叶子密得透不过光。',
+ quiz:[
+  {q:'比喻是用来干什么的？',o:['让字数变多','把看不见的说成看得见的','显得自己会的词多'],a:1,e:'比喻是帮读的人看见画面，不是为了凑字数。'},
+  {q:'“我的腿很软”改成比喻，哪一句最准？',o:['我的腿像两根煮过的面条','我的腿像一棵树','我的腿很软很软'],a:0,e:'煮过的面条也是软的，共同点对上了，这才叫“像”。'},
+  {q:'下面哪一句是比喻“乱用”？',o:['雨点像小石子一样砸在伞上','月亮像盘子，像眼睛，像银币，像小船','他的手冰得像两块铁'],a:1,e:'一处比喻就够。连着四个“像”是堆砌，读完还是不知道月亮什么样。'},
+  {q:'一篇作文里，比喻用几处最好？',o:['一处也不用','1–2 处','每段都要有'],a:1,e:'比喻是调料，1–2 处最提味。'}],
+ rewrite:[
+  {p:'把下面这句改成一个比喻，<b>只用一个“像”</b>：<br><b>教室里很安静。</b>',checks:[{re:'像|好像|仿佛|似的|如同',msg:'用了比喻'},{re:'^(?!(?:[\\s\\S]*(?:像|好像|仿佛|似的|如同)){2})',msg:'只用了一处，没有堆砌'}],min:10},
+  {type:'order', p:'按“先写样子 → 再用一个比喻 → 最后写我的反应”的顺序，依次点一点：',items:['窗台上的仙人掌长出了一排小刺。','那排小刺硬硬的，像一圈小小的牙签。','我伸手想摸，又赶紧把手缩了回来。']}],
+ write:{p:'写一样你见过的东西，或者一个瞬间，60 字以上，<b>只用 1–2 处比喻</b>，把最关键的那一点写准。',
+  checks:[{re:'像|好像|仿佛|似的|如同',msg:'用了比喻'},
+          {re:'^(?!(?:[\\s\\S]*(?:像|好像|仿佛|似的|如同)){3})',msg:'比喻没有堆砌（最多 2 处）'},
+          {re:'红|黄|绿|白|黑|亮|圆|尖|细|软|硬|凉|烫|声|响|香',msg:'有看得见、听得见的细节'},
+          {re:'我|心|手|脚|眼|脸',msg:'有“我”在里面'}],min:60},
+ think:['我要写的那一点，到底是什么样？（软？快？亮？吵？）','生活里还有什么东西也有这一点？','这处比喻放在哪一句最合适？别的地方是不是可以不用？'],
+ tell:'把你的比喻句读给爸爸听，问他：你脑子里出现的是什么样子？',
+ detect:{checks:['像|好像|仿佛|似的|如同','^(?!(?:[\\s\\S]*(?:像|好像|仿佛|似的|如同)){4})'],need:2}},
+
+{id:'personify', group:'rhetoric', badge:'🌱', name:'拟人', tag:'让东西有动作、有脾气',
+ learn:['拟人就是把东西当人来写：它会动、会说话、会有脾气。<b>用来干什么</b>：让不会动的东西活起来。',
+        '<b>怎么找</b>：先看它真实在干什么，再换成一个人的动作。风把树枝吹得一直晃 → 老槐树一个劲儿地朝我招手。',
+        '<b>用在哪里</b>：写景、写植物、写天气、写文具最好用。写人、写一件事的时候一般不用。',
+        '<b>用量</b>：一段里 1–2 处。要是花也唱歌、草也跳舞、太阳也微笑，那就成了谁都会写的套话。'],
+ pairs:[
+  {bad:'风很大，树叶掉了很多。', good:'风一来，老槐树抖了抖身子，叶子哗啦啦地往下落。', why:'“抖了抖身子”是人的动作，树一下子就活了。'},
+  {bad:'小花在唱歌，小草在跳舞，太阳在微笑，小鸟在点头，白云在散步。', good:'院子里的小花被雨淋过，一个个低着头，像刚被批评完。', why:'这是“堆砌套话”。唱歌跳舞微笑一起上，谁都这么写，等于没写。写一处，写细。'},
+  {bad:'我的台灯很听话。', good:'我一按开关，台灯就睁开一只黄黄的眼睛，照亮了作业本。', why:'“睁开眼睛”把开灯这一下写出来了，比“很听话”具体。'}],
+ ex:'阳台上那盆小葱三天没浇水，叶子蔫得趴在盆边。我端起水壶浇下去，它咕咚咕咚喝了个饱。第二天早上，它居然挺起了腰，叶尖上顶着一颗亮亮的小水珠。',
+ quiz:[
+  {q:'拟人写得好，关键是什么？',o:['给它一个和它真实样子对得上的动作','用的词越华丽越好','每句都写它在唱歌'],a:0,e:'先看它真实在干什么，再换成人的动作，才不假。'},
+  {q:'哪一句是拟人？',o:['月亮很圆','月亮悄悄爬上了楼顶','月亮像一个盘子'],a:1,e:'“爬”是人的动作，这是拟人；“像盘子”是比喻。'},
+  {q:'下面哪一句是拟人“乱用、堆砌”？',o:['小花在唱歌，小草在跳舞，太阳在微笑，白云在散步','雨点敲着窗户，一下一下，像在催我起床','那棵老树弯着腰，守在路口'],a:0,e:'四个套话挤在一起，看不出你到底看见了什么。'},
+  {q:'拟人最适合用在哪种作文里？',o:['写一道数学题怎么算','写景、写植物、写天气','写考试的名次'],a:1,e:'写景写物最好用；写真人真事的时候，老老实实写更可信。'}],
+ rewrite:[
+  {p:'把这句改成拟人，<b>只用一处</b>：<br><b>水壶里的水开了，声音很大。</b>',checks:[{re:'叫|喊|唱|吵|闹|急|生气|不耐烦|催|跳|说|嚷|喘|哼|吐|鼓着|顶|掀|等不及|发脾气|咕哝',msg:'给了它一个人的动作或脾气'},{re:'^(?!(?:[\\s\\S]*(?:唱歌|跳舞|微笑)){2})',msg:'没有堆砌“唱歌／跳舞／微笑”'}],min:10},
+  {type:'order', p:'按“看见 → 拟人一句 → 我的反应”的顺序，依次点一点：',items:['早上拉开窗帘，玻璃上糊着一层白雾。','雾气趴在玻璃上一动不动，像不肯起床。','我用手指画了一只小猫，才看清外面在下雨。']}],
+ write:{p:'写一样你身边的东西（植物、天气、文具都行），60 字以上，用 <b>1–2 处拟人</b>，让它活起来。',
+  checks:[{re:RN_ACT,msg:'给了它人的动作或心情'},
+          {re:'^(?!(?:[\\s\\S]*(?:唱歌|跳舞|微笑)){3})',msg:'没有堆砌“唱歌跳舞微笑”'},
+          {re:'红|黄|绿|白|黑|亮|圆|尖|细|声|响|香|凉|湿|软|硬',msg:'有看得见、听得见的细节'},
+          {re:'我',msg:'写了我和它之间的一点关系'}],min:60},
+ think:['我要写的这样东西，真实的样子是什么？它在动吗？在变吗？','如果它是个人，它这会儿在干什么？心情怎样？','这一处拟人，和它真实的样子对得上吗？'],
+ tell:'读给爸爸听，问他：你觉得这样东西像个什么样的人？',
+ detect:{checks:[RN_ACT,'^(?!(?:[\\s\\S]*(?:唱歌|跳舞|微笑)){3})'],need:2}},
+
+{id:'parallel', group:'rhetoric', badge:'🎹', name:'排比', tag:'三句同样的句式，推着往前走',
+ learn:['排比就是用<b>三句</b>句式差不多的话，连着说同一件事。<b>用来干什么</b>：把力气攒到一起，让人觉得多、久、强。',
+        '<b>怎么搭</b>：每句开头的几个字一样（“我盼着……我盼着……我盼着……”），但内容要<b>不一样</b>，而且一句比一句重。',
+        '<b>用在哪里</b>：一篇只放一处，放在你最想强调的地方——最累的时候、最盼的时候，或者结尾。',
+        '<b>用量</b>：三句就够，别写成五句六句；也别整段都排比，前后一定要有普通的叙述句。'],
+ pairs:[
+  {bad:'我很想去海边。', good:'我盼着雨快停，盼着车快开，盼着一下车就能看见海。', why:'三句句式一样，内容往前走，“想去”的劲头就出来了。'},
+  {bad:'春天来了！花开了！草绿了！鸟叫了！天蓝了！水清了！我真高兴啊！', good:'春天来了。院子里的桃花一夜之间全开了，粉得发亮。我蹲下来看了好久，才发现树根边还钻出了几棵小草。', why:'这是“堆砌”。六个感叹句一口气喊完，是在喊口号。排比只放一处，前后要有看得见的画面。'},
+  {bad:'操场上有打球的，有人在跳绳，还有几个同学正在那边聊天。', good:'操场上，有打球的，有跳绳的，有追着跑的。', why:'排比要句式整齐。三句长短差太多，就排不起来了。'}],
+ ex:'那天的太阳真毒，我们在操场上站了快一个小时。我的后背在出汗，头发在出汗，连握着水壶的手心都在出汗。教官终于喊了一声“稍息”，队伍里立刻响起一片长长的呼气声。',
+ quiz:[
+  {q:'排比一般写几句？',o:['两句','三句','六句以上'],a:1,e:'三句最稳。三句之后，劲就散了。'},
+  {q:'排比的三句，内容应该怎样？',o:['完全一样，重复说','不一样，还要一句比一句重','越短越好'],a:1,e:'句式一样、内容往前走，读的人才会被推着走。'},
+  {q:'下面哪一句是排比“乱用”？',o:['春天来了！花开了！草绿了！鸟叫了！天蓝了！水清了！','我的后背在出汗，头发在出汗，手心都在出汗。','他跑过一棵树，跑过一个水坑，跑过终点线。'],a:0,e:'一口气六个感叹句，是喊口号，不是写作文。'},
+  {q:'排比最好放在哪里？',o:['一篇里放一处，放在最想强调的地方','每段都放一处','开头、中间、结尾各放一处'],a:0,e:'放一处才有劲；处处排比，读的人就累了。'}],
+ rewrite:[
+  {p:'用“我盼着……”写三句，句式一样，内容往前走（场景随你）：',checks:[{re:'盼着[\\s\\S]*盼着[\\s\\S]*盼着',msg:'“盼着”出现了三次'},{re:'^(?!(?:[\\s\\S]*！){3})',msg:'没有连用三个感叹号'}],min:18},
+  {type:'order', p:'按“普通叙述 → 排比三句（由小到大）→ 我的动作”的顺序，依次点一点：',items:['最后十秒，教室外面全是喊声。','一个人在喊，一排人在喊，整个班都在喊。','我咬着牙，手里的绳子甩得看不见影子。']}],
+ write:{p:'写一个“最累”或者“最盼”的时刻，60 字以上，中间放<b>一处</b>三句排比，前后要有普通的句子。',
+  checks:[{re:PB_ANY,msg:'有三小句句式一样（或者连用了三个“有的……”）'},
+          {re:'[，,、][\\s\\S]*[，,、]',msg:'三小句之间用逗号隔开'},
+          {re:'^(?!(?:[\\s\\S]*！){3})(?!(?:[\\s\\S]*然后){2})',msg:'感叹号不超过 2 个，也没有用“然后”串成流水账'},
+          {re:'^(?!(?:[\\s\\S]*(?:像|好像|仿佛|似的)){3})',msg:'比喻没有跟着堆砌（最多 2 处）'}],min:60},
+ think:['这件事里，哪个时刻我最想强调？（最累？最盼？最吵？）','我能找出三样东西、或者三个动作来排吗？','这三句里哪一句最重？把它放到最后。'],
+ tell:'把三句排比读给爸爸听，一句读得比一句重一点。',
+ detect:{checks:[PB_ANY,'^(?!(?:[\\s\\S]*！){3})(?!(?:[\\s\\S]*然后){2})'],need:2}},
+
+{id:'hyperbole', group:'rhetoric', badge:'🎈', name:'夸张', tag:'说得过头一点，让人一下记住',
+ learn:['夸张就是故意说过头：“我饿得能吃下一头牛。”<b>用来干什么</b>：把“很”“非常”换成一个让人记得住的画面。',
+        '<b>怎么找</b>：先想清楚你要夸的是哪一样（太饿？太累？太冷？太急？），再把它放大到不可能的程度。',
+        '<b>用在哪里</b>：放在最难受或者最好笑的那一下。写观察日记、写信的时候少用。',
+        '<b>用量</b>：一篇 1 处就够。句句夸张，读的人一句也不信了；而且真事里的关键信息（分数、名次、时间）不能夸张。'],
+ pairs:[
+  {bad:'那天我非常冷。', good:'风一吹，我觉得耳朵快要被吹掉了，手指硬得像不是自己的。', why:'“耳朵快被吹掉”是夸张，比“非常冷”让人记得住。'},
+  {bad:'我一分钟写了一万个字，老师惊得眼珠都掉出来了，全班笑得把房顶都翻了，我的分数高得冲上了天。', good:'我写得飞快，笔尖在纸上沙沙响。交卷的时候，手指都有点发酸。', why:'这是“堆砌”，句句夸张就没人信了；“写一万个字”这种关键信息更不能乱夸。'},
+  {bad:'我等了很久很久很久。', good:'我在校门口等妈妈，等到天都快黑成了一瓶墨水。', why:'把“很久”换成一个画面。“很久很久很久”只是在重复。'}],
+ ex:'放学回家的那段路，我饿得眼睛都快冒绿光了。一进门我就掀开锅盖，半锅红烧肉还冒着热气。我端着碗蹲在厨房门口，一口饭一口肉，吃到第三碗才慢下来，撑得坐都坐不直，妈妈笑着说我像个小皮球。',
+ quiz:[
+  {q:'夸张是用来替换哪种话的？',o:['“很”“非常”这种笼统的话','别人说的原话','具体的动作'],a:0,e:'“很冷”“非常累”换成一个过头的画面，才让人记得住。'},
+  {q:'哪一句是夸张？',o:['我饿得能吃下一头牛','我有点饿了','我的肚子饿了'],a:0,e:'“吃下一头牛”不可能，但一读就知道有多饿。'},
+  {q:'下面哪一句是夸张“乱用”？',o:['我累得腿都不像自己的了','这次数学我考了一千分，把全校都比下去了','他冷得牙齿直打架'],a:1,e:'分数、名次是真事里的关键信息，一夸就变成假话了。'},
+  {q:'一篇作文里夸张用几处合适？',o:['一处','每段一处','越多越好'],a:0,e:'夸张像辣椒，放一点提味，放多了就没法吃了。'}],
+ rewrite:[
+  {p:'用夸张改写，<b>不许用“很”“非常”“特别”</b>：<br><b>那天我非常累。</b>',checks:[{re:'^(?![\\s\\S]*(?:很|非常|特别))',msg:'没用“很／非常／特别”'},{re:'都|简直|快要|快|恨不得|一步也|像|连',msg:'有夸张的味道'}],min:10},
+  {p:'把这句里的“很久”换成一个夸张的画面：<br><b>我在校门口等了很久。</b>',checks:[{re:'^(?![\\s\\S]*很久)',msg:'没有再写“很久”'},{re:'都|快|简直|以为|年|一百|一千|黑|等到',msg:'夸张出了画面'}],min:10}],
+ write:{p:'写一个你“太饿／太累／太冷／太着急”的时刻，60 字以上，<b>只用 1 处夸张</b>，别的地方老老实实写。',
+  checks:[{re:KZ_W,msg:'有一处夸张'},
+          {re:'^(?!(?:[\\s\\S]*(?:简直|恨不得|快要|都快|一万|一百万)){3})',msg:'夸张没有堆砌（最多 2 处）'},
+          {re:'^(?![\\s\\S]*(?:很很|非常非常|特别特别|久很久))',msg:'没有靠“非常非常”凑感觉'},
+          {re:'手|脚|腿|心|脸|眼|肚子|汗|牙|嗓|背|喘|耳',msg:'有身体的真实感觉'}],min:60},
+ think:['那一刻，我最受不了的是什么？（饿？累？冷？急？）','如果把它放大一百倍，会变成什么样子？','这一处夸张放在哪一句？别的地方我老实写了吗？'],
+ tell:'把夸张那一句读给爸爸听，看他会不会笑出来。',
+ detect:{checks:[KZ_W,'^(?!(?:[\\s\\S]*(?:简直|恨不得|快要|都快|一万|一百万)){3})'],need:2}}
+];
+
+/* ================= 2. 学习阶梯（17 关） =================
+   stage 1 打底 → 2 感受与结构 → 3 修辞调料 → 4 题材实战。
+   requires 是“建议前置”，why 一句话写给家长看。
+   soft 是“推荐先学、但不拦着”的关（学校单元急用时，家长页可以提前打开题材关）。 */
+const LADDER = [
+ /* ---- 阶段 1：打底 ---- */
+ {id:'say',  stage:1, stageName:'打底', requires:[],
+  why:'一切的起点：孩子写不出来，多半是没想好。先用嘴说三句话，内容就有了。'},
+ {id:'sense',stage:1, stageName:'打底', requires:['say'],
+  why:'会说之后才教观察。五感是素材来源，没有素材，后面的招式都是空架子。'},
+ {id:'zoom', stage:1, stageName:'打底', requires:['sense'],
+  why:'有了素材再学取舍。镜头放大是治“流水账”的主药，也是全站最关键的一招。'},
+
+ /* ---- 阶段 2：感受与结构 ---- */
+ {id:'feel', stage:2, stageName:'感受与结构', requires:['zoom'],
+  why:'先有画面，才谈得上感受。四把钥匙是把“我很开心”换成看得见的东西。'},
+ {id:'frame',stage:2, stageName:'感受与结构', requires:['feel'],
+  why:'会写段落了，再学怎么摆放。三段结构让两个镜头各就各位，一篇文章才站得住。'},
+ {id:'ends', stage:2, stageName:'感受与结构', requires:['frame'],
+  why:'骨架搭好后再修开头结尾。这一关是提分最快的地方，也最容易写成套话，所以放在最后。'},
+
+ /* ---- 阶段 3：修辞调料 ---- */
+ {id:'metaphor', stage:3, stageName:'修辞调料', requires:['say','sense','zoom','feel','frame','ends'],
+  why:'修辞是调料不是主菜。必须先会观察、会放镜头、会写感受，否则修辞只会变成华丽的空话。比喻最简单，排在修辞岛第一关。'},
+ {id:'personify',stage:3, stageName:'修辞调料', requires:['metaphor'],
+  why:'比喻是“像什么”，拟人是“当成人”，比比喻多一步。学完比喻再学，孩子分得清两者的区别。'},
+ {id:'parallel', stage:3, stageName:'修辞调料', requires:['personify'],
+  why:'排比要管三句话的句式，难度高于前两关，而且最容易写成喊口号，所以放后面并严格限量。'},
+ {id:'hyperbole',stage:3, stageName:'修辞调料', requires:['personify'],
+  why:'夸张最好玩也最容易失控（真事里的分数、名次不能夸）。放在孩子已经懂“真实”之后再教。'},
+
+ /* ---- 阶段 4：题材实战 ---- */
+ {id:'animal',stage:4, stageName:'题材实战', requires:['sense','zoom'], soft:['personify'],
+  why:'观察日记只要五感加变化，是题材里最容易上手的，放题材第一关建立信心。拟人学过更出彩，没学也能写。'},
+ {id:'person',stage:4, stageName:'题材实战', requires:['zoom','feel'],
+  why:'写人靠“一个特点＋一件事证明”，这件事就是一个镜头，所以必须先过镜头和感受。'},
+ {id:'place', stage:4, stageName:'题材实战', requires:['sense','zoom'], soft:['metaphor'],
+  why:'写景吃五感和取舍：移步换景＋每处一个亮点。比喻、拟人用上更美，但只是加分项，不是门票。'},
+ {id:'letter',stage:4, stageName:'题材实战', requires:['say'],
+  why:'写信主要考六样格式，不太依赖前面的招式。门槛特意放到最低——学校这一单元随时会用到。'},
+ {id:'event', stage:4, stageName:'题材实战', requires:['zoom','frame'],
+  why:'记一次活动是最常考的题型，也最容易写成流水账，必须先会放镜头、会分三段。'},
+ {id:'imagine',stage:4, stageName:'题材实战', requires:['zoom','frame'], soft:['hyperbole','personify'],
+  why:'想象作文要自己编起因、经过、结果，比记实多一层设计，所以排在记实之后。'},
+ {id:'heart', stage:4, stageName:'题材实战', requires:['feel','zoom','ends'],
+  why:'心理感受是四把钥匙一起用，是全站难度最高的一关，压在最后收尾。'}
+];
+
+/* ================= 3. 卡住时的一句示范（HINTS） =================
+   “范文晚给、拆开给、给完就撤”：写前最多只给一句开头或一个短片段（≤40 字），
+   而且场景故意和本关的写作题目错开，防止照抄。每用一次要计数。 */
+const HINTS = {
+ say:['这件事是我第一次自己去小区门口买酱油。',
+      '这件事是上周我把妹妹的拼图弄丢了。',
+      '这件事是我第一次给全班发作业本。'],
+ sense:['雨刚停，操场上一股土腥味往上冒。',
+        '剥开花生壳，“咔”的一声，手指尖有点发痒。'],
+ zoom:['爸爸的扳手“当”地掉在地上，车链子甩了他一手黑。',
+       '我趴在玻璃上看，呼出的气把那块玻璃糊白了。'],
+ feel:['护士拿起针，我赶紧把头转向窗外，手心全是汗。',
+       '我以为妈妈会生气，没想到她只是摸了摸我的头。'],
+ frame:['开头：出门前，我把跳绳在手上绕了三圈。',
+        '结尾：原来最难的，是第一个数到十。'],
+ ends:['“别回头，往前看！”教练在身后喊。',
+       '我把跳绳在手上绕了三圈，才敢往队伍前面站。'],
+ metaphor:['新发的作业本白得像一块豆腐，我都不敢下笔。',
+           '雪粒子打在羽绒服上，像撒了一把盐。'],
+ personify:['台灯一按就睁开一只黄眼睛，陪我熬完了最后一道题。',
+            '闹钟在枕头边一直喊，我把它按住，它才闭嘴。'],
+ parallel:['我找过书包，找过抽屉，找过整个教室的地面。',
+           '风吹在脸上，吹在手上，吹进了袖子里。'],
+ hyperbole:['那口汤烫得我觉得舌头要掉下来了。',
+            '书包重得像背了半个教室。'],
+ person:['外婆的手总是凉的，可她一握住我，我的手就暖了。',
+         '他是个“急性子”，话还没说完，人已经跑出了门。'],
+ animal:['刚抱回来那天，小仓鼠缩成一个毛球，连眼睛都看不见。',
+         '蒜瓣泡在水里第三天，底下冒出了几根白须。'],
+ place:['走进巷子口，第一眼就是那家卖豆浆的小窗户。',
+        '沿着河边往前走，石板路被太阳晒得发烫。'],
+ imagine:['如果我的橡皮能擦掉昨天，会发生什么？',
+          '那只纸飞机飞到一半，突然转了个弯，朝我飞回来。'],
+ letter:['大姨，您上次教我包的饺子，我昨天自己包成功了。',
+         '爷爷，您种的那棵石榴树，今年结了几个？'],
+ event:['哨子一响，我前面的同学一下子蹲了下去。',
+        '我们从落后两分，一直追到只差一个球。'],
+ heart:['抽签的纸在我手里被捏得发软，我迟迟不敢打开。',
+        '我以为点到的是别人，没想到念的是我的学号。']
+};
+
+/* ================= 4. 写完以后的好坏对照（EX_PAIRS） =================
+   “给完就撤”：只在孩子写完以后出现，而且一次只借一招改一处。
+   bad 都是四年级最常见的毛病：流水账、套话、堆砌。 */
+const EX_PAIRS = {
+ zoom:{
+  bad:'星期天我们去了动物园。先看了熊猫，然后看了猴子，然后看了老虎，最后买了冰淇淋就回家了。动物园真好玩，我很开心。',
+  good:'熊猫抱着一根竹子，咔嚓咔嚓地啃，碎叶子沾得满嘴都是。它吃一口就换个姿势，最后干脆躺下来，把竹子举在半空。我趴在栏杆上看了好久，手心被铁杆压出两道红印。',
+  why:'坏的那篇是“然后”串起来的快进。好的那篇只放大啃竹子这一会儿，有声音、有动作，连我的手心都在里面。'},
+ feel:{
+  bad:'要上台了，我非常紧张，心里特别害怕，非常非常紧张。后来讲完了我就不紧张了，我很开心。',
+  good:'我以为还能再等两个人，没想到老师直接念了我的名字。我站起来，椅子腿在地上刮出一声响。走到台边，我的手把稿纸捏得发软，台下有人小声说了句“加油”，我这才敢抬头。',
+  why:'坏的那篇把“紧张”说了三遍，等于一遍也没写。好的那篇用了钥匙 2 和钥匙 1，紧张是被身体和声音演出来的。'},
+ person:{
+  bad:'我的同桌是个好人。她长着大大的眼睛，高高的鼻子，小小的嘴巴，个子不高也不矮。她学习很好，待人也很热心，同学们都喜欢她。我很喜欢我的同桌，她真是一个好同桌。',
+  good:'我的同桌是个“热心肠”。上次我的橡皮滚到了讲台底下，我蹲在那儿不敢动。她二话不说钻过去，捡起来还吹了吹灰：“给你，没脏。”她的手上沾了一道白粉笔印，她自己都没发现。',
+  why:'坏的那篇在罗列五官和套话（“真是一个好同桌”）。好的那篇只写一个特点，用一件小事证明，还留了一个细节（手上的粉笔印）。'},
+ animal:{
+  bad:'我家养了一只小乌龟，它很可爱。它有一个硬壳，有四条腿，还有一个小尾巴，壳是绿色的，上面有花纹。它每天都吃东西，吃完就睡觉，有时候爬一爬，有时候不爬。我很喜欢它，它是我最好的朋友，我要一直养着它。',
+  good:'刚买回来时，小乌龟只有一枚硬币那么大，我一碰它就把头缩进壳里。喂了两个月，现在它一看见我手里的虾干，就伸长脖子，四只脚在水里扒得哗哗响。壳摸上去凉凉的，有一道道像树圈的纹。',
+  why:'坏的那篇在数零件（壳、腿、尾巴），没有时间。好的那篇写了“刚来时”和“现在”的变化，还用上了摸和听。'},
+ place:{
+  bad:'我推荐公园。公园里有花，有草，有树，有湖，有亭子，还有很多人在玩。那里的空气很新鲜，风景非常美丽，阳光明媚，鸟语花香。大家有空一定要去玩，那里真是一个好地方。',
+  good:'走进公园后门，迎面是一片月季，红的粉的挤在一起，蹲下去闻，有点甜。沿着小路往前走就是湖边，几只野鸭“嘎嘎”地互相追。再往前，有一棵歪脖子柳树，枝条垂到水面上，风一吹就扫出一圈圈小波纹。',
+  why:'坏的那篇是列清单加四字套话。好的那篇按脚步走，三处地方，每处只写一个亮点，还有声音和气味。'},
+ imagine:{
+  bad:'有一天我和孙悟空过了一天。我们先去了花果山，又去了天宫，还去了海底。我们玩得非常开心，吃了很多好吃的。最后我醒了，原来是一场梦，真是一个有趣的梦。',
+  good:'孙悟空拔下一根毫毛，吹了一口气：“变！”我的书包立刻变成一朵筋斗云。我们刚飞上天，就撞进一团乌云，云里的水把我的袖子打湿了。我吓得抱紧他的胳膊，他却在前面大笑：“抓牢点！”最后我们降在自家阳台上，妈妈正在收衣服，差点把我们当成两只大鸟。',
+  why:'坏的那篇是“去了很多地方＋原来是一场梦”，最省力也最没劲。好的那篇有起因、有麻烦（撞进乌云）、有结果，还有身体感觉和原话。'},
+ letter:{
+  bad:'奶奶你好。我最近学习很好，考试考得不错，身体也很健康，老师也经常表扬我。家里人都很好，爸爸妈妈也都很好。希望你也身体健康，万事如意，天天开心，笑口常开。我以后一定更加努力学习，不让你失望。再见。小雨',
+  good:'亲爱的奶奶：<br>　　您好！您寄来的柿子我收到了，一个个红彤彤的，像小灯笼。我给同桌带了一个，她说比超市买的甜多了。奶奶，您的腿还疼吗？天冷了，记得把那条厚裤子穿上。<br>　　祝<br>身体健康！<br>　　　　　　　您的孙女：小雨<br>　　　　　　　十月十八日',
+  why:'坏的那封没有格式，全是“万事如意”这种谁都能收的套话。好的那封六样格式齐了，而且说的是只有她们俩知道的事。还有，给长辈写信要用“您”，不是“你”。'},
+ event:{
+  bad:'今天天气晴朗，阳光明媚，我们班开运动会。我们先做了热身，然后跳绳，然后拔河，然后赛跑，然后又看了别的班比赛，最后老师给我们发了奖状。同学们都很积极，大家都很努力。这次运动会我们很开心，真是难忘的一天。',
+  good:'拔河开始了。我两只脚死死蹬住地面，手心被绳子磨得发烫。对方猛一用力，我们被拖过去一大步，我心里“咯噔”一下。“一、二！一、二！”大家喊起号子，绳子一点一点被我们拉回来。哨声响的时候，我才发现手掌已经红成了一片。',
+  why:'坏的那篇是“然后”串起来的流水账，结尾还是套话。好的那篇只放大拔河这一个镜头，有身体、有原话、有最后的那个细节。'},
+ heart:{
+  bad:'上台演讲的时候我非常紧张，心里特别害怕，手也在抖，腿也在抖，头上还出了很多汗。我站在台上非常非常紧张，心里一直在想我一定不能讲错。后来我终于讲完了，我就不紧张了，我很开心，同学们都给我鼓掌。我明白了勇敢的重要性。',
+  good:'老师念到我的学号时，我以为自己听错了。走上台，我的腿像灌了铅，稿纸在手里“哗哗”地抖。我看见妈妈坐在最后一排，朝我点了点头。我深吸一口气，第一句话出来了，声音有点飘，第二句就稳了。走下台我才发现，手心的汗早把稿纸浸软了。',
+  why:'坏的那篇把“紧张”说了三遍，结尾是“重要性”套话。好的那篇用了四把钥匙，紧张是被身体演出来的，结尾用一个细节收住。'},
+ metaphor:{
+  bad:'操场像一张大纸，太阳像一个火球，同学们像一群蚂蚁，我的心像一只小鸟，汗水像一颗颗珍珠，跑道像一条长龙，加油声像潮水一样涌过来，终点线像一道门。我像离弦的箭一样冲了过去。这真是一场难忘的比赛。',
+  good:'发令枪一响，我冲了出去。跑到第二圈，两条腿像拖着两袋沙子，怎么也抬不起来。我听见自己的喘气声，一下比一下响。最后二十米，同学的喊声从两边压过来，我咬着牙冲过了终点。',
+  why:'坏的那篇六个比喻挤成一堆，读完一个画面都没留下。好的那篇只用一处比喻（两袋沙子），放在最难的时候，其他地方老实写。'},
+ personify:{
+  bad:'春天来了，小花在唱歌，小草在跳舞，太阳在微笑，小鸟在点头，白云在散步，大树在招手，小河在唱歌，柳条在梳头发，连风都在和我们打招呼。到处都是生机，到处都是欢笑。春天真是一个美丽的季节。',
+  good:'阳台上那盆小葱三天没浇水，叶子蔫得趴在盆边。我端起水壶浇下去，它咕咚咕咚喝了个饱。第二天早上，它居然挺起了腰，叶尖上顶着一颗亮亮的小水珠。',
+  why:'坏的那篇全是“唱歌跳舞微笑”，谁都能写，等于没写。好的那篇只拟人两处（喝饱、挺腰），而且和小葱真实的变化对得上。'},
+ parallel:{
+  bad:'跑步真累啊！太阳真晒啊！我真想停下来啊！同学们真热情啊！老师真关心我们啊！我们班真团结啊！这次比赛真激烈啊！这次长跑真是太难忘了啊！我以后一定要坚持锻炼身体啊！',
+  good:'最后两圈，我已经数不清自己跑了多久。腿在抖，胳膊在抖，连举着水杯的手都在抖。路边的同学一个接一个喊我的名字，我把头一低，又往前挪了几步。',
+  why:'坏的那篇六个感叹句是喊口号。好的那篇只放一处三句排比（都在“抖”），前后有普通的叙述，劲就集中了。'},
+ hyperbole:{
+  bad:'我饿得能吃下一头牛，一头大象，还有一座山！饭菜一上来，我一秒钟就吃了十碗，一分钟吃光了一整桌，肚子撑得像气球一样飞了起来，简直快要爆炸，妈妈惊得眼珠都掉出来了，连盘子都被我舔得发亮。',
+  good:'放学到家，我饿得眼睛都快冒绿光了。一掀锅盖，半锅红烧肉还冒着热气。我端着碗蹲在厨房门口，一口饭一口肉，吃到第三碗才慢下来，撑得坐都坐不直。',
+  why:'坏的那篇句句夸张，一句也不可信。好的那篇只夸张一处（冒绿光），其余老实写动作，反而更让人想吃饭。'}
+};
+
+/* ================= 5. 心情词梯（WORD_LADDER） =================
+   每种心情三级：[词, 身体动作]。一级最普通，三级最有画面。
+   用法：找到孩子原来写的那个词，往下走一级，再把身体动作补进句子里。 */
+const WORD_LADDER = {
+ 开心:[['高兴','嘴角往上翘，脚尖一点一点地敲地'],
+       ['乐开了花','笑得眼睛眯成一条缝，肩膀一抖一抖'],
+       ['心里像装了一团火','想喊又忍住，攥着拳头在原地蹦了两下']],
+ 难过:[['不开心','低着头，用鞋尖蹭地上的小石子'],
+       ['心里难受','鼻子一酸，眼睛发涨，赶紧把脸转开'],
+       ['心里堵得慌','喉咙像塞了一团棉花，一个字也挤不出来']],
+ 紧张:[['有点紧张','手指不停地绞着衣角'],
+       ['心怦怦直跳','手心冒汗，纸被捏得发软'],
+       ['腿都软了','心跳敲得耳朵发麻，膝盖一直在抖']],
+ 生气:[['不高兴','嘴巴一撅，把书往桌上一放'],
+       ['气呼呼的','鼻子直喘气，脸烫得发红'],
+       ['气得发抖','牙咬得咯咯响，拳头攥得指甲掐进肉里']],
+ 害怕:[['有点怕','往后退了半步，手抓住了妈妈的衣角'],
+       ['心里发毛','后背一阵阵发凉，不敢回头'],
+       ['吓得动不了','头皮一紧，脚像钉在地上，连气都不敢喘']],
+ 惊讶:[['有点意外','眉毛一下子抬了起来'],
+       ['一下子呆住了','嘴巴张着忘了合上，手停在半空'],
+       ['简直不敢信','眼睛睁得老大，先退一步，又凑上去看了一遍']],
+ 着急:[['着急','一个劲儿地看表，脚底下来回打转'],
+       ['急得不行','手忙脚乱，书包带子缠在了胳膊上'],
+       ['急得直冒汗','额头一层汗，话说得结结巴巴']],
+ 骄傲:[['有点得意','挺起胸，走路带着风'],
+       ['心里美滋滋','忍不住回头看了一眼，又赶紧转回来'],
+       ['骄傲得想喊','把奖状举得高高的，手一直在抖']]
+};
+
+/* ================= 6. 连接词卡（CONNECTORS） ================= */
+const CONNECTORS = {
+ 时间顺序:['先……接着……','过了一会儿','没过多久','紧接着','就在这时','最后'],
+ 移步换景:['走进……','沿着……往前走','绕过……','再往前就是……','旁边不远处','一抬头'],
+ 转折:['可是','没想到','谁知','本来……后来……','偏偏','原以为……结果……'],
+ 因果:['因为……所以……','原来是','怪不得','这才明白','正因为这样','要不是……就……'],
+ 总结:['原来','我终于明白','从那天起','现在想起来','从那以后，我再也不怕＿＿了','原来，最难的不是＿＿，是＿＿']
+};
+
+/* ================= 7. 口头禅检查（FILLERS / FILLER_LIMIT） =================
+   FILLER_LIMIT 是“每 100 字建议上限”，超了就提醒换掉，不扣分。 */
+const FILLERS = ['然后','很','非常','特别','突然'];
+const FILLER_LIMIT = {然后:1, 很:2, 非常:1, 特别:1, 突然:1};
+
+/* ================= 8. 审题拆解器（TOPIC_PARSER） ================= */
+const TOPIC_PARSER = [
+ {q:'题目要我写人、写事、写景，还是写物？', tip:'先圈出题目里的那个词。写事就找镜头，写景就按脚步走，写人就先定一个特点。'},
+ {q:'这件事我真的经历过吗？', tip:'没经历过的别硬写。换一件真发生过的小事，哪怕只有十分钟，也比编的好看。'},
+ {q:'题目里有没有藏着一个“最”字？', tip:'“难忘”“第一次”“怦怦跳”都在问：最难的那一刻是哪一刻？那一刻就是你要放大的镜头。'},
+ {q:'我的心情从什么变成了什么？', tip:'说出“从……变成……”。有变化，结尾才有话说；没变化，文章就是一张清单。'},
+ {q:'如果是半命题，我补上什么最真实？', tip:'补一个你身边的、能说出细节的词。别人都写的那个词，先划掉。'},
+ {q:'写完以后，我这一篇只用哪一招？', tip:'一次只练一招。这一篇就盯着那一招改，其他的下一篇再说。'}
+];
+
 /* 作文招式闯关 · 应用逻辑 */
-const VERSION = '1.1';
+const VERSION = '1.2';
 const KEY = 'kidWriting.v1';
 const $ = id => document.getElementById(id);
 const app = $('app');
@@ -382,10 +790,17 @@ function rankInfo() {
 const lvState = id => S.lv[id] = S.lv[id] || { step: 0, done: false, start: Date.now(), tries: 0 };
 const tryFail = id => { lvState(id).tries = (lvState(id).tries || 0) + 1; save(); };
 const rootDone = () => LEVELS.filter(l => l.group === 'root').every(l => (S.lv[l.id] || {}).done);
+const LAD_ = id => LADDER.find(x => x.id === id);
+const lvDone = id => !!(S.lv[id] || {}).done;
 function unlocked(L) {
-  if (L.group === 'genre') return rootDone() || S.genreOpen;
-  const roots = LEVELS.filter(l => l.group === 'root'), i = roots.indexOf(L);
-  return i === 0 || (S.lv[roots[i - 1].id] || {}).done;
+  const l = LAD_(L.id); if (!l) return true;
+  const req = l.requires || [];
+  if (L.group === 'rhetoric') {
+    const inner = req.filter(r => (LAD_(r) || {}).stage === 3), outer = req.filter(r => (LAD_(r) || {}).stage !== 3);
+    return inner.every(lvDone) && (outer.every(lvDone) || S.rhetoricOpen);
+  }
+  if (L.group === 'genre') return req.every(lvDone) || S.genreOpen;
+  return req.every(lvDone);
 }
 
 /* ============ 检查工具 ============ */
@@ -395,8 +810,14 @@ function runChecks(text, checks, need) {
   return { res, pass: n >= (need || checks.length), n };
 }
 function fbHtml(r, min, len) {
-  let h = '<ul>' + r.res.map(x => `<li>${x.ok ? '✅' : '⬜'} ${x.msg}</li>`).join('') + '</ul>';
-  if (len < min) h += `<div>还差一点：至少写 ${min} 个字（现在 ${len} 个字）。</div>`;
+  const good = r.res.filter(x => x.ok), bad = r.res.filter(x => !x.ok);
+  let h = '';
+  if (good.length) h += `<div class="okline">做到了：${good.map(x => '✅ ' + x.msg).join('　')}</div>`;
+  if (bad.length) {
+    h += `<div class="oneoff"><b>就差一个：${bad[0].msg}</b></div>`;
+    if (bad.length > 1) h += `<details class="rest"><summary>还有 ${bad.length - 1} 条，等一下再看</summary><ul>${bad.slice(1).map(x => `<li>⬜ ${x.msg}</li>`).join('')}</ul></details>`;
+  }
+  if (min) h += `<div class="small">字数 ${len} / ${min}${len < min ? '（再补一个细节就够了）' : '（够了）'}</div><div class="bar"><span style="width:${Math.min(100, Math.round(100 * len / min))}%"></span></div>`;
   return h;
 }
 function detectUsed(L, text) {
@@ -424,28 +845,18 @@ function essayItems(t, genre) {
 const clicheIn = t => CLICHES.filter(w => t.includes(w));
 
 /* ============ 首页 ============ */
-function dailyTask() {
-  const due = LEVELS.filter(L => { const s = S.lv[L.id]; return s && s.done && (s.review || []).some(d => d <= today()); });
-  if (due.length) return { t: '复习「' + due[0].name + '」', h: '#review/' + due[0].id, why: '只做一道改写题，2 分钟。' };
-  const nxt = LEVELS.find(L => unlocked(L) && !(S.lv[L.id] || {}).done);
-  if (nxt) return { t: '闯关「' + nxt.name + '」', h: '#lv/' + nxt.id, why: nxt.tag };
-  const last = S.essays.length ? S.essays[S.essays.length - 1].d : null;
-  if (last && addDays(last, 7) > today()) { const wk = weakest(); if (wk) return { t: '巩固「' + wk.name + '」', h: '#micro', why: '这一招现在最弱，做个 3 分钟微挑战。' }; }
-  return { t: '写一篇工坊作文', h: '#workshop', why: last ? '上次写整篇是 ' + last + '。' : '把学过的招式拼成一整篇。' };
-}
+function dailyTask() { return nextStep(); }
 function home() {
-  const r = rankInfo(), task = dailyTask(), mode = S.mode;
-  let h = `<div class="card task"><div class="small">今天的任务</div><div class="big">${task.t}</div><div class="tip">${task.why}</div><a class="btn go" href="${task.h}">开始</a><div class="small" style="margin-top:8px">🔥 连续打卡 ${streak()} 天</div></div>`;
-  const ad = assessDue();
-  if (ad === 'base' && !S.skipBase) h += `<div class="card review"><b>📏 第一次来？先做个摸底</b><div class="tip">10 道小题 + 一篇作文，以后和自己比。</div><a class="btn go" href="#assess">去摸底</a><button class="btn alt" onclick="S.skipBase=true;save();home()">先跳过</button></div>`;
+  const task = dailyTask(), ad = assessDue(), n = stageNow();
+  let h = '';
+  if (!S.tour.done && !Object.keys(S.lv).length) h += `<a class="card tourcard" href="#hello/1"><b>👋 第一次来？先看 3 句话</b><div class="tip">30 秒就看完。</div></a>`;
+  h += `<div class="card task"><div class="small">今天只做这一件</div><div class="big">${task.t}</div><div class="tip">${task.why}</div><a class="btn go" href="${task.h}">开始</a>${task.base ? `<button class="btn alt" onclick="S.skipBase=true;save();home()">先跳过</button>` : ''}<div class="taskwhere">🔥 连续打卡 ${streak()} 天　·　你在第 ${n} 阶「${STAGE_NAME[n]}」</div></div>`;
+  if (S.ws) h += `<a class="card draft" href="#workshop"><b>✍️ 有一篇草稿没写完</b><div class="tip">《${esc(S.ws.title || '没取名字')}》第 ${S.ws.step + 1} 步，接着写。</div></a>`;
   if (ad === 'month') h += `<div class="card review"><b>📏 该做月度测评啦</b><div class="tip">写一篇没有提示的作文，看看这个月的进步。</div><a class="btn go" href="#assess">去测评</a></div>`;
   if (microAvail().length) h += `<a class="card micro" href="#micro"><b>⚡ 今天 3 分钟</b><div class="tip">只做 1 题。累的时候也能做。今天还能拿 ${S.micro.d === today() ? Math.max(0, 3 - S.micro.n) : 3} 次星星。</div></a>`;
-  h += `<div class="card"><b>${r.name}</b>　⭐ 共得 ${S.stars} 颗（可用 ${avail()}）${r.next ? `<div class="bar"><span style="width:${Math.min(100, Math.round(100 * (S.stars - RANKS[r.idx][0]) / (RANKS[r.idx + 1][0] - RANKS[r.idx][0])))}%"></span></div><div class="small">再得 ${r.need} 颗星，升级为「${r.next}」</div>` : '<div class="small">你已经是最高等级啦！</div>'}</div>`;
-  h += `<div class="card"><b>今天怎么练？</b><br><button class="btn ${mode === 'dad' ? 'go' : 'alt'}" onclick="setMode('dad')">爸爸陪我</button><button class="btn ${mode === 'solo' ? 'go' : 'alt'}" onclick="setMode('solo')">我自己练</button><div class="small">${mode === 'solo' ? '自己练：先在心里想一想，再写；写完小声读给自己听。' : '爸爸陪：写完讲给爸爸听，爸爸只夸一句、只改一处。'}</div></div>`;
-  h += grid('root', '通用招式', '每篇作文都用得上，一关一关解锁。');
-  h += grid('genre', '题材岛', rootDone() || S.genreOpen ? '学校上到哪个单元，就先练哪一关（单元名以课本为准）。' : '通用招式全部过关后解锁（爸爸也可以在家长页提前打开）。');
-  h += `<a class="card workshop" href="#workshop"><b>✍️ 整篇写作工坊</b><div class="tip">一步一步，把招式拼成一整篇，还能写二稿。</div></a>`;
-  h += `<div class="card"><b>工具箱</b><nav class="tools"><a href="#coaster">心情过山车</a><a href="#check">作文自查</a><a href="#topic">抽个题目</a><a href="#essays">我的作文本</a><a href="#badges">徽章墙</a><a href="#shop">星星兑换</a><a href="#lines">我的好句子</a><a href="#report">成长报告</a><a href="#assess">测评</a><a href="#parent">给爸爸妈妈</a></nav></div><div class="small" style="text-align:center">版本 ${VERSION}</div>`;
+  h += `<div class="card"><b>第 ${n} 阶 · ${STAGE_NAME[n]}</b>${ladderStrip()}</div>`;
+  h += `<a class="card map" href="#map"><b>🗺️ 学习地图</b><div class="tip">17 关都在这儿：走到亮着的那个点就行。⭐ ${S.stars}（可用 ${avail()}）· ${rankInfo().name}</div></a>`;
+  h += `<div class="card homefoot"><nav class="tools"><a href="#tools">🧰 工具箱</a><a href="#bank">📚 句子银行</a><a href="#workshop">✍️ 整篇工坊</a><a href="#essays">📖 作文本</a><a href="#report">📈 成长报告</a><a href="#parent">👨‍👩‍👧 给爸爸妈妈</a></nav><div class="small">今天怎么练？<button class="btn ${S.mode === 'dad' ? 'go' : 'alt'} sm" onclick="setMode('dad')">爸爸陪我</button><button class="btn ${S.mode === 'solo' ? 'go' : 'alt'} sm" onclick="setMode('solo')">我自己练</button></div></div><div class="small" style="text-align:center">版本 ${VERSION}</div>`;
   app.innerHTML = h;
 }
 function setMode(m) { S.mode = m; save(); home(); }
@@ -453,13 +864,13 @@ function grid(group, title, tip) {
   let h = `<div class="card"><b>${title}</b><div class="tip">${tip}</div></div><div class="grid">`;
   LEVELS.filter(l => l.group === group).forEach((L, i) => {
     const s = S.lv[L.id], ok = unlocked(L);
-    h += `<a class="lv ${s && s.done ? 'done' : ''} ${ok ? '' : 'lock'}" ${ok ? `href="#lv/${L.id}"` : ''}><div class="n">${L.badge} ${group === 'root' ? '第 ' + (i + 1) + ' 招' : '题材'} ${s && s.done ? (MASTER[mastery(L.id)] || '✅') : ok ? '' : '🔒'}</div><div class="t">${L.name}</div><div class="s">${L.tag}</div>${L.unit ? `<div class="small">课本：${L.unit}</div>` : ''}</a>`;
+    const kind = group === 'root' ? '第 ' + (i + 1) + ' 招' : group === 'rhetoric' ? '调料' : '题材';
+    h += `<a class="lv ${s && s.done ? 'done' : ''} ${ok ? '' : 'lock'}" ${ok ? `href="#lv/${L.id}"` : ''}><div class="n">${L.badge} ${kind} ${s && s.done ? (MASTER[mastery(L.id)] || '✅') : ok ? '' : '🔒'}</div><div class="t">${L.name}</div><div class="s">${L.tag}</div>${L.unit ? `<div class="small">课本：${L.unit}</div>` : ''}${ok ? '' : `<div class="small">🔒 ${lockWhy(L)}</div>`}</a>`;
   });
   return h + '</div>';
 }
 
 /* ============ 关卡 ============ */
-const STEPS = ['学', '辨', '改', '写', (S.mode === 'solo' ? '读' : '讲')];
 function level(id) {
   const L = L_(id); if (!L || !unlocked(L)) { home(); return; }
   MOOD_NOW = null;
@@ -473,7 +884,7 @@ function level(id) {
   } else if (step === 1) h += `<h3>辨一辨</h3><div id="quiz"></div>`;
   else if (step === 2) h += `<h3>改一改</h3><div id="rw"></div>`;
   else if (step === 3) {
-    h += `<h3>写一写</h3><div>${L.write.p}</div>${voiceGuide()}<div class="ex" id="thinkBox">${moodRow('lv_' + id, null)}<b>先在心里想一想（不用写下来）：</b><ul>${L.think.map(q => `<li>${q}</li>`).join('')}</ul><button class="btn" onclick="startWrite()">我想好了，开始写</button></div><div id="writeArea" style="display:none"><textarea id="wt"></textarea>${VOICE_TIP}<div class="chips" id="bodyChips"></div><button class="btn" onclick="checkWrite('${id}')">检查</button><div id="wf"></div></div>`;
+    h += `<h3>写一写</h3><div>${L.write.p}</div>${voiceGuide()}<div class="ex" id="thinkBox">${moodRow('lv_' + id, null)}<b>先在心里想一想（不用写下来）：</b><ul>${L.think.map(q => `<li>${q}</li>`).join('')}</ul><button class="btn" onclick="startWrite()">我想好了，开始写</button></div><div id="writeArea" style="display:none"><textarea id="wt"></textarea>${VOICE_TIP}<div class="chips" id="bodyChips"></div><button class="btn" onclick="checkWrite('${id}')">检查</button>${hintBtnHtml(id, 'lv-pre')}<div id="wf"></div></div>`;
   } else if (step === 4) {
     if (S.mode === 'solo') h += `<h3>读一读（自己练）</h3><ul>${SOLO_TELL.map(x => `<li>${x}</li>`).join('')}</ul>${recHtml()}<input type="text" id="best" placeholder="我最满意的一句"><button class="btn go" onclick="finish('${id}')">我读完了</button>`;
     else h += `<h3>讲一讲</h3><div class="ex">${L.tell}</div>${recHtml()}<input type="text" id="best" placeholder="爸爸觉得最好的一句（可以不填）"><button class="btn go" onclick="finish('${id}')">我讲完了，爸爸听懂了</button>`;
@@ -486,7 +897,10 @@ function level(id) {
   if (step === 2) rewrite(L, 0);
   if (step === 3) $('bodyChips').innerHTML = ['手心冒汗', '心怦怦直跳', '腿一下子软了', '脸唰地红了', '眼泪在眼眶里打转', '咬着嘴唇', '攥紧了拳头', '嗓子发干'].map(w => `<span onclick="$('wt').value+='${w}'">${w}</span>`).join('');
 }
-function startWrite() { if (!MOOD_NOW) { alert('先点一下：现在想写吗？'); return; } $('thinkBox').style.display = 'none'; $('writeArea').style.display = 'block'; $('wt').focus(); }
+function startWrite() {
+  if (!MOOD_NOW) { const b = $('thinkBox'); if (b && !b.querySelector('.needmood')) b.insertAdjacentHTML('beforeend', '<div class="fb warn needmood">先点一下上面：现在想写吗？</div>'); return; }
+  $('thinkBox').style.display = 'none'; $('writeArea').style.display = 'block'; $('wt').focus();
+}
 function next(id, st) { lvState(id).step = st; save(); level(id); window.scrollTo(0, 0); }
 function redo(id) { const s = lvState(id); Object.assign(s, { step: 0, done: false, start: Date.now(), end: null, rate: null }); save(); level(id); }
 function finish(id) {
@@ -558,7 +972,8 @@ function checkWrite(id) {
   const L = L_(id), t = $('wt').value.trim(), r = runChecks(t, L.write.checks, L.write.need), len = hanLen(t), ok = r.pass && len >= L.write.min;
   let h = `<div class="fb ${ok ? 'good' : 'warn'}">${fbHtml(r, L.write.min, len)}${ok ? '<b>写得真好！（+3 ⭐）</b><br>如果是用语音说的，错字你自己改过了吗？改错字也是在练修改。' : '没打勾的地方，<b>只改一处</b>就好。'}</div>`;
   if (ok) {
-    h += `<div class="card"><b>现在看看例文：</b><div class="ex">${L.ex}</div>例文里用了这一关的招式吗？在哪一句？你的也用了吗？<br><button class="btn alt" onclick="this.parentNode.querySelector('.cmp').textContent='很好！你和例文用了同一招。'">我也用了</button><button class="btn alt" onclick="this.parentNode.querySelector('.cmp').textContent='没关系，看看例文那一句，挑一处加到你的里面。'">我还没有</button><div class="cmp tip"></div></div>`;
+    logPost(id);
+    h += rhetAdvice(t) + pbRecheck(id, t) + fillerHtml(t) + compareHtml(id) + speakBtn("$('wt').value");
     h += ratingHtml('lv_' + id) + `<button class="btn" onclick="saveRating('lv_${id}','${id}');next('${id}',4)">下一步：${S.mode === 'solo' ? '读一读' : '讲一讲'}</button>`;
     star(3); lvState(id).text = t; save();
   } else tryFail(id);
@@ -861,7 +1276,8 @@ function microPick() {
   const weekAgo = addDays(today(), -7);
   const fresh = pool.filter(L => !S.microLog.some(x => x.lv === L.id && x.d >= weekAgo));
   const arr = fresh.length ? fresh : pool, L = arr[Math.floor(Math.random() * arr.length)];
-  const types = ['quiz', 'rewrite'].concat(L.rewrite.some(r => r.type === 'order') ? ['order'] : []);
+  /* 修 bug：frame 这类只有排序题的关，rewrite 分支会取到 undefined */
+  const types = ['quiz'].concat(L.rewrite.some(r => r.type !== 'order') ? ['rewrite'] : []).concat(L.rewrite.some(r => r.type === 'order') ? ['order'] : []);
   const t = types[(S.microLog.length) % types.length];
   return { L, t };
 }
@@ -984,6 +1400,7 @@ function radarSvg(series) {
   return `<svg viewBox="0 0 300 260" class="chart">${g}</svg><div class="small">${series.filter(s => s.v).map(s => `<span style="color:${s.c}">■</span> ${s.n}`).join('　')}</div>`;
 }
 function lineSvg(pts, label, unit) {
+  pts = (pts || []).map(p => ({ l: p.l, v: +p.v || 0 })); /* 旧存档缺 min/chars 时按 0 画，避免 SVG 出 NaN */
   if (!pts.length) return `<div class="tip">${label}：还没有数据</div>`;
   const W = 320, H = 140, max = Math.max(...pts.map(p => p.v), 1), step = pts.length > 1 ? (W - 50) / (pts.length - 1) : 0;
   const xy = pts.map((p, i) => [30 + i * step, H - 25 - (H - 45) * p.v / max]);
@@ -1043,6 +1460,783 @@ Object.assign(PAGES, { micro, assess, report });
 const _route1 = route;
 route = function () { if (location.hash.slice(1).split('/')[0] !== 'assess' && AS && AS.timer) clearInterval(AS.timer); _route1(); };
 window.removeEventListener('hashchange', _route1);
+window.addEventListener('hashchange', route);
+
+/* ===== v1.2：学习地图 / 修辞岛 / 句子银行 / 范文策略 / 小工具 / 报告 ===== */
+
+/* ---------- 0. 把修辞岛 4 关并进 LEVELS（root 之后、genre 之前） ---------- */
+(function () {
+  const i = LEVELS.findIndex(l => l.group === 'genre');
+  LEVELS.splice(i < 0 ? LEVELS.length : i, 0, ...RHETORIC_LEVELS);
+})();
+
+/* ---------- 1. 存档：只加字段，读取补默认（确定性，不用随机数/时间戳） ---------- */
+function defaults3(s) {
+  s.tour = s.tour || { done: false, seen: {} };
+  s.stages = s.stages || {};
+  s.hintLog = (s.hintLog || []).filter(x => x && x.d && x.d >= addDays(today(), -120));
+  s.exStage = s.exStage || 1;
+  s.rhetoricOpen = !!s.rhetoricOpen;
+  s.mapList = !!s.mapList;
+  s.skipBase = !!s.skipBase;
+  s.bank = s.bank || [];
+  s.bankWeek = s.bankWeek || { w: '', ids: [] };
+  s.bankDay = s.bankDay || { d: '', n: 0 };
+  s.pile = s.pile || [];
+  s.manual = s.manual || [];
+  if (!s.bankInit) {
+    s.bank = s.bank.concat((s.lines || []).map((l, i) => ({
+      id: 'ln' + i, t: String(l.t || '').slice(0, 120), src: l.lv ? 'lv:' + l.lv : 'self',
+      tags: [], d: l.d || today(), mimic: [], used: [], graduated: false, rv: ''
+    })).filter(x => x.t.trim()));
+    s.bankInit = true;
+  }
+  return s;
+}
+defaults3(S);
+const _defaults2 = defaults;
+defaults = function (s) { return defaults3(_defaults2(s)); };
+
+/* ---------- 2. 阶梯 / 阶段 ---------- */
+const STAGE_NO = [1, 2, 3, 4];
+const STAGE_IDS = {}, STAGE_NAME = {};
+STAGE_NO.forEach(n => {
+  const g = LADDER.filter(x => x.stage === n);
+  STAGE_IDS[n] = g.map(x => x.id);
+  STAGE_NAME[n] = (g[0] || {}).stageName || '';
+});
+const STAGE_EM = { 1: '🧱', 2: '💗', 3: '🧂', 4: '🏝️' };
+const stageOf = id => (LAD_(id) || {}).stage || 0;
+const stageDone = n => STAGE_IDS[n].every(lvDone);
+function stageNow() { for (const n of STAGE_NO) if (!stageDone(n)) return n; return 4; }
+function lockWhy(L) {
+  const l = LAD_(L.id); if (!l) return '';
+  const miss = (l.requires || []).filter(r => !lvDone(r));
+  if (!miss.length) return L.group === 'genre' ? '先过完通用招式' : '先过完前面的招式';
+  return '先过「' + ((L_(miss[0]) || {}).name || miss[0]) + '」' + (miss.length > 1 ? ' 等 ' + miss.length + ' 关' : '');
+}
+function softTip(L) {
+  const l = LAD_(L.id); if (!l || !l.soft) return '';
+  const s = l.soft.filter(r => !lvDone(r)).map(r => (L_(r) || {}).name);
+  return s.length ? '学过「' + s.join('」「') + '」会更出彩（不学也能写）' : '';
+}
+const TIER = { '': 0, bronze: 1, silver: 2, gold: 3 };
+const TIER_NAME = { bronze: '🥉 铜章', silver: '🥈 银章', gold: '🥇 金章' };
+function stageTier(n) {
+  const ms = STAGE_IDS[n].map(id => mastery(id));
+  const cnt = k => ms.filter(m => m >= k).length;
+  if (n === 3) {
+    if (ms.every(m => m >= 3) && ms.some(m => m === 4) && rhetRate().rate >= 0.6) return 'gold';
+    if (ms.every(m => m >= 2)) return 'silver';
+    if (cnt(1) >= 2) return 'bronze';
+    return '';
+  }
+  if (n === 4) {
+    if (ms.every(m => m >= 2) && ms.filter(m => m === 4).length >= 2) return 'gold';
+    if (cnt(2) >= 4) return 'silver';
+    if (cnt(1) >= 2) return 'bronze';
+    return '';
+  }
+  if (ms.every(m => m >= 3) && ms.some(m => m === 4)) return 'gold';
+  if (ms.every(m => m >= 2) && ms.some(m => m === 3)) return 'silver';
+  if (ms.every(m => m >= 1)) return 'bronze';
+  return '';
+}
+/* 纯幂等：只升不降；返回"刚刚通关、还没庆祝"的阶段号（0 = 没有） */
+function stageCheck() {
+  let cheer = 0;
+  STAGE_NO.forEach(n => {
+    const t = stageTier(n), cur = S.stages[n];
+    if (t && (!cur || TIER[t] > TIER[cur.lvl || ''])) S.stages[n] = { lvl: t, d: today(), cheered: !!(cur && cur.cheered) };
+    if (stageDone(n) && S.stages[n] && !S.stages[n].cheered) { S.stages[n].cheered = true; if (!cheer) cheer = n; }
+  });
+  save(); return cheer;
+}
+
+/* ---------- 3. 修辞检测（正则全部写成字符串，new RegExp 编译） ---------- */
+const BI_QUANT = '(?:像|好像|仿佛|如同|犹如|宛如|好似)[^。！？；，、\\n]{0,8}?一(?:只|个|条|片|团|阵|根|串|把|朵|道|块|面|群|层|颗|粒|扇|张|座|排|堆|丛|盏|枚|头|匹|袋|锅|瓶|杯|口|圈|封|台|辆|架|艘|支|双|副|顶|间|棵|株)';
+const BI_FRAME = '(?:像|好像|仿佛|如同|犹如|宛如|好似)[^。！？；，、\\n]{1,16}?(?:一样|似的|那样|一般)';
+const BI_NOUN = '(?:像|好像|仿佛|如同|犹如|宛如|好似)[^。！？；，、\\n]{0,6}?(?:风|火|球|云|雪|冰|水|雷|浪|潮水|海|山|石头|镜子|盘子|面条|棉花|豆腐|糖|盐|灯|灯笼|线|针|刀|鼓|墙|树|花|草|鸟|猫|狗|兔|蚂蚁|小船|船|箭|沙子|沙包|牙签|铅笔|木头|铁|钢|铅|墨水|气球|皮球|毛球|火球|小山)';
+const BI_GUESS = '(?:像|好像|仿佛|似乎|好象)[^。！？；，、\\n]{0,6}?(?:要|会|快|将|是|不是|没有|没|不会|在想|有点|有些|觉得|记得|知道|明白|听见|听到|看见|看到|想起|猜|懂|生气|忘|睡着|来了|走了|到了|哭了|笑了|病了)';
+const RN_SUBJ = '(?:微风|风|雨点|雨|雪|乌云|白云|云|太阳|阳光|月亮|星星|雾|露珠|桃花|月季|小花|花|小草|草|老树|大树|树|柳条|柳|叶子|枝条|小葱|葱|苗|种子|仙人掌|小河|河|小溪|溪|浪|湖|海|山|石头|沙子|巷子|台灯|路灯|灯|闹钟|钟|手机|电脑|作业本|本子|书包|书|铅笔|钢笔|笔|橡皮|尺子|水壶|锅|门|窗帘|窗|玻璃|桌子|椅子|风扇|空调|自行车|公交车|车|风筝|纸飞机|气球|皮球|球|玩具|娃娃|电视|冰箱|洗衣机|雨伞|伞|鞋|帽子|衣服|毛巾|牙刷|馒头|饺子|面条)';
+/* RN_ACT 在 data_v12.js 里定义，关卡判定与这里的扫描器共用 */
+const RN_BODY = '(?:的)?(?:腰|身子|脖子|脑袋|眉毛|胳膊|头发|肩膀)';
+const RN_A = RN_SUBJ + '[^。！？；，、\\n]{0,6}?' + RN_ACT;
+const RN_B = RN_SUBJ + '[^。！？；，、\\n]{0,6}?' + RN_BODY;
+const RN_HUMAN = '(?:我|你|他|她|咱|同学|老师|爸|妈|爷|奶|姥|姨|叔|哥|姐|弟|妹|教官|阿姨|医生|护士|司机|人们|大家)';
+const RN_CLICHE_LIST = ['唱歌', '跳舞', '微笑', '招手', '点头', '散步', '梳头'];
+const RN_CLICHE_KINDS = 3;
+const PB_YOUDE = PB_YOUDE3;
+const PB_BLACK = ['然后', '接着', '最后', '于是', '后来', '还有', '就是', '这是', '那是'];
+const PB_VOID = '的了是就很也个一我你他她它们这那和在有不又着过上下来去说';
+const KZ_FRAME = '(?:快要|都快|就要|简直|恨不得|差点|真想)[^。！？!?；;，,、\\n]{0,8}?(?:掉下来|掉了|飞起来|飞了|炸了|爆|裂|化了|冒绿光|冒火|冒烟|断了|没了|不见了|透不过气|喘不上气|吃下|钻进|跳出来|翻过来|顶破|撞破|睁不开|抬不起|站不住|说不出|听不见|冻成|烧起来|软成|甜到|烫掉|吹掉)';
+const KZ_NUM = '(?:一万|十万|一百万|一千万|一亿|三天三夜|一百遍|一千遍|半个教室|半座|整座|一头牛|一头大象|一座山|比山还|比天还|全世界|十碗|一整桌)';
+const KZ_BODY = '(?:耳朵|舌头|眼睛|眼珠|腿|手|肚子|嗓子|脑袋|头|心|脚|牙)[^。！？!?；;，,、\\n]{0,6}?(?:快要|都快|要掉|不像自己|不是自己|冒绿光|冒火)';
+const KZ_LIT = '(?:快要|都快|就要|差点)[^。！？!?；;，,、\\n]{0,4}?(?:到|下课|放学|过年|开学|开始|结束|天黑|迟到|考试|睡觉|吃饭|上课|回家|毕业|十二点|八点|九点)';
+const KZ_FAKE = '(?:考了|得了|打了|拿了|第)[^。！？!?；;，,、\\n]{0,6}?(?:一百二十|一百五十|两百|三百|一千|一万)分?|(?:全校|全班|全国)第一(?:名)?';
+const RH_RE = { BI_QUANT, BI_FRAME, BI_NOUN, BI_GUESS, RN_A, RN_B, RN_HUMAN, PB_YOUDE, PB_REP, PB_ANY, RN_ACT, KZ_W, KZ_FRAME, KZ_NUM, KZ_BODY, KZ_LIT, KZ_FAKE };
+const RH_KIND = { metaphor: 'bi', personify: 'rn', parallel: 'pb', hyperbole: 'kz' };
+const RH_NAME = { bi: '比喻', rn: '拟人', pb: '排比', kz: '夸张' };
+
+const rhClauses = t => String(t == null ? '' : t).split(/[。！？!?；;，,、\n]/).map(x => x.trim()).filter(Boolean);
+const rhSents = t => String(t == null ? '' : t).split(/[。！？!?；;\n]/).map(x => x.trim()).filter(Boolean);
+
+function scanBi(t) {
+  const g = new RegExp(BI_GUESS), a = new RegExp(BI_QUANT), b = new RegExp(BI_FRAME), c = new RegExp(BI_NOUN);
+  const hits = [];
+  rhClauses(t).forEach(x => { if (g.test(x)) return; if (a.test(x) || b.test(x) || c.test(x)) hits.push(x); });
+  return { n: hits.length, hits };
+}
+function scanRn(t) {
+  const A = new RegExp(RN_A), B = new RegExp(RN_B), H = new RegExp(RN_HUMAN), hits = [];
+  rhClauses(t).forEach(x => {
+    /* 命中的那一段里本身带了人（“一进门我就掀开锅盖”里的“门…掀”），说明动作的主人是人，不算拟人 */
+    const ms = [A.exec(x), B.exec(x)].filter(m => m && !H.test(m[0]));
+    if (!ms.length) return;
+    const first = Math.min.apply(null, ms.map(m => m.index)), h = x.search(H);
+    if (h >= 0 && h < first) return;
+    hits.push(x);
+  });
+  return { n: hits.length, hits };
+}
+const pbVoidOnly = s => s.split('').every(ch => PB_VOID.indexOf(ch) >= 0);
+function pbSent(s) {
+  const cs = s.split(/[，,、]/).map(x => x.trim()).filter(Boolean);
+  for (let i = 0; i + 2 < cs.length; i++) {
+    const a = cs[i], b = cs[i + 1], c = cs[i + 2];
+    if ([a, b, c].some(x => x.length < 2 || x.length > 24)) continue;
+    const ta = a.slice(-2);
+    if (ta === b.slice(-2) && ta === c.slice(-2) && !pbVoidOnly(ta)) return true;
+    for (let k = 0; k <= 2 && k + 2 <= a.length; k++) {
+      const an = a.substr(k, 2);
+      if (PB_BLACK.indexOf(an) >= 0 || pbVoidOnly(an)) continue;
+      const ib = b.indexOf(an), ic = c.indexOf(an);
+      if (ib >= 0 && ib <= 2 && ic >= 0 && ic <= 2) return true;
+    }
+    if (a[0] === b[0] && a[0] === c[0] && a.slice(-1) === b.slice(-1) && a.slice(-1) === c.slice(-1)) return true;
+  }
+  return false;
+}
+function scanPb(t) {
+  const Y = new RegExp(PB_YOUDE), hits = [];
+  rhSents(t).forEach(s => { if (pbSent(s) || Y.test(s)) hits.push(s); });
+  return { n: hits.length, hits };
+}
+function scanKz(t) {
+  const L = new RegExp(KZ_LIT), F = new RegExp(KZ_FRAME), N = new RegExp(KZ_NUM), B = new RegExp(KZ_BODY), hits = [];
+  rhClauses(t).forEach(x => { if (L.test(x)) return; if (F.test(x) || N.test(x) || B.test(x)) hits.push(x); });
+  return { n: hits.length, hits };
+}
+const countBi = t => scanBi(t).n, countRn = t => scanRn(t).n, countPb = t => scanPb(t).n, countKz = t => scanKz(t).n;
+const countBang = t => (String(t == null ? '' : t)
+  .replace(/[“"][^”"]*[”"]/g, '')
+  .replace(/(?:您好|你好)！/g, '')
+  .replace(/(?:健康|快乐|顺利|进步|平安|如意|长寿)！/g, '')
+  .match(/[！!]/g) || []).length;
+const clicheKinds = t => RN_CLICHE_LIST.filter(w => String(t == null ? '' : t).indexOf(w) >= 0).length;
+function rhetCount(t) { return { bi: countBi(t), rn: countRn(t), pb: countPb(t), kz: countKz(t), bang: countBang(t) }; }
+function pbShare(t) { const n = zhLen(t); return n ? zhLen(scanPb(t).hits.join('')) / n : 0; }
+
+const PILE = { bi: { abs: 4, per100: 2.0, min: 3 }, rn: { abs: 4, per100: 2.0, min: 3 }, pb: { abs: 2, per100: 1.0, min: 2 }, kz: { abs: 3, per100: 1.5, min: 3 }, bang: { abs: 3, per100: 2.0, min: 3 }, all: { abs: 6, per100: 3.0, min: 3 } };
+const PILE_KEYS = ['bi', 'rn', 'pb', 'kz', 'bang', 'all'];
+function piled(t) {
+  const c = rhetCount(t), n = zhLen(t), all = c.bi + c.rn + c.pb + c.kz, o = { c, all };
+  const hit = (k, v) => { const P = PILE[k]; return v >= P.abs || (n >= 60 && v >= (P.min || 2) && v * 100 / n >= P.per100); };
+  o.bi = hit('bi', c.bi);
+  o.rn = hit('rn', c.rn) || clicheKinds(t) >= RN_CLICHE_KINDS;
+  o.pb = hit('pb', c.pb) || (c.pb > 1 && pbShare(t) >= 0.35) || (zhLen(t) >= 120 && pbShare(t) >= 0.35);
+  o.kz = hit('kz', c.kz);
+  o.bang = hit('bang', c.bang);
+  o.all = hit('all', all);
+  return o;
+}
+const pileKinds = t => { const p = piled(t); return PILE_KEYS.filter(k => p[k]); };
+const PILE_TIP = {
+  bi: '挑最准的那一个「像」留下，别的改成老实话——读的人才看得清。',
+  rn: '太多东西在唱歌跳舞了。留一处，写它<b>真实</b>在干什么。',
+  pb: '排比一篇只放一处最有劲。前后要有普通的句子，不然像在喊口号。',
+  kz: '句句夸张，读的人就一句也不信了。留最好笑的那一处。',
+  bang: '感叹号超过两个，劲就散了。把其中一句改成写动作。',
+  all: '调料放多了。这一篇<b>只留 1–2 处</b>，剩下的下一篇再用。'
+};
+function pileTip(t) {
+  const p = piled(t), n = zhLen(t) || 1;
+  const k = PILE_KEYS.filter(x => p[x]).sort((a, b) => {
+    const va = a === 'all' ? p.all : (a === 'bang' ? p.c.bang : p.c[a]), vb = b === 'all' ? p.all : (b === 'bang' ? p.c.bang : p.c[b]);
+    return (vb * 100 / n - PILE[b].per100) - (va * 100 / n - PILE[a].per100);
+  })[0];
+  return k ? PILE_TIP[k] : '';
+}
+/* 整篇修辞反馈：先说好话，只提一条 */
+function rhetAdvice(t) {
+  if (zhLen(t) < 30) return '';
+  const c = rhetCount(t), p = piled(t), good = [];
+  ['bi', 'rn', 'pb', 'kz'].forEach(k => { if (c[k] >= 1 && !p[k]) good.push(`${RH_NAME[k]} ${c[k]} 处`); });
+  let h = '';
+  if (good.length) h += `<div class="fb good">这里用上了：${good.join('、')}——刚好。</div>`;
+  const tip = pileTip(t);
+  if (tip) h += `<div class="fb warn"><b>调料提醒：</b>${tip}</div>`;
+  if (new RegExp(KZ_FAKE).test(t)) h += '<div class="fb warn">分数和名次不能夸张哦，一夸就变成假话了。别的地方照样可以夸。</div>';
+  return h;
+}
+/* 口头禅检查 */
+function fillerCheck(t) {
+  const n = zhLen(t);
+  if (n < 60) return [];
+  return FILLERS.map(w => { const c = String(t).split(w).length - 1; return { w, c, per: Math.round(c * 1000 / n) / 10, lim: FILLER_LIMIT[w] }; })
+    .filter(x => x.c >= 2 && x.per > x.lim)
+    .sort((a, b) => (b.per - b.lim) - (a.per - a.lim))
+    .slice(0, 2);
+}
+const FILLER_TIP = {
+  然后: c => `「然后」有 ${c} 个。留一个，别的换成「接着」「过了一会儿」「就在这时」，或者直接分成两句。`,
+  很: c => `「很」说了 ${c} 次。挑一个换成身体动作——心情词梯里有现成的。`,
+  非常: c => `「非常」说了 ${c} 次。挑一个换成身体动作——心情词梯里有现成的。`,
+  特别: c => `「特别」说了 ${c} 次。挑一个换成身体动作——心情词梯里有现成的。`,
+  突然: c => `「突然」多了就不突然了。留一个，别的改成「没想到」「谁知」，或者写出前一秒的样子。`
+};
+function fillerHtml(t) {
+  const f = fillerCheck(t);
+  if (!f.length) return '';
+  return `<div class="fb warn tic"><b>口头禅检查（不扣星）</b><ul>${f.map(x => `<li>${FILLER_TIP[x.w](x.c)}<span class="small">（每百字 ${x.per}，建议 ${x.lim}）</span></li>`).join('')}</ul></div>`;
+}
+
+/* ---------- 4. detectOk / mastery 第 4 级 ---------- */
+function detectOk(L, text, essay) {
+  if (!detectUsed(L, text)) return false;
+  if (essay && (essay.hints || []).indexOf(L.id) >= 0) return false;
+  const k = RH_KIND[L.id];
+  if (k && piled(text)[k]) return false;
+  return true;
+}
+innerCount = function (L) {
+  const arr = S.essays.map(e => ({ t: e.v2 || e.v1, hints: e.hints || [] }))
+    .concat(S.assess.filter(a => a.text).map(a => ({ t: a.text, hints: a.hints || [] })));
+  let n = arr.filter(x => detectOk(L, x.t, x)).length;
+  if (S.manual.some(m => m.lv === L.id)) n += 1;
+  return n;
+};
+function lastWorks(k) {
+  return S.essays.map(e => ({ d: e.d, t: e.v2 || e.v1, id: e.id, hints: e.hints || [] }))
+    .concat(S.assess.filter(a => a.text).map(a => ({ d: a.d, t: a.text, id: null, hints: a.hints || [] })))
+    .sort((a, b) => a.d < b.d ? -1 : 1).slice(-k);
+}
+function rhetRate() {
+  const W = lastWorks(5); let A = 0, B = 0, tot = 0, ch = 0, lastP = '';
+  W.forEach(x => {
+    const c = rhetCount(x.t), p = piled(x.t), used = c.bi + c.rn + c.pb + c.kz;
+    tot += used; ch += zhLen(x.t);
+    if (used >= 1) { A++; const bad = PILE_KEYS.filter(k => p[k]); if (!bad.length) B++; else lastP = RH_NAME[bad[0]] || bad[0]; }
+  });
+  return { A, B, rate: A ? B / A : 0, per100: ch ? Math.round(tot * 1000 / ch) / 10 : 0, lastPile: lastP };
+}
+
+/* ---------- 5. 范文：卡住了？看一句示范 ---------- */
+const hintCount = (lv, where) => S.hintLog.filter(x => x.lv === lv && x.where === where && !x.blocked).length;
+function hintBtnHtml(lv, where) {
+  if (!HINTS[lv]) return '';
+  const used = hintCount(lv, where);
+  const txt = S.exStage >= 2 ? '卡住了？看一句示范' : (used === 0 ? '卡住了？看一句示范' : '再看一句（第 ' + (used + 1) + ' 次）');
+  return `<button class="btn alt sm" id="hintBtn" onclick="hintGive('${lv}','${where}')">${txt}</button><div id="hintBox"></div>`;
+}
+function hintBtnSync(lv, where) {
+  const b = $('hintBtn'); if (!b) return;
+  const used = hintCount(lv, where);
+  b.textContent = S.exStage >= 2 ? '卡住了？看一句示范' : (used === 0 ? '卡住了？看一句示范' : '再看一句（第 ' + (used + 1) + ' 次）');
+}
+function hintGive(lv, where) {
+  const H = HINTS[lv] || [], box = $('hintBox'); if (!box) return;
+  if (S.exStage >= 2) {
+    S.hintLog.push({ d: today(), lv, where, blocked: true }); save();
+    const q = ((L_(lv) || {}).think || ['那一刻，你看见了什么？'])[0];
+    box.innerHTML = `<div class="fb warn hint1">这一关先自己试。写完有两篇给你对照。<br>先想一想：${esc(q)}</div>`;
+    hintBtnSync(lv, where);
+    return;
+  }
+  const i = hintCount(lv, where) % Math.max(1, H.length);
+  S.hintLog.push({ d: today(), lv, where }); save();
+  box.innerHTML = `<div class="ex hint1">${H[i] || ''}<div class="small">只借一招，别照抄整句。写两句再来看下一句。</div><button class="btn alt sm" onclick="$('hintBox').innerHTML=''">收起来</button></div>`;
+  hintBtnSync(lv, where);
+}
+/* 写完以后的好坏两篇对照（给完就撤） */
+/* 写完看对照：记一次日志（同一天同一关只记一次，渲染多少遍都不重复） */
+function logPost(id) {
+  if (!id) return;
+  if (S.hintLog.some(x => x.d === today() && x.lv === id && x.where === 'lv-post')) return;
+  S.hintLog.push({ d: today(), lv: id, where: 'lv-post' }); save();
+}
+function compareHtml(id) {
+  if (S.exStage >= 3) return `<div class="card"><b>写完了！</b><div class="tip">范文先存着，月测以后一起看。</div></div>`;
+  const P = EX_PAIRS[id], L = L_(id);
+  if (P) return `<div class="card"><b>现在看看两篇对照：</b><div class="pair cmp"><div class="bad"><span>✗ 一般的写法</span>${P.bad}</div><div class="good"><span>✓ 用上招式的写法</span>${P.good}</div><div class="why">${P.why}</div></div><div class="tip">只借一招，改一处就好。</div><button class="btn alt" onclick="this.parentNode.querySelector('.cmp2x').textContent='很好！你和好的那篇用了同一招。'">我也用了</button><button class="btn alt" onclick="this.parentNode.querySelector('.cmp2x').textContent='没关系，挑好的那篇里的一句，照着改你的一处。'">我还没有</button><div class="cmp2x tip"></div></div>`;
+  return `<div class="card"><b>现在看看例文：</b><div class="ex">${L.ex}</div>例文里用了这一关的招式吗？在哪一句？你的也用了吗？<br><button class="btn alt" onclick="this.parentNode.querySelector('.cmp2x').textContent='很好！你和例文用了同一招。'">我也用了</button><button class="btn alt" onclick="this.parentNode.querySelector('.cmp2x').textContent='没关系，看看例文那一句，挑一处加到你的里面。'">我还没有</button><div class="cmp2x tip"></div></div>`;
+}
+const todayHints = () => { const o = []; S.hintLog.forEach(x => { if (x.d === today() && /-pre$/.test(x.where) && !x.blocked && o.indexOf(x.lv) < 0) o.push(x.lv); }); return o; };
+function hintWeekly() {
+  const g = {};
+  S.hintLog.filter(x => /-pre$/.test(x.where) && !x.blocked).forEach(x => { const k = weekKey(x.d); g[k] = (g[k] || 0) + 1; });
+  return Object.keys(g).sort().map(k => ({ l: k.slice(5), v: g[k] }));
+}
+
+/* ---------- 6. 朗读（特性检测，没有就整块不渲染） ---------- */
+const canSpeak = () => !!(window.speechSynthesis && window.SpeechSynthesisUtterance);
+let SPEAKING = false;
+function speakBtn(expr) { return canSpeak() ? `<button class="btn alt sm speakBtn" onclick="speakIt(${expr})">🔊 读给我听</button>` : ''; }
+function speakIt(txt) {
+  if (!canSpeak()) return;
+  if (SPEAKING) { window.speechSynthesis.cancel(); SPEAKING = false; return; }
+  const s = String(txt == null ? '' : txt).slice(0, 600); if (!s.trim()) return;
+  const u = new window.SpeechSynthesisUtterance(s); u.lang = 'zh-CN'; u.rate = 0.9;
+  u.onend = () => { SPEAKING = false; };
+  window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); SPEAKING = true;
+}
+
+/* ---------- 7. 句子银行 ---------- */
+const BANK_TAGS = ['比喻', '拟人', '排比', '夸张', '五感', '身体感受', '原话', '开头', '结尾', '连接词', '句式'];
+const TAG_KIND = { 比喻: 'bi', 拟人: 'rn', 排比: 'pb', 夸张: 'kz' };
+const SKELETON = {
+  '从…变成…': '从[^。！？\\n]{1,14}(?:变成|到)[^。！？\\n]{0,14}',
+  '我以为…没想到…': '(?:我)?以为[^。！？\\n]{1,40}?(?:没想到|结果|谁知)',
+  '一…就…': '一[^。！？\\n]{1,8}就[^。！？\\n]{1,16}',
+  '越…越…': '越[^。！？\\n]{1,8}越',
+  '有的…有的…': '有的[^。！？\\n]{1,30}有的',
+  '不是…而是…': '不是[^。！？\\n]{1,20}(?:而是|是)',
+  '连…都…': '连[^。！？\\n]{1,12}都',
+  '原话': '(?:“[^”]{1,60}”|说[：:])',
+  '身体感受': '(?:手心|心怦|心跳|脸|眼|泪|汗|嗓|腿|脚|牙|背|肩|耳)[^。！？\\n]{0,10}(?:冒|跳|红|酸|软|抖|麻|干|紧|烫|凉|打转|发)'
+};
+const hanOnly = t => String(t == null ? '' : t).replace(/[^一-龥]/g, '');
+function maxOverlap(a, b) {
+  a = hanOnly(a); b = hanOnly(b); let best = 0;
+  for (let i = 0; i < a.length; i++) for (let j = 0; j < b.length; j++) { let k = 0; while (i + k < a.length && j + k < b.length && a[i + k] === b[j + k]) k++; if (k > best) best = k; }
+  return best;
+}
+const bankTagOk = (tag, text) => { const k = TAG_KIND[tag]; if (!k) return true; const c = rhetCount(text); return c[k] >= 1; };
+function skeletonOf(t) { return Object.keys(SKELETON).filter(k => new RegExp(SKELETON[k]).test(t)); }
+/* 整篇里"用上了同类"——不要求原句出现；原样照抄不算 */
+function usedCheck(it, text, essayId) {
+  if (maxOverlap(it.t, text) >= 10) return { ok: false, copy: true };
+  const c = rhetCount(text), p = piled(text);
+  const rt = (it.tags || []).filter(x => TAG_KIND[x]);
+  if (rt.length) { const ok = rt.some(x => c[TAG_KIND[x]] >= 1 && !p[TAG_KIND[x]]); if (ok) return { ok: true }; }
+  const tags = it.tags || [];
+  if (tags.indexOf('五感') >= 0) { const Sn = L_('sense'); if (Sn && Sn.detect.checks.filter(re => new RegExp(re).test(text)).length >= 2) return { ok: true }; }
+  if (tags.indexOf('身体感受') >= 0 && new RegExp(SKELETON['身体感受']).test(text)) return { ok: true };
+  if (tags.indexOf('原话') >= 0 && new RegExp(SKELETON['原话']).test(text)) return { ok: true };
+  if (tags.indexOf('连接词') >= 0) { const all = Object.keys(CONNECTORS).reduce((a, k) => a.concat(CONNECTORS[k]), []); if (all.some(w => connUsed(w, text))) return { ok: true }; }
+  const sk = skeletonOf(it.t);
+  if (sk.length) {
+    const head = text.slice(0, 30), tail = text.slice(-90);
+    if (tags.indexOf('开头') >= 0 && sk.some(k => new RegExp(SKELETON[k]).test(head))) return { ok: true };
+    if (tags.indexOf('结尾') >= 0 && sk.some(k => new RegExp(SKELETON[k]).test(tail))) return { ok: true };
+    if (sk.some(k => new RegExp(SKELETON[k]).test(text))) return { ok: true };
+    return { ok: false };
+  }
+  return { ok: false, manual: true };
+}
+function graduateCheck(it) {
+  const ids = (it.used || []).map(u => u.essayId).filter((v, i, a) => a.indexOf(v) === i);
+  if ((it.tags || []).length >= 1 && (it.mimic || []).length >= 1 && (it.used || []).length >= 2 && ids.length >= 2 && addDays(it.d, 14) <= today()) it.graduated = true;
+  return it.graduated;
+}
+function bankUseAll(text, essayId) {
+  const out = [];
+  S.bank.forEach(it => {
+    if (it.graduated) return;
+    if ((it.used || []).some(u => u.essayId === essayId)) return;
+    const r = usedCheck(it, text, essayId);
+    if (r.ok) { it.used = (it.used || []).concat({ essayId: essayId, d: today() }); graduateCheck(it); out.push(it.id); }
+  });
+  if (out.length) { star(Math.min(4, out.length * 2)); save(); }
+  return out;
+}
+const bankWeekDone = it => (it.tags || []).length >= 1 && (it.mimic || []).length >= 1;
+function weekRank() {
+  const cand = S.bank.filter(x => !x.graduated);
+  const grp = x => !(x.tags || []).length ? 1 : (!(x.mimic || []).length ? 2 : (!(x.used || []).length ? 3 : ((x.used || []).length === 1 ? 4 : 5)));
+  return cand.slice().sort((a, b) => grp(a) - grp(b) || (a.rv || '').localeCompare(b.rv || '') || (a.d || '').localeCompare(b.d || '') || a.id.localeCompare(b.id)).filter(x => grp(x) <= 4);
+}
+/* 纯函数：一周内每次都给同样 3 句（渲染时调用安全，不写存档） */
+function weekPick() {
+  const w = weekKey(today());
+  if (S.bankWeek && S.bankWeek.w === w && (S.bankWeek.ids || []).length) {
+    const sel = S.bankWeek.ids.map(id => S.bank.find(x => x.id === id)).filter(x => x && !x.graduated);
+    if (sel.length) return sel;
+  }
+  return weekRank().slice(0, 3);
+}
+/* 落盘（只在打开银行页时做一次） */
+function weekCommit() {
+  const w = weekKey(today()), p = weekPick();
+  if (S.bankWeek.w !== w || !(S.bankWeek.ids || []).length) { S.bankWeek = { w, ids: p.map(x => x.id) }; p.forEach(x => { x.rv = today(); }); save(); }
+  return p;
+}
+function bankFunnel() {
+  return { a: S.bank.length, b: S.bank.filter(x => (x.tags || []).length).length, c: S.bank.filter(x => (x.mimic || []).length).length, d: S.bank.filter(x => (x.used || []).length).length, e: S.bank.filter(x => x.graduated).length };
+}
+const bankText = id => { const it = S.bank.find(x => x.id === id); return it ? it.t : ''; };
+let BANK_MSG = '';
+function bankAdd() {
+  const v = ($('bkIn') || {}).value || '', t = v.trim().slice(0, 120);
+  if (zhLen(t) < 6) { BANK_MSG = '<div class="fb warn">再长一点（至少 6 个字）。从书上抄一句你最喜欢的。</div>'; bank(); return; }
+  if (S.bank.some(x => x.t === t)) { BANK_MSG = '<div class="fb warn">这句已经在银行里了。换一句吧。</div>'; bank(); return; }
+  if (S.bankDay.d !== today()) S.bankDay = { d: today(), n: 0 };
+  if (S.bankDay.n >= 5) { BANK_MSG = '<div class="fb warn">今天已经摘了 5 句，够啦。明天再来。</div>'; bank(); return; }
+  const src = ($('bkSrc') || {}).value || 'book';
+  S.bank.push({ id: 'b' + Date.now().toString(36), t, src, tags: [], d: today(), mimic: [], used: [], graduated: false, rv: '' });
+  S.bankDay.n++; star(1); BANK_MSG = '<div class="fb good">摘进来了！（+1 ⭐）下一步：给它贴个标签。</div>';
+  bank();
+}
+function bankTag(id, tag) {
+  const it = S.bank.find(x => x.id === id); if (!it) return;
+  const i = it.tags.indexOf(tag);
+  if (i >= 0) { it.tags.splice(i, 1); save(); bank(); return; }
+  if (it.tags.length >= 3) { BANK_MSG = '<div class="fb warn">最多选 3 个标签。</div>'; bank(); return; }
+  it.tags.push(tag);
+  if (!bankTagOk(tag, it.t)) { it.tagsManual = true; BANK_MSG = `<div class="fb warn">再看看，这一句里的${tag}在哪儿？你要是确定，就留着。</div>`; }
+  else { if (it.tags.length === 1) star(1); BANK_MSG = '<div class="fb good">标好了！下一步：照它的句式写一句自己的。</div>'; }
+  save(); bank();
+}
+function bankMimic(id, btn) {
+  const it = S.bank.find(x => x.id === id); if (!it) return;
+  const box = btn && btn.parentNode, inp = box && box.querySelector('input');
+  const v = String((inp || $('mi_' + id) || {}).value || '').trim();
+  if (zhLen(v) < 8) { BANK_MSG = '<div class="fb warn">仿写至少 8 个字。换内容，留句式。</div>'; bank(); return; }
+  if (maxOverlap(it.t, v) >= 6) { BANK_MSG = '<div class="fb warn">这是抄下来的。换成你自己的事，句式照着它就行。</div>'; bank(); return; }
+  const rt = it.tags.filter(x => TAG_KIND[x]);
+  if (rt.length && !rt.some(x => bankTagOk(x, v))) { BANK_MSG = `<div class="fb warn">仿写里还没看见${rt[0]}。再改一处。</div>`; bank(); return; }
+  it.mimic = (it.mimic || []).concat({ t: v.slice(0, 120), d: today() }); star(2);
+  BANK_MSG = '<div class="fb good">仿得好！（+2 ⭐）下一步：写整篇的时候把这一招用进去。</div>';
+  save(); bank();
+}
+function bankManualUse(id) {
+  const it = S.bank.find(x => x.id === id); if (!it) return;
+  it.used = (it.used || []).concat({ essayId: 'manual' + ((it.used || []).length + 1), d: today(), manual: true });
+  graduateCheck(it); star(2); BANK_MSG = '<div class="fb good">记上了！（+2 ⭐）</div>'; save(); bank();
+}
+function bankStep4(it) {
+  const on = [1, (it.tags || []).length >= 1, (it.mimic || []).length >= 1, (it.used || []).length >= 1];
+  return `<span class="step4">${on.map(x => `<i class="${x ? 'on' : ''}"></i>`).join('')}</span>`;
+}
+function bankItemHtml(it, full, scope) {
+  const sk = skeletonOf(it.t);
+  return `<div class="bankItem"><div>${esc(it.t)} ${speakBtn(`bankText('${it.id}')`)}</div>
+  <div class="small">${bankStep4(it)} ${esc(it.d)} · 来源 ${esc(it.src === 'book' ? '书上摘的' : it.src === 'dad' ? '爸爸给的' : it.src.indexOf('lv:') === 0 ? '关卡里自己写的' : '自己想的')}${sk.length ? ' · 句式 ' + esc(sk[0]) : ''}${it.graduated ? ' · 🏆 已内化' : ''}</div>
+  <div class="tagRow">${BANK_TAGS.map(t => `<span class="tagChip ${it.tags.indexOf(t) >= 0 ? 'sel' : ''}" onclick="bankTag('${it.id}','${t}')">${t}</span>`).join('')}</div>
+  ${(it.mimic || []).length ? `<div class="small">我仿写的：${it.mimic.map(m => esc(m.t)).join('；')}</div>` : ''}
+  ${full && !it.graduated ? `<div class="imitBox"><input type="text" id="mi_${scope || 'x'}_${it.id}" placeholder="照它的句式，换成我自己的事"><button class="btn sm" onclick="bankMimic('${it.id}',this)">仿写好了</button><button class="btn alt sm" onclick="bankManualUse('${it.id}')">我在作文里用过</button></div>` : ''}
+  ${(it.used || []).length ? `<div class="small">用过 ${it.used.length} 次</div>` : ''}</div>`;
+}
+function bank() {
+  const wk = weekCommit(), F = bankFunnel(), msg = BANK_MSG; BANK_MSG = '';
+  const grad = S.bank.filter(x => x.graduated), live = S.bank.filter(x => !x.graduated);
+  let h = `<div class="card"><h2>📚 句子银行</h2><div class="tip">四步：摘 → 标 → 仿 → 用。<b>句子要自己从书上摘</b>，别抄这个网站上的。</div>
+  <div class="small">共 ${S.bank.length} 句　摘 ${F.a} · 标 ${F.b} · 仿 ${F.c} · 用 ${F.d} · 毕业 ${F.e}</div>${msg}
+  <div class="row"><label>摘一句进来</label><input type="text" id="bkIn" placeholder="从书上抄一句你最喜欢的"><select id="bkSrc" style="margin-top:6px"><option value="book">书上摘的</option><option value="self">自己想的</option><option value="dad">爸爸妈妈给的</option></select><button class="btn go" onclick="bankAdd()">存进银行</button></div></div>`;
+  h += `<div class="card"><b>本周要练的 3 句</b><div class="tip">一周换一次，练完有 ⭐。</div>${wk.length ? wk.map(it => bankItemHtml(it, true, 'wk')).join('') : '<div class="tip">还没有句子，先去摘一句。</div>'}${wk.length && wk.every(bankWeekDone) ? '<div class="fb good">这周的 3 句都练到了！</div>' : ''}</div>`;
+  h += `<div class="card"><b>全部句子（${live.length}）</b>${live.length ? live.slice().reverse().map(it => bankItemHtml(it, true, 'all')).join('') : '<div class="tip">还没有句子。</div>'}</div>`;
+  if (grad.length) h += `<div class="card"><details><summary>🏆 已内化（${grad.length} 句）</summary>${grad.map(it => bankItemHtml(it, false, 'gr')).join('')}<div class="small">这些句子已经变成你自己的了。</div></details></div>`;
+  h += '<a class="btn alt" href="#home">回首页</a>';
+  app.innerHTML = h;
+}
+/* 关卡第 5 步「最满意的一句」同时进银行 */
+function bankFromBest(id, t) {
+  const v = String(t || '').trim(); if (!v) return;
+  if (S.bank.some(x => x.t === v.slice(0, 120))) return;
+  S.bank.push({ id: 'b' + Date.now().toString(36), t: v.slice(0, 120), src: 'lv:' + id, tags: [], d: today(), mimic: [], used: [], graduated: false, rv: '' });
+}
+
+/* ---------- 8. 学习地图 ---------- */
+function mapNode(L, sm) {
+  const s = S.lv[L.id] || {}, ok = unlocked(L), m = mastery(L.id);
+  const due = s.done && (s.review || []).some(d => d <= today());
+  const cls = ['mnode']; if (sm) cls.push('sm');
+  if (s.done) cls.push('done', 'm' + m); else if (ok) cls.push('now'); else cls.push('lock');
+  if (due) cls.push('due');
+  const sub = s.done ? (due ? '该复习了' : MASTER_NAME[m]) : (ok ? '现在这里' : '锁住');
+  if (!ok) return `<div class="${cls.join(' ')}"><span class="em">${L.badge}</span><b>${L.name}</b><i>${sub}</i><div class="mlock" id="why_${L.id}">${lockWhy(L)}</div></div>`;
+  return `<a class="${cls.join(' ')}" href="#lv/${L.id}"><span class="em">${L.badge}</span><b>${L.name}</b><i>${sub}</i>${softTip(L) ? `<div class="small">${softTip(L)}</div>` : ''}</a>`;
+}
+function stageBar(n) {
+  const ids = STAGE_IDS[n], ms = ids.map(mastery), ok = ms.filter(m => m >= 2).length;
+  const t = (S.stages[n] || {}).lvl;
+  return `<div class="stageHead ${stageDone(n) ? 'pass' : stageNow() === n ? 'now' : ''}"><b>${STAGE_EM[n]} 第 ${n} 阶 · ${STAGE_NAME[n]}</b> <span class="small">${ok}/${ids.length} 关已会用${t ? ' · ' + TIER_NAME[t] : ''}</span></div>`;
+}
+function map() {
+  const r = rankInfo(), n = stageNow();
+  let h = `<div class="card mapHead"><b>${r.name}</b>　⭐ 共 ${S.stars}（可用 ${avail()}）${r.next ? `<div class="bar"><span style="width:${Math.min(100, Math.round(100 * (S.stars - RANKS[r.idx][0]) / (RANKS[r.idx + 1][0] - RANKS[r.idx][0])))}%"></span></div><div class="small">再得 ${r.need} 颗星升级为「${r.next}」</div>` : '<div class="small">你已经是最高等级啦！</div>'}<div class="small">你在：第 ${n} 阶 · ${STAGE_NAME[n]}</div></div>`;
+  if (S.ws) h += `<a class="card draft" href="#workshop"><b>✍️ 有一篇草稿没写完</b><div class="tip">《${esc(S.ws.title || '没取名字')}》第 ${S.ws.step + 1} 步</div></a>`;
+  h += '<div class="card map">';
+  STAGE_NO.forEach(st => {
+    h += stageBar(st);
+    h += `<div class="mline">${STAGE_IDS[st].map(id => mapNode(L_(id), st === 3)).join('')}</div>`;
+    if (st === 3) h += '<div class="gateTip">调料岛是支线：每篇只撒 1–2 处。</div>';
+    else if (!stageDone(st)) h += `<div class="gateTip">出阶还差：${STAGE_IDS[st].filter(id => !lvDone(id)).map(id => (L_(id) || {}).name).join('、')}</div>`;
+  });
+  h += '</div>';
+  const t = nextStep();
+  h += `<div class="card task"><div class="small">下一步只做这一件</div><div class="big">${t.t}</div><div class="tip">${t.why}</div><a class="btn go" href="${t.h}">开始</a></div>`;
+  h += `<div class="card"><button class="btn alt sm" onclick="S.mapList=!S.mapList;save();map()">${S.mapList ? '收起列表' : '换成列表看全部'}</button></div>`;
+  if (S.mapList) h += grid('root', '通用招式', '一关一关解锁。') + grid('rhetoric', '调料岛', '修辞是调料，每篇 1–2 处。') + grid('genre', '题材岛', '学校上到哪个单元，就先练哪一关（单元名以课本为准）。');
+  h += '<a class="btn alt" href="#home">回首页</a>';
+  app.innerHTML = h;
+}
+
+/* ---------- 9. 新手引导 / 阶段庆祝 ---------- */
+function hello(i) {
+  const k = +(i || (location.hash.split('/')[1] || 1));
+  const P = [
+    { t: '写作文不难。难的是<b>没想好</b>。', s: '这里先让你用嘴说，再写。', v: '<div class="tourArt art1"><i></i><i></i><i></i></div>', b: '知道了', h: '#hello/2' },
+    { t: '一次只练<b>一招</b>。', s: '学 → 辨 → 改 → 写 → 讲，五步走完就过关。', v: '<div class="tourArt art2"><i></i><i></i><i></i><i></i><i></i></div>', b: '然后呢', h: '#hello/3' },
+    { t: '这是你的<b>地图</b>。', s: '走到亮着的那个点就行。', v: '<div class="tourArt art3"><i></i><i></i><i></i><i></i></div>', b: '开始第一关', h: '#lv/say' }
+  ][Math.min(3, Math.max(1, k)) - 1];
+  app.innerHTML = `<div class="card tour"><div class="small">${k} / 3</div><div class="big">${P.t}</div><div class="tip">${P.s}</div>${P.v}
+  <a class="btn go" href="${P.h}" onclick="tourDone(${k === 3 ? 1 : 0})">${P.b}</a>
+  <button class="btn alt sm" onclick="tourDone(1);location.hash='#home'">跳过</button></div>`;
+}
+function tourDone(fin) { if (fin) { S.tour = { done: true, d: today(), seen: S.tour.seen || {} }; save(); } }
+function cheer(n) {
+  n = +n || 1;
+  const nx = n < 4 ? `解锁了：第 ${n + 1} 阶 · ${STAGE_NAME[n + 1]}` : '四个阶段全部走完了！';
+  const t = (S.stages[n] || {}).lvl;
+  app.innerHTML = `<div class="card"><div class="conf">${Array.from({ length: 12 }).map((_, i) => `<i style="left:${4 + i * 8}%;background:${['#c62828', '#1e5aa8', '#2e7d4f', '#f0a020'][i % 4]};animation-delay:${(i % 6) * 0.15}s"></i>`).join('')}</div>
+  <span class="cheerBadge">${STAGE_EM[n]}</span>
+  <div class="big" style="text-align:center">第 ${n} 阶 · ${STAGE_NAME[n]} 过关！</div>
+  <div class="tip" style="text-align:center">${t ? TIER_NAME[t] + '　' : ''}${nx}</div>
+  <div style="text-align:center"><a class="btn go" href="#map">去看地图</a><a class="btn alt" href="#home">先歇一下</a></div></div>`;
+}
+
+/* ---------- 10. 今天的任务（首页与地图共用一个口径） ---------- */
+function nextStep() {
+  const due = LEVELS.filter(L => { const s = S.lv[L.id]; return s && s.done && (s.review || []).some(d => d <= today()); });
+  if (due.length) return { t: '复习「' + due[0].name + '」', h: '#review/' + due[0].id, why: '只做一道，2 分钟。' };
+  if (!S.skipBase && assessDue() === 'base') return { t: '先做个摸底', h: '#assess', why: '10 道小题 + 一篇作文，以后和自己比。', base: 1 };
+  const st = stageNow();
+  const inStage = LEVELS.filter(L => stageOf(L.id) === st && unlocked(L) && !lvDone(L.id));
+  const nxt = inStage[0] || LEVELS.find(L => unlocked(L) && !lvDone(L.id));
+  if (nxt) return { t: '闯关「' + nxt.name + '」', h: '#lv/' + nxt.id, why: nxt.tag };
+  const wk = weekPick();
+  if (wk.length && !wk.every(bankWeekDone)) return { t: '这周的 3 句', h: '#bank', why: '抽 3 句，仿一句。' };
+  const last = S.essays.length ? S.essays[S.essays.length - 1].d : null;
+  if (!last || addDays(last, 7) <= today()) return { t: '写一篇工坊作文', h: '#workshop', why: last ? '上次写整篇是 ' + last + '。' : '把学过的招式拼成一整篇。' };
+  if (assessDue() === 'month') return { t: '该做月度测评', h: '#assess', why: '写一篇没有提示的作文，和以前的自己比。' };
+  const w = weakest();
+  return { t: w ? '巩固「' + w.name + '」' : '今天 3 分钟', h: '#micro', why: '3 分钟一题，累的时候也能做。' };
+}
+function ladderStrip() {
+  const n = stageNow();
+  return `<div class="ladderStrip">${STAGE_IDS[n].map(id => {
+    const L = L_(id), s = S.lv[id] || {}, ok = unlocked(L);
+    return `<a class="lv mini ${s.done ? 'done' : ''} ${ok ? '' : 'lock'}" ${ok ? `href="#lv/${id}"` : ''}><span class="n">${L.badge}</span><span class="t">${L.name}</span></a>`;
+  }).join('')}</div>`;
+}
+
+/* ---------- 11. 工具箱与小工具 ---------- */
+function tools() {
+  const card = (h, n, w) => `<a class="toolCard" href="${h}"><b>${n}</b><div class="toolWhen">${w}</div></a>`;
+  let h = `<div class="card"><h2>🧰 工具箱</h2><div class="tip">什么时候用哪个，下面都写了。</div></div>`;
+  h += `<div class="card tg"><h4>① 想内容（写不出来的时候）</h4><nav class="tools2">${card('#topic', '抽个题目', '不知道写什么，抽一个')}${card('#parse', '审题拆解器', '拿到题目先过一遍，30 秒')}${card('#coaster', '心情过山车', '事情记得住，心情说不清')}${card('#words', '心情词梯', '只会写"很开心"的时候')}</nav></div>`;
+  h += `<div class="card tg"><h4>② 写句子（卡在一句话的时候）</h4><nav class="tools2">${card('#linker', '连接词卡', '两句话接不上')}${card('#bank', '句子银行', '摘→标→仿→用，四步')}${canSpeak() ? card('#read', '朗读听一听', '读起来卡住的地方就是要改的地方') : ''}</nav></div>`;
+  h += `<div class="card tg"><h4>③ 查问题（写完了的时候）</h4><nav class="tools2">${card('#check', '作文自查', '写完先自己查一遍（含口头禅检查）')}${card('#essays', '我的作文本', '看看自己以前写的')}</nav></div>`;
+  h += `<div class="card tg"><h4>我的东西</h4><nav class="tools2">${card('#badges', '徽章墙', '')}${card('#shop', '星星兑换', '')}${card('#map', '学习地图', '')}</nav></div>`;
+  h += `<div class="card tg"><h4>给爸爸妈妈</h4><nav class="tools2">${card('#report', '成长报告', '')}${card('#parent', '家长页', '')}</nav></div>`;
+  h += '<a class="btn alt" href="#home">回首页</a>';
+  app.innerHTML = h;
+}
+let WORD_PICK = Object.keys(WORD_LADDER)[0], WORD_DRAFT = '';
+function wordPick(k) { const e = $('wdBox'); if (e) WORD_DRAFT = e.value || ''; WORD_PICK = k; words(); }
+function words() {
+  const keys = Object.keys(WORD_LADDER), L = WORD_LADDER[WORD_PICK] || WORD_LADDER[keys[0]];
+  app.innerHTML = `<div class="card"><h2>🪜 心情词梯</h2><div class="tip">把「很开心」往下走一级，再把身体动作补进句子里。</div>
+  <div class="chips">${keys.map(k => `<span class="${k === WORD_PICK ? 'sel' : ''}" onclick="wordPick('${k}')">${k}</span>`).join('')}</div>
+  <ol class="ladder3">${L.map((x, i) => `<li class="on"><b>第 ${i + 1} 级：${x[0]}</b><div class="small">身体：${x[1]}</div><button class="btn alt sm mw" onclick="insertTo('wdBox','${x[1]}')">把身体动作放进去</button></li>`).join('')}</ol>
+  <div class="row"><label>在这里改你的句子</label><textarea id="wdBox" class="mid" placeholder="先写你原来那句，再把身体动作补进去">${esc(WORD_DRAFT)}</textarea></div>
+  ${speakBtn("$('wdBox').value")}<a class="btn alt" href="#tools">回工具箱</a></div>`;
+}
+function linker() {
+  app.innerHTML = `<div class="card"><h2>🔗 连接词卡</h2><div class="tip">两句话接不上的时候，挑一个点进去。</div>
+  ${Object.keys(CONNECTORS).map(k => `<h3>${k}</h3><div class="chips">${CONNECTORS[k].map(w => `<span onclick="insertTo('lkBox','${w.replace(/…+/g, '____')}')">${w}</span>`).join('')}</div>`).join('')}
+  <div class="row"><label>在这里接一接</label><textarea id="lkBox" class="mid"></textarea></div>
+  ${speakBtn("$('lkBox').value")}<a class="btn alt" href="#tools">回工具箱</a></div>`;
+}
+function insertTo(box, txt) { const e = $(box); if (!e) return; e.value = (e.value || '') + txt; e.focus(); }
+/* 「因为……所以……」要按片段依次出现才算用上，不能拼成「因为所以」去搜 */
+function connUsed(w, text) {
+  const ps = String(w).split(/[…＿_]+/).filter(Boolean);
+  if (!ps.length) return false;
+  let i = 0;
+  return ps.every(sgm => { const j = String(text).indexOf(sgm, i); if (j < 0) return false; i = j + sgm.length; return true; });
+}
+function parse() {
+  app.innerHTML = `<div class="card"><h2>🔎 审题拆解器</h2><div class="tip">把题目先过一遍，30 秒。不用全写下来，心里答一遍就行。</div>
+  <div class="row"><label>题目</label><input type="text" id="psIn" placeholder="比如：一次难忘的运动会"></div>
+  <ol class="parseList">${TOPIC_PARSER.map((q, i) => `<li><b>${q.q}</b><details><summary>怎么想</summary><div class="small">${q.tip}</div></details></li>`).join('')}</ol>
+  <div class="row"><label>这一篇只练哪一招？</label><select id="psAim"><option value="">选一招</option>${LEVELS.filter(L => lvDone(L.id)).map(L => `<option value="${L.id}">${L.badge} ${L.name}</option>`).join('')}</select><button class="btn go" onclick="parseAim()">存成这篇的目标</button></div>
+  <div id="psOut"></div><a class="btn alt" href="#tools">回工具箱</a></div>`;
+}
+function parseAim() {
+  const t = (($('psIn') || {}).value || '').trim(), a = ($('psAim') || {}).value;
+  if (S.ws) { S.ws.aim = a; S.ws.aimTitle = t.slice(0, 40); save(); }
+  const L = a && L_(a);
+  $('psOut').innerHTML = `<div class="fb good"><b>这一篇的目标：</b>${t ? esc(t) : '（还没写题目）'}${L ? '，只练「' + L.name + '」：' + L.tag : ''}<br>${S.ws ? '已经存到工坊里了。' : '去工坊写的时候再选一次就好。'}</div><a class="btn go" href="#workshop">去工坊写</a>`;
+}
+function read() {
+  if (!canSpeak()) { app.innerHTML = '<div class="card"><h2>🔊 朗读听一听</h2><div class="tip">这台设备不支持朗读。那就小声读给自己听——效果一样好。</div><a class="btn alt" href="#tools">回工具箱</a></div>'; return; }
+  app.innerHTML = `<div class="card"><h2>🔊 朗读听一听</h2><div class="tip">听一遍。读起来卡住的地方，就是要改的地方。</div>
+  <textarea id="rdBox" placeholder="把你写的粘进来"></textarea>${speakBtn("$('rdBox').value")}<a class="btn alt" href="#tools">回工具箱</a></div>`;
+}
+
+/* ---------- 12. 成长报告新增三块 ---------- */
+function barRow(label, v, max, note) {
+  return `<div class="stagebar"><div class="small">${label}</div><span style="width:${max ? Math.min(100, Math.round(100 * v / max)) : 0}%"></span><i>${note || v}</i></div>`;
+}
+function reportExtra() {
+  const hw = hintWeekly(), R = rhetRate(), F = bankFunnel();
+  let h = '<h3>卡住了看示范的次数（按周）</h3>' + (hw.length ? lineSvg(hw, '写之前求助的次数（越来越少就是进步）', '次') + '<div class="small">这条线往下走，说明她越来越能自己开头了。</div>' : '<div class="tip">还没有求助记录，很好。</div>');
+  h += '<h3>修辞恰当使用率（近 5 篇）</h3>';
+  if (!R.A) h += '<div class="tip">还没在整篇里用过修辞。</div>';
+  else {
+    h += `<div class="rhetbar"><span style="width:${Math.round(100 * R.rate)}%"></span><em></em></div>
+    <div class="small">${R.B} / ${R.A} 篇用得刚好（${Math.round(100 * R.rate)}%）；平均每百字 ${R.per100} 处，刚好的区间是 0.5–2.0${R.lastPile ? '；最近一次堆砌：' + R.lastPile : ''}</div>`;
+    if (R.rate < 0.6) h += `<div class="fb warn">调料放多了。下一篇只留 1–2 处。</div>`;
+  }
+  h += '<h3>句子银行漏斗</h3>';
+  const m = Math.max(1, F.a);
+  h += barRow('摘', F.a, m) + barRow('标', F.b, m) + barRow('仿', F.c, m) + barRow('用', F.d, m) + barRow('毕业', F.e, m);
+  const drop = [['标', F.a - F.b], ['仿', F.b - F.c], ['用', F.c - F.d]].sort((a, b) => b[1] - a[1])[0];
+  if (F.a && drop && drop[1] > 0) h += `<div class="small">掉得最狠的是「${drop[0]}」这一级 —— 这周先补两句。</div>`;
+  const la = S.assess.filter(a => a.type === 'month').slice(-1)[0];
+  if (S.exStage >= 3 && la && addDays(la.d, 2) > today()) h += `<h3>这个月的好坏对照</h3><a class="btn go" href="#pairs">这个月的好坏对照</a><div class="small">48 小时内可看。</div>`;
+  return h;
+}
+const _report = report;
+report = function () {
+  _report();
+  const h3 = Array.prototype.slice.call(app.querySelectorAll('h3')).filter(x => x.textContent.indexOf('测评记录') >= 0)[0];
+  const html = reportExtra();
+  if (h3) h3.insertAdjacentHTML('beforebegin', html); else app.querySelector('.card').insertAdjacentHTML('beforeend', html);
+};
+const _reportText = reportText;
+reportText = function () {
+  const hw = hintWeekly(), R = rhetRate(), F = bankFunnel();
+  return _reportText() + '\n' + [
+    '卡住看示范（近 4 周）：' + (hw.length ? hw.slice(-4).map(x => `${x.l} ${x.v} 次`).join('；') : '无记录') + '。',
+    '修辞恰当使用率：' + (R.A ? `${Math.round(100 * R.rate)}%（${R.B}/${R.A} 篇），平均每百字 ${R.per100} 处。` : '还没在整篇里用过修辞。'),
+    `句子银行漏斗：摘 ${F.a} / 标 ${F.b} / 仿 ${F.c} / 用 ${F.d} / 毕业 ${F.e}。`
+  ].join('\n');
+};
+function pairs() {
+  const done = LEVELS.filter(L => lvDone(L.id) && EX_PAIRS[L.id]);
+  app.innerHTML = `<div class="card"><h2>好坏两篇对照</h2><div class="tip">写完以后才看，一次只借一招。</div>${done.length ? done.map(L => `<h3>${L.badge} ${L.name}</h3><div class="pair cmp"><div class="bad"><span>✗ 一般的写法</span>${EX_PAIRS[L.id].bad}</div><div class="good"><span>✓ 用上招式的写法</span>${EX_PAIRS[L.id].good}</div><div class="why">${EX_PAIRS[L.id].why}</div></div>`).join('') : '<div class="tip">先过几关再来看。</div>'}<a class="btn alt" href="#report">回报告</a></div>`;
+}
+
+/* ---------- 13. 接入既有流程 ---------- */
+/* 自查项里加一条"修辞是调料"的提醒（不扣星，只提示） */
+const _essayItems = essayItems;
+essayItems = function (t, genre) {
+  const items = _essayItems(t, genre);
+  if (zhLen(t) >= 30 && PILE_KEYS.some(k => piled(t)[k])) items.push(['修辞是调料：这一篇放多了', false, pileTip(t)]);
+  return items;
+};
+/* 作文自查页：补口头禅 + 修辞提示 */
+const _doCheck = doCheck;
+doCheck = function () {
+  _doCheck();
+  const t = ($('et') || {}).value || '';
+  if (zhLen(t) < 50 || !$('eo')) return;
+  $('eo').insertAdjacentHTML('beforeend', rhetAdvice(t) + fillerHtml(t) + speakBtn("$('et').value"));
+  bankUseAll(t, 'check' + today());
+};
+/* #11 排比关补一条复核提示：正则过了但 scanPb 认不出来，说明只是词在重复 */
+function pbRecheck(id, t) {
+  if (id !== 'parallel' || zhLen(t) < 12) return '';
+  if (scanPb(t).n > 0) return '';
+  return '<div class="fb warn">这三句只是同一个词重复，句式还没排起来：试试每句开头都用同样的两个字（我盼着……／有……的）。</div>';
+}
+/* 关卡：写一写通过后给好坏对照；工坊第 5 步给口头禅+修辞 */
+const _workshop = workshop;
+workshop = function () {
+  _workshop();
+  if (!S.ws) return;
+  const st = S.ws.step;
+  if (S.ws.aimTitle) { const c = app.querySelector('.card'); if (c && st >= 3) c.insertAdjacentHTML('afterbegin', `<div class="small">这一篇的目标：${esc(S.ws.aimTitle)}${S.ws.aim ? ' · 只练「' + ((L_(S.ws.aim) || {}).name || '') + '」' : ''}</div>`); }
+  if (st === 3) { const c = app.querySelector('.card'); if (c) c.insertAdjacentHTML('beforeend', hintBtnHtml(S.ws.genre || 'zoom', 'ws-pre')); }
+  if (st === 4) {
+    const c = app.querySelector('.card'), t = S.ws.v1 || '';
+    if (c) c.insertAdjacentHTML('beforeend', rhetAdvice(t) + fillerHtml(t) + speakBtn('S.ws.v1'));
+  }
+  if (st === 5) { logPost(S.ws.genre); const c = app.querySelector('.card'); if (c) c.insertAdjacentHTML('beforeend', compareHtml(S.ws.genre) + speakBtn("$('v2').value")); }
+};
+const _wsSave = wsSave;
+wsSave = function () {
+  const W = S.ws, text = W ? (W.v2 || W.v1) : '';
+  _wsSave();
+  const e = S.essays[S.essays.length - 1];
+  if (e) {
+    e.hints = todayHints(); e.rhet = rhetCount(text); e.piled = pileKinds(text);
+    e.bankUsed = bankUseAll(text, e.id);
+    if (e.piled.length) S.pile.push({ d: today(), essayId: e.id, kind: e.piled[0], n: zhLen(text) });
+  }
+  const n = stageCheck();
+  if (n) location.hash = '#cheer/' + n;
+};
+const _assessSave = assessSave;
+assessSave = function () {
+  const text = AS ? AS.text : '';
+  _assessSave();
+  const a = S.assess[S.assess.length - 1];
+  if (a && a.text) {
+    a.hints = todayHints(); a.rhet = rhetCount(a.text); a.piled = pileKinds(a.text);
+    a.bankUsed = bankUseAll(a.text, 'as' + a.d);
+    if (a.piled.length) S.pile.push({ d: today(), essayId: 'as' + a.d, kind: a.piled[0], n: a.chars || zhLen(a.text) });
+  }
+  stageCheck();
+};
+const _finish = finish;
+finish = function (id) {
+  const b = ($('best') || {}).value;
+  _finish(id);
+  bankFromBest(id, b);
+  const n = stageCheck();
+  if (n) location.hash = '#cheer/' + n;
+};
+
+/* ---------- 14. 家长页新增开关 ---------- */
+const EX_STAGE_NAME = { 1: '1 多扶一点（写前可看一句示范，写完给好坏两篇）', 2: '2 先自己写（写前不给句子，只给问题；写完给对照）', 3: '3 只在月测后（写前写完都不给，月测后集中看）' };
+function setExStage(v) { S.exStage = +v; save(); parent(); }
+function manualAdd(lv) { S.manual.push({ lv, essayId: null, d: today(), by: 'dad' }); save(); parent(); }
+function parentExtra() {
+  const pre14 = S.hintLog.filter(x => /-pre$/.test(x.where) && !x.blocked && x.d >= addDays(today(), -13)).length;
+  const st = stageNow(), allOk = STAGE_IDS[st].every(id => mastery(id) >= 3);
+  let h = '<h3>范文使用阶段</h3><div class="small">范文「晚给、拆开给、给完就撤」。孩子连续两周很少点示范，就可以往上调一阶。调回来也随时可以。</div>';
+  h += [1, 2, 3].map(v => `<label class="blk"><input type="radio" name="exs" ${S.exStage === v ? 'checked' : ''} onchange="setExStage(${v})"> ${EX_STAGE_NAME[v]}</label>`).join('');
+  if (pre14 <= 2 && allOk && S.exStage < 3) h += `<div class="fb">近 14 天只点了 ${pre14} 次示范，可以试试第 ${S.exStage + 1} 阶段了。</div>`;
+  h += `<h3>调料岛（修辞）</h3><label class="blk"><input type="checkbox" ${S.rhetoricOpen ? 'checked' : ''} onchange="S.rhetoricOpen=this.checked;save()"> 提前打开调料岛（通用招式还没过完也能练修辞）</label>`;
+  h += `<div class="small">夸张多半是嘴上先说出来的，不一定写进作文里。听见她口头用上了，可以手动记一次：<button class="btn alt sm" onclick="manualAdd('hyperbole')">我听过她用上夸张了</button>（已记 ${S.manual.filter(m => m.lv === 'hyperbole').length} 次）</div>`;
+  h += `<h3>新手引导</h3><a class="btn alt sm" href="#hello/1">再看一次引导</a>`;
+  h += `<h3>阶段徽章</h3><div class="small">${STAGE_NO.map(n => `第 ${n} 阶 ${STAGE_NAME[n]}：${(S.stages[n] || {}).lvl ? TIER_NAME[S.stages[n].lvl] : '还没拿到'}`).join('；')}</div>`;
+  return h;
+}
+const _parent = parent;
+parent = function () {
+  _parent();
+  const h3 = Array.prototype.slice.call(app.querySelectorAll('h3')).filter(x => x.textContent.indexOf('星星兑换奖励') >= 0)[0];
+  const html = parentExtra();
+  if (h3) h3.insertAdjacentHTML('beforebegin', html); else app.querySelector('.card').insertAdjacentHTML('beforeend', html);
+};
+
+/* ---------- 15. 路由 ---------- */
+PAGES.lines = bank;
+/* 重新注册：PAGES 在 app.js/app2.js 里捕获的是旧引用，包装后必须重新挂一次 */
+Object.assign(PAGES, { map, bank, tools, words, linker, parse, read, hello, pairs, report, parent, workshop });
+const _route2 = route;
+route = function () {
+  const h = location.hash.slice(1) || 'home', p = h.split('/')[0], id = h.split('/')[1];
+  if (p === 'cheer') { cheer(id); window.scrollTo(0, 0); return; }
+  if (p === 'hello') { hello(id); window.scrollTo(0, 0); return; }
+  _route2();
+};
+window.removeEventListener('hashchange', _route2);
 window.addEventListener('hashchange', route);
 save(); route();
 </script>
