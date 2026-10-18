@@ -141,6 +141,16 @@ const LEVELS = [
  tell:'把开头和结尾读给爸爸听，问爸爸：想不想知道中间发生了什么？'}
 ];
 
+const THINK={
+ say:['这周发生了哪件事，让我心情有变化？','一开始我是什么心情？后来变成了什么？','这件事让我发现了什么？'],
+ sense:['我要写的东西，看起来是什么颜色、什么样子？','它会发出声音吗？闻起来什么味道？','摸上去、吃起来是什么感觉？'],
+ zoom:['我挑哪一个瞬间？那时候我在哪里？','我看到了什么？听到了什么？','有人说了一句什么话？','我的身体有什么感觉？我做了什么动作？'],
+ feel:['那一刻，我的手、脚、心、脸在干什么？','事情发生前，我以为会怎样？结果呢？','旁边的人在干什么？我看到后怎么做的？'],
+ frame:['事前我是什么心情？','最难的时候发生了什么？','什么时候心情变好了？','最后我发现了什么？'],
+ ends:['这件事的第一秒，有人说了什么、或者我做了什么？','从这件事里，我自己想到了什么？（不是老师说的道理）']
+};
+const SOLO_TELL=['小声把你写的读给自己听，读到卡住的地方，用铅笔圈出来。','读完问自己：我用上这一关的招式了吗？在哪一句？','选出最满意的一句，抄进下面的框里。'];
+const VERSION='1.0';
 const TOPICS=['第一次＿＿（游泳 / 上台 / 自己买东西）','那一次，我好紧张','我学会了＿＿','一次失败的尝试','运动会上的我','我当了一回小老师','和爸爸妈妈的一次比赛','被误会的那一天','一次难忘的考试','我终于做到了','记一次游戏','我的心儿怦怦跳'];
 const BODY=['手','脚','腿','心跳','心怦','心扑通','脸','眼','泪','汗','嗓','嘴','牙','低头','抬头','背','肩','膝','鼻','耳','抖','咬','攥','握','跺','缩','屏住','发麻','发软','直冒','打转','蹦','喘'];
 
@@ -151,7 +161,8 @@ const save=()=>{localStorage.setItem(KEY,JSON.stringify(S));document.getElementB
 const star=n=>{S.stars+=n;save()};
 const today=()=>new Date().toISOString().slice(0,10);
 const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)};
-const lvState=id=>S.lv[id]=S.lv[id]||{step:0,done:false};
+const lvState=id=>S.lv[id]=S.lv[id]||{step:0,done:false,start:Date.now(),tries:0};
+const tryFail=id=>{lvState(id).tries=(lvState(id).tries||0)+1;save()};
 save();
 
 /* ============ 工具 ============ */
@@ -174,12 +185,14 @@ function home(){
   const due=LEVELS.filter(L=>{const s=S.lv[L.id];return s&&s.done&&s.review&&s.review.some(d=>d<=today())});
   let h='';
   if(due.length) h+=`<div class="card review"><h2>今天要复习</h2>${due.map(L=>`<a class="btn" href="#review/${L.id}">${L.name}</a>`).join('')}<div class="small">只做一道改写题，2 分钟。</div></div>`;
+  const mode=S.mode||'dad';
+  h+=`<div class="card"><h2>今天怎么练？</h2><button class="btn ${mode==='dad'?'go':'alt'}" onclick="S.mode='dad';save();home()">爸爸陪我</button><button class="btn ${mode==='solo'?'go':'alt'}" onclick="S.mode='solo';save();home()">我自己练</button><div class="small">${mode==='solo'?'自己练：先在心里想一想，再写；写完小声读给自己听。':'爸爸陪：写完讲给爸爸听，爸爸只夸一句、只改一处。'}</div></div>`;
   h+='<div class="card"><h2>六个招式</h2><div class="tip">每个招式五步：学 → 辨 → 改 → 写 → 讲。过关一个，才开下一个。</div></div><div class="grid">';
   LEVELS.forEach((L,i)=>{
     const s=S.lv[L.id]; const unlocked=i===0||(S.lv[LEVELS[i-1].id]||{}).done;
     h+=`<a class="lv ${s&&s.done?'done':''} ${unlocked?'':'lock'}" ${unlocked?`href="#lv/${L.id}"`:''}><div class="n">第 ${i+1} 招 ${s&&s.done?'✅':''}</div><div class="t">${L.name}</div><div class="s">${L.tag}</div></a>`;
   });
-  h+='</div><div class="card" style="margin-top:14px"><h2>工具</h2><nav class="tools"><a href="#coaster">心情过山车</a><a href="#check">作文自查</a><a href="#topic">抽个题目</a><a href="#parent">给爸爸妈妈</a></nav></div>';
+  h+='</div><div class="card" style="margin-top:14px"><h2>工具</h2><nav class="tools"><a href="#coaster">心情过山车</a><a href="#check">作文自查</a><a href="#topic">抽个题目</a><a href="#parent">给爸爸妈妈</a><a href="#lines">我的好句子</a></nav></div><div class="small" style="text-align:center">版本 '+VERSION+'</div>';
   app.innerHTML=h;
 }
 
@@ -196,11 +209,16 @@ function level(id){
   }else if(step===2){
     h+=`<h3>改一改</h3><div id="rw"></div>`;
   }else if(step===3){
-    h+=`<h3>写一写</h3><div>${L.write.p}</div><textarea id="wt"></textarea><div class="chips" id="bodyChips"></div><button class="btn" onclick="checkWrite('${id}')">检查</button><div id="wf"></div>`;
+    h+=`<h3>写一写</h3><div>${L.write.p}</div><div class="ex" id="thinkBox"><b>先在心里想一想（不用写下来）：</b><ul>${(THINK[id]||[]).map(q=>`<li>${q}</li>`).join('')}</ul><button class="btn" onclick="startWrite()">我想好了，开始写</button></div><div id="writeArea" style="display:none"><textarea id="wt"></textarea><div class="chips" id="bodyChips"></div><button class="btn" onclick="checkWrite('${id}')">检查</button><div id="wf"></div></div>`;
   }else if(step===4){
-    h+=`<h3>讲一讲</h3><div class="ex">${L.tell}</div><button class="btn go" onclick="finish('${id}')">我讲完了，爸爸听懂了</button>`;
+    if((S.mode||'dad')==='solo'){
+      h+=`<h3>读一读（自己练）</h3><ul>${SOLO_TELL.map(x=>`<li>${x}</li>`).join('')}</ul><input type="text" id="best" placeholder="我最满意的一句"><button class="btn go" onclick="finish('${id}')">我读完了</button>`;
+    }else{
+      h+=`<h3>讲一讲</h3><div class="ex">${L.tell}</div><input type="text" id="best" placeholder="爸爸觉得最好的一句（可以不填）"><button class="btn go" onclick="finish('${id}')">我讲完了，爸爸听懂了</button>`;
+    }
   }else{
-    h+=`<div class="fb good"><b>这一招你过关啦！</b>第 1、3、7 天回来复习一下就记牢了。</div><a class="btn" href="#home">回到首页</a> <button class="btn alt" onclick="redo('${id}')">再练一遍</button>`;
+    const R={easy:'😊 容易',ok:'😐 还行',hard:'😣 有点难'};
+    h+=`<div class="fb good"><b>这一招你过关啦！</b>第 1、3、7 天回来复习一下就记牢了。</div><div class="card"><b>这一关难不难？</b><br>${Object.keys(R).map(k=>`<button class="btn ${s.rate===k?'go':'alt'}" onclick="rate('${id}','${k}')">${R[k]}</button>`).join('')}</div><a class="btn" href="#home">回到首页</a> <button class="btn alt" onclick="redo('${id}')">再练一遍</button>`;
   }
   h+='</div>';
   app.innerHTML=h;
@@ -208,9 +226,12 @@ function level(id){
   if(step===2) rewrite(L,0);
   if(step===3) $('bodyChips').innerHTML=['手心冒汗','心怦怦直跳','腿一下子软了','脸唰地红了','眼泪在眼眶里打转','咬着嘴唇','攥紧了拳头','嗓子发干'].map(w=>`<span onclick="$('wt').value+='${w}'">${w}</span>`).join('');
 }
+function startWrite(){$('thinkBox').style.display='none';$('writeArea').style.display='block';$('wt').focus()}
 function next(id,st){lvState(id).step=st;save();level(id);window.scrollTo(0,0)}
 function redo(id){S.lv[id].step=0;S.lv[id].done=false;save();level(id)}
-function finish(id){const s=lvState(id);s.done=true;s.step=5;const t=today();s.review=[addDays(t,1),addDays(t,3),addDays(t,7)];star(1);save();level(id)}
+function finish(id){const s=lvState(id);const b=($('best')||{}).value;if(b&&b.trim()){S.lines=S.lines||[];S.lines.push({lv:id,t:b.trim(),d:today()})}
+ s.done=true;s.step=5;s.end=Date.now();s.mode=S.mode||'dad';const t=today();s.review=[addDays(t,1),addDays(t,3),addDays(t,7)];star(1);save();level(id)}
+function rate(id,v){lvState(id).rate=v;save();level(id)}
 
 function quiz(L,i,right){
   const box=$('quiz'); if(!box) return;
@@ -238,14 +259,15 @@ function rewrite(L,i){
     const t=$('ri').value.trim(); const r=runChecks(t,R.checks,R.need); const len=hanLen(t);
     const ok=r.pass&&len>=(R.min||0);
     $('rf').innerHTML=`<div class="fb ${ok?'good':'warn'}">${fbHtml(r,R.min||0,len)}${ok?'<b>改得好！（+2 ⭐）</b>':'差一点，按没打勾的地方再改改。'}</div>`+(ok?'<button class="btn" id="rn">下一题</button>':'');
-    if(ok){star(2);$('rn').onclick=()=>rewrite(L,i+1)}
+    if(ok){star(2);$('rn').onclick=()=>rewrite(L,i+1)}else tryFail(L.id);
   };
 }
 function checkWrite(id){
   const L=LEVELS.find(x=>x.id===id); const t=$('wt').value.trim(); const r=runChecks(t,L.write.checks,L.write.need); const len=hanLen(t);
   const ok=r.pass&&len>=L.write.min;
-  $('wf').innerHTML=`<div class="fb ${ok?'good':'warn'}">${fbHtml(r,L.write.min,len)}${ok?'<b>写得真好！（+3 ⭐）</b>把最满意的一句抄到“好句子收集”里。':'没打勾的地方，<b>只改一处</b>就好。'}</div>`+(ok?`<button class="btn" onclick="next('${id}',4)">下一步：讲一讲</button>`:'');
-  if(ok) star(3);
+  const exHtml=ok?`<div class="card"><b>现在看看例文：</b><div class="ex">${L.ex}</div>例文里用了这一关的招式吗？在哪一句？你的作文里也有吗？<br><button class="btn alt" onclick="this.parentNode.querySelector('.cmp').textContent='很好！你和例文用了同一招。';">我也用了</button><button class="btn alt" onclick="this.parentNode.querySelector('.cmp').textContent='没关系，看看例文那一句，挑一处加到你的作文里。';">我还没有</button><div class="cmp tip"></div></div>`:'';
+  $('wf').innerHTML=`<div class="fb ${ok?'good':'warn'}">${fbHtml(r,L.write.min,len)}${ok?'<b>写得真好！（+3 ⭐）</b>':'没打勾的地方，<b>只改一处</b>就好。'}</div>`+exHtml+(ok?`<button class="btn" onclick="next('${id}',4)">下一步：${(S.mode||'dad')==='solo'?'读一读':'讲一讲'}</button>`:'');
+  if(ok){star(3);lvState(id).text=t;save()}else tryFail(id);
 }
 function review(id){
   const L=LEVELS.find(x=>x.id===id); const R=L.rewrite[Math.floor(Math.random()*L.rewrite.length)];
@@ -313,16 +335,22 @@ function parent(){
   const prog=LEVELS.map(L=>{const s=S.lv[L.id];return `<li>${L.name}：${s&&s.done?'✅ 已过关':s?'进行中（第 '+(s.step+1)+' 步）':'未开始'}</li>`}).join('');
   app.innerHTML=`<div class="card"><h2>给爸爸妈妈</h2>
   <h3>进度</h3><ul>${prog}</ul><div class="small">共 ${S.stars} 颗星</div>
+  <h3>练习记录（用来改进下一版）</h3><div style="overflow-x:auto"><table style="border-collapse:collapse;font-size:15px;width:100%"><tr><th align="left">关卡</th><th>重试</th><th>用时</th><th>难度</th><th>方式</th></tr>${LEVELS.map(L=>{const s=S.lv[L.id];if(!s)return'';const m=s.end&&s.start?Math.round((s.end-s.start)/60000)+' 分':'-';const R={easy:'😊',ok:'😐',hard:'😣'};return `<tr><td>${L.name}</td><td align="center">${s.tries||0}</td><td align="center">${m}</td><td align="center">${R[s.rate]||'-'}</td><td align="center">${s.mode==='solo'?'自己':s.mode?'爸爸陪':'-'}</td></tr>`}).join('')}</table></div>
+  <button class="btn" onclick="exportRec()">导出练习记录</button><div id="exp"></div>
   <h3>节奏</h3><ul><li>每周 3 次，每次 15 分钟，练一个招式</li><li>每两周写一篇整篇，配合学校的习作单元</li><li>过关后第 1、3、7 天，首页会提醒复习</li></ul>
   <h3>问孩子的时候</h3><ul><li><b>一次只问一个问题</b>，问完心里默数 10 秒，不催</li><li>卡住了就降难度：开放题 → 二选一 → 问画面（“那一下你的脚停了没有？”）</li><li><b>先问身体，再问心里</b></li><li>她说一句，你复述一句，抓一个词往下问</li><li>不问“有什么印象深刻的”“有什么感受”，问“哪一刻、谁、说了什么、你做了什么”</li></ul>
   <h3>评价只看四样，每样 1–3 颗星</h3><ul><li>内容具体</li><li>感受真实</li><li>结构清楚</li><li>语言通顺</li></ul><div class="tip">只夸具体的一句，只改一处；只跟她自己比。</div>
   <button class="btn alt" onclick="if(confirm('确定清空所有进度？')){localStorage.removeItem(KEY);location.hash='#home';location.reload()}">清空进度</button></div>`;
 }
 
+function exportRec(){const d={version:VERSION,date:today(),stars:S.stars,levels:Object.fromEntries(Object.entries(S.lv).map(([k,v])=>[k,{done:v.done,tries:v.tries||0,min:v.end&&v.start?Math.round((v.end-v.start)/60000):null,rate:v.rate||null,mode:v.mode||null,text:v.text||''}])),lines:S.lines||[]};
+ const t=JSON.stringify(d);$('exp').innerHTML='<div class="tip">全选下面的文字，复制发给 AI 助手：</div><textarea style="min-height:120px">'+t.replace(/</g,'&lt;')+'</textarea>';
+ if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>{$('exp').insertAdjacentHTML('afterbegin','<div class="fb good">已复制到剪贴板。</div>')}).catch(()=>{});}
+function lines(){const L=S.lines||[];app.innerHTML=`<div class="card"><h2>我的好句子</h2>${L.length?'<ul>'+L.slice().reverse().map(x=>`<li>${x.t.replace(/</g,'&lt;')} <span class="small">${x.d}</span></li>`).join('')+'</ul>':'<div class="tip">每过一关，把最满意的一句存进来。</div>'}<a class="btn" href="#home">回首页</a></div>`}
 /* 路由 */
 function route(){
   const h=location.hash.slice(1)||'home'; const [p,id]=h.split('/');
-  ({home,coaster,check,topic,parent}[p]||(p==='lv'?()=>level(id):p==='review'?()=>review(id):home))();
+  ({home,coaster,check,topic,parent,lines}[p]||(p==='lv'?()=>level(id):p==='review'?()=>review(id):home))();
   window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',route); route();
