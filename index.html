@@ -69,6 +69,21 @@ input[type=range]{width:100%}
 svg{width:100%;height:170px;background:#fff;border-radius:12px}
 @media (max-width:420px){.cmp2{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr;gap:8px}.lv .t{font-size:17px}}
 @media print{header,nav,.btn{display:none}}
+.card.micro{border:3px solid #f0a020}
+.voice{font-size:13px;color:#888;margin-top:4px}
+.fb.guide{background:#fff8d6;border:2px dashed #f0c040}
+.moodRow{margin-bottom:10px}.moodRow .btn{font-size:16px;padding:8px 12px}
+.rec{background:#f3f6fb;border-radius:12px;padding:10px;margin:10px 0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}
+.kpis div{background:#fff3e6;border-radius:12px;padding:8px 2px}.kpis b{display:block;font-size:22px;color:#c62828}.kpis span{font-size:12px;color:#666}
+.wall{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.wcell{background:#f4f4f4;border-radius:10px;padding:6px;font-size:13px;text-align:center}
+.wcell span{display:block;font-size:22px}.wcell b{display:block;font-size:12px;color:#2e7d4f}
+.wcell.m0{opacity:.5}.wcell.m4{background:#fff4c2}
+svg.chart{height:auto;max-height:260px}
+.printcard{background:#fffdf5;border:2px solid #eee;border-radius:12px;padding:10px;margin:10px 0}
+.printcard table{font-size:13px}.printcard td,.printcard th{white-space:normal}
+@media print{body *{visibility:hidden}.printcard,.printcard *{visibility:visible}.printcard{position:absolute;left:0;top:0;width:100%;border:0}.printcard .btn{display:none}}
 </style>
 </head>
 <body>
@@ -318,7 +333,7 @@ const RANKS = [[0,'见习小作家'],[30,'小作家'],[80,'优秀小作家'],[16
 const DIMS = [['content','内容具体','有画面：有原话、动作或细节'],['feel','感受真实','读的人能感觉到你的心情'],['struct','结构清楚','开头、中间、结尾分得清'],['lang','语言通顺','读起来不卡，没有错别字']];
 const CLICHES = ['很开心','很难忘','终身难忘','重要性','天气晴朗','难忘的一天','万里无云','阳光明媚'];
 const CHANGELOG = [
- ['1.1','新增 7 个题材专项关、整篇写作工坊（含二稿只改一处）、四维星级评价、坏句好句对比卡、小作家等级与徽章、每日任务与连续打卡、星星兑换、进度备份恢复；修复复习日期按 UTC 计算的问题。'],
+ ['1.1','新增 7 个题材专项关、整篇写作工坊（含二稿只改一处）、四维星级评价、坏句好句对比卡、小作家等级与徽章、每日任务与连续打卡、星星兑换、进度备份恢复；“今天 3 分钟”微挑战、句子排序题、语音输入提示、录音回放、屏幕外练习卡；招式掌握四级、写作心情记录、摸底与月度测评、成长报告与周报；修复复习日期按 UTC 计算的问题。'],
  ['1.0','6 个通用招式闯关；爸爸陪 / 自己练两种模式；先想后写；写完再看例文；练习记录导出；好句子收集。']
 ];
 
@@ -415,17 +430,22 @@ function dailyTask() {
   const nxt = LEVELS.find(L => unlocked(L) && !(S.lv[L.id] || {}).done);
   if (nxt) return { t: '闯关「' + nxt.name + '」', h: '#lv/' + nxt.id, why: nxt.tag };
   const last = S.essays.length ? S.essays[S.essays.length - 1].d : null;
+  if (last && addDays(last, 7) > today()) { const wk = weakest(); if (wk) return { t: '巩固「' + wk.name + '」', h: '#micro', why: '这一招现在最弱，做个 3 分钟微挑战。' }; }
   return { t: '写一篇工坊作文', h: '#workshop', why: last ? '上次写整篇是 ' + last + '。' : '把学过的招式拼成一整篇。' };
 }
 function home() {
   const r = rankInfo(), task = dailyTask(), mode = S.mode;
   let h = `<div class="card task"><div class="small">今天的任务</div><div class="big">${task.t}</div><div class="tip">${task.why}</div><a class="btn go" href="${task.h}">开始</a><div class="small" style="margin-top:8px">🔥 连续打卡 ${streak()} 天</div></div>`;
+  const ad = assessDue();
+  if (ad === 'base' && !S.skipBase) h += `<div class="card review"><b>📏 第一次来？先做个摸底</b><div class="tip">10 道小题 + 一篇作文，以后和自己比。</div><a class="btn go" href="#assess">去摸底</a><button class="btn alt" onclick="S.skipBase=true;save();home()">先跳过</button></div>`;
+  if (ad === 'month') h += `<div class="card review"><b>📏 该做月度测评啦</b><div class="tip">写一篇没有提示的作文，看看这个月的进步。</div><a class="btn go" href="#assess">去测评</a></div>`;
+  if (microAvail().length) h += `<a class="card micro" href="#micro"><b>⚡ 今天 3 分钟</b><div class="tip">只做 1 题。累的时候也能做。今天还能拿 ${S.micro.d === today() ? Math.max(0, 3 - S.micro.n) : 3} 次星星。</div></a>`;
   h += `<div class="card"><b>${r.name}</b>　⭐ 共得 ${S.stars} 颗（可用 ${avail()}）${r.next ? `<div class="bar"><span style="width:${Math.min(100, Math.round(100 * (S.stars - RANKS[r.idx][0]) / (RANKS[r.idx + 1][0] - RANKS[r.idx][0])))}%"></span></div><div class="small">再得 ${r.need} 颗星，升级为「${r.next}」</div>` : '<div class="small">你已经是最高等级啦！</div>'}</div>`;
   h += `<div class="card"><b>今天怎么练？</b><br><button class="btn ${mode === 'dad' ? 'go' : 'alt'}" onclick="setMode('dad')">爸爸陪我</button><button class="btn ${mode === 'solo' ? 'go' : 'alt'}" onclick="setMode('solo')">我自己练</button><div class="small">${mode === 'solo' ? '自己练：先在心里想一想，再写；写完小声读给自己听。' : '爸爸陪：写完讲给爸爸听，爸爸只夸一句、只改一处。'}</div></div>`;
   h += grid('root', '通用招式', '每篇作文都用得上，一关一关解锁。');
   h += grid('genre', '题材岛', rootDone() || S.genreOpen ? '学校上到哪个单元，就先练哪一关（单元名以课本为准）。' : '通用招式全部过关后解锁（爸爸也可以在家长页提前打开）。');
   h += `<a class="card workshop" href="#workshop"><b>✍️ 整篇写作工坊</b><div class="tip">一步一步，把招式拼成一整篇，还能写二稿。</div></a>`;
-  h += `<div class="card"><b>工具箱</b><nav class="tools"><a href="#coaster">心情过山车</a><a href="#check">作文自查</a><a href="#topic">抽个题目</a><a href="#essays">我的作文本</a><a href="#badges">徽章墙</a><a href="#shop">星星兑换</a><a href="#lines">我的好句子</a><a href="#parent">给爸爸妈妈</a></nav></div><div class="small" style="text-align:center">版本 ${VERSION}</div>`;
+  h += `<div class="card"><b>工具箱</b><nav class="tools"><a href="#coaster">心情过山车</a><a href="#check">作文自查</a><a href="#topic">抽个题目</a><a href="#essays">我的作文本</a><a href="#badges">徽章墙</a><a href="#shop">星星兑换</a><a href="#lines">我的好句子</a><a href="#report">成长报告</a><a href="#assess">测评</a><a href="#parent">给爸爸妈妈</a></nav></div><div class="small" style="text-align:center">版本 ${VERSION}</div>`;
   app.innerHTML = h;
 }
 function setMode(m) { S.mode = m; save(); home(); }
@@ -433,7 +453,7 @@ function grid(group, title, tip) {
   let h = `<div class="card"><b>${title}</b><div class="tip">${tip}</div></div><div class="grid">`;
   LEVELS.filter(l => l.group === group).forEach((L, i) => {
     const s = S.lv[L.id], ok = unlocked(L);
-    h += `<a class="lv ${s && s.done ? 'done' : ''} ${ok ? '' : 'lock'}" ${ok ? `href="#lv/${L.id}"` : ''}><div class="n">${L.badge} ${group === 'root' ? '第 ' + (i + 1) + ' 招' : '题材'} ${s && s.done ? '✅' : ok ? '' : '🔒'}</div><div class="t">${L.name}</div><div class="s">${L.tag}</div>${L.unit ? `<div class="small">课本：${L.unit}</div>` : ''}</a>`;
+    h += `<a class="lv ${s && s.done ? 'done' : ''} ${ok ? '' : 'lock'}" ${ok ? `href="#lv/${L.id}"` : ''}><div class="n">${L.badge} ${group === 'root' ? '第 ' + (i + 1) + ' 招' : '题材'} ${s && s.done ? (MASTER[mastery(L.id)] || '✅') : ok ? '' : '🔒'}</div><div class="t">${L.name}</div><div class="s">${L.tag}</div>${L.unit ? `<div class="small">课本：${L.unit}</div>` : ''}</a>`;
   });
   return h + '</div>';
 }
@@ -442,6 +462,7 @@ function grid(group, title, tip) {
 const STEPS = ['学', '辨', '改', '写', (S.mode === 'solo' ? '读' : '讲')];
 function level(id) {
   const L = L_(id); if (!L || !unlocked(L)) { home(); return; }
+  MOOD_NOW = null;
   const s = lvState(id), step = s.done ? 5 : s.step;
   const bar = `<div class="steps">${['学', '辨', '改', '写', S.mode === 'solo' ? '读' : '讲'].map((t, i) => `<span class="${i < step ? 'ok' : i === step ? 'on' : ''}">${t}</span>`).join('')}</div>`;
   let h = `<div class="card"><h2>${L.badge} ${L.name}</h2><div class="tip">${L.tag}</div>${bar}`;
@@ -452,10 +473,10 @@ function level(id) {
   } else if (step === 1) h += `<h3>辨一辨</h3><div id="quiz"></div>`;
   else if (step === 2) h += `<h3>改一改</h3><div id="rw"></div>`;
   else if (step === 3) {
-    h += `<h3>写一写</h3><div>${L.write.p}</div><div class="ex" id="thinkBox"><b>先在心里想一想（不用写下来）：</b><ul>${L.think.map(q => `<li>${q}</li>`).join('')}</ul><button class="btn" onclick="startWrite()">我想好了，开始写</button></div><div id="writeArea" style="display:none"><textarea id="wt"></textarea><div class="chips" id="bodyChips"></div><button class="btn" onclick="checkWrite('${id}')">检查</button><div id="wf"></div></div>`;
+    h += `<h3>写一写</h3><div>${L.write.p}</div>${voiceGuide()}<div class="ex" id="thinkBox">${moodRow('lv_' + id, null)}<b>先在心里想一想（不用写下来）：</b><ul>${L.think.map(q => `<li>${q}</li>`).join('')}</ul><button class="btn" onclick="startWrite()">我想好了，开始写</button></div><div id="writeArea" style="display:none"><textarea id="wt"></textarea>${VOICE_TIP}<div class="chips" id="bodyChips"></div><button class="btn" onclick="checkWrite('${id}')">检查</button><div id="wf"></div></div>`;
   } else if (step === 4) {
-    if (S.mode === 'solo') h += `<h3>读一读（自己练）</h3><ul>${SOLO_TELL.map(x => `<li>${x}</li>`).join('')}</ul><input type="text" id="best" placeholder="我最满意的一句"><button class="btn go" onclick="finish('${id}')">我读完了</button>`;
-    else h += `<h3>讲一讲</h3><div class="ex">${L.tell}</div><input type="text" id="best" placeholder="爸爸觉得最好的一句（可以不填）"><button class="btn go" onclick="finish('${id}')">我讲完了，爸爸听懂了</button>`;
+    if (S.mode === 'solo') h += `<h3>读一读（自己练）</h3><ul>${SOLO_TELL.map(x => `<li>${x}</li>`).join('')}</ul>${recHtml()}<input type="text" id="best" placeholder="我最满意的一句"><button class="btn go" onclick="finish('${id}')">我读完了</button>`;
+    else h += `<h3>讲一讲</h3><div class="ex">${L.tell}</div>${recHtml()}<input type="text" id="best" placeholder="爸爸觉得最好的一句（可以不填）"><button class="btn go" onclick="finish('${id}')">我讲完了，爸爸听懂了</button>`;
   } else {
     const R = { easy: '😊 容易', ok: '😐 还行', hard: '😣 有点难' };
     h += `<div class="fb good"><b>${L.badge} 这一招你过关啦！得到徽章「${L.name}」</b><br>第 1、3、7 天回来复习一下就记牢了。</div><div class="card"><b>这一关难不难？</b><br>${Object.keys(R).map(k => `<button class="btn ${s.rate === k ? 'go' : 'alt'}" onclick="rate('${id}','${k}')">${R[k]}</button>`).join('')}</div><a class="btn" href="#home">回到首页</a> <button class="btn alt" onclick="redo('${id}')">再练一遍</button>`;
@@ -465,13 +486,13 @@ function level(id) {
   if (step === 2) rewrite(L, 0);
   if (step === 3) $('bodyChips').innerHTML = ['手心冒汗', '心怦怦直跳', '腿一下子软了', '脸唰地红了', '眼泪在眼眶里打转', '咬着嘴唇', '攥紧了拳头', '嗓子发干'].map(w => `<span onclick="$('wt').value+='${w}'">${w}</span>`).join('');
 }
-function startWrite() { $('thinkBox').style.display = 'none'; $('writeArea').style.display = 'block'; $('wt').focus(); }
+function startWrite() { if (!MOOD_NOW) { alert('先点一下：现在想写吗？'); return; } $('thinkBox').style.display = 'none'; $('writeArea').style.display = 'block'; $('wt').focus(); }
 function next(id, st) { lvState(id).step = st; save(); level(id); window.scrollTo(0, 0); }
 function redo(id) { const s = lvState(id); Object.assign(s, { step: 0, done: false, start: Date.now(), end: null, rate: null }); save(); level(id); }
 function finish(id) {
   const s = lvState(id), b = ($('best') || {}).value;
   if (b && b.trim()) S.lines.push({ lv: id, t: b.trim(), d: today() });
-  s.done = true; s.step = 5; s.end = Date.now(); s.mode = S.mode; const t = today();
+  s.done = true; s.step = 5; s.end = Date.now(); s.mode = S.mode; const t = today(); s.doneD = t;
   s.review = [addDays(t, 1), addDays(t, 3), addDays(t, 7)];
   star(1); level(id);
 }
@@ -526,7 +547,7 @@ function rewrite(L, i) {
     orderWidget('ordBox', Object.assign({ lv: L.id }, R), i + L.id.length, () => { star(2); $('rf').innerHTML = '<button class="btn" id="rn">下一题</button>'; $('rn').onclick = () => rewrite(L, i + 1); });
     return;
   }
-  box.innerHTML = `<div class="small">第 ${i + 1} / ${L.rewrite.length} 题</div><div>${R.p}</div><input type="text" id="ri"><button class="btn" id="rb">检查</button><div id="rf"></div>`;
+  box.innerHTML = `<div class="small">第 ${i + 1} / ${L.rewrite.length} 题</div><div>${R.p}</div><input type="text" id="ri">${VOICE_TIP}<button class="btn" id="rb">检查</button><div id="rf"></div>`;
   $('rb').onclick = () => {
     const t = $('ri').value.trim(), r = runChecks(t, R.checks, R.need), len = hanLen(t), ok = r.pass && len >= (R.min || 0);
     $('rf').innerHTML = `<div class="fb ${ok ? 'good' : 'warn'}">${fbHtml(r, R.min || 0, len)}${ok ? '<b>改得好！（+2 ⭐）</b>' : '差一点，按没打勾的地方再改改。'}</div>` + (ok ? '<button class="btn" id="rn">下一题</button>' : '');
@@ -535,7 +556,7 @@ function rewrite(L, i) {
 }
 function checkWrite(id) {
   const L = L_(id), t = $('wt').value.trim(), r = runChecks(t, L.write.checks, L.write.need), len = hanLen(t), ok = r.pass && len >= L.write.min;
-  let h = `<div class="fb ${ok ? 'good' : 'warn'}">${fbHtml(r, L.write.min, len)}${ok ? '<b>写得真好！（+3 ⭐）</b>' : '没打勾的地方，<b>只改一处</b>就好。'}</div>`;
+  let h = `<div class="fb ${ok ? 'good' : 'warn'}">${fbHtml(r, L.write.min, len)}${ok ? '<b>写得真好！（+3 ⭐）</b><br>如果是用语音说的，错字你自己改过了吗？改错字也是在练修改。' : '没打勾的地方，<b>只改一处</b>就好。'}</div>`;
   if (ok) {
     h += `<div class="card"><b>现在看看例文：</b><div class="ex">${L.ex}</div>例文里用了这一关的招式吗？在哪一句？你的也用了吗？<br><button class="btn alt" onclick="this.parentNode.querySelector('.cmp').textContent='很好！你和例文用了同一招。'">我也用了</button><button class="btn alt" onclick="this.parentNode.querySelector('.cmp').textContent='没关系，看看例文那一句，挑一处加到你的里面。'">我还没有</button><div class="cmp tip"></div></div>`;
     h += ratingHtml('lv_' + id) + `<button class="btn" onclick="saveRating('lv_${id}','${id}');next('${id}',4)">下一步：${S.mode === 'solo' ? '读一读' : '讲一讲'}</button>`;
@@ -545,15 +566,18 @@ function checkWrite(id) {
 }
 function review(id) {
   const L = L_(id), cand = L.rewrite.filter(r => r.type !== 'order'), R = cand.length ? cand[Math.floor(Math.random() * cand.length)] : null;
-  if (!R) { app.innerHTML = `<div class="card review"><h2>复习：${L.name}</h2><div id="ordBox"></div><div id="rf"></div></div>`; orderWidget('ordBox', L.rewrite[0], Date.now() % 97, () => reviewDone(id)); return; }
-  app.innerHTML = `<div class="card review"><h2>复习：${L.badge} ${L.name}</h2><div class="ex">${L.learn[0]}</div><div>${R.p}</div><input type="text" id="ri"><button class="btn" id="rb">检查</button><div id="rf"></div></div>`;
+  if (!R) { app.innerHTML = `<div class="card review"><h2>复习：${L.name}</h2><div id="ordBox"></div><div id="rf"></div></div>`; let ft = true; orderWidget('ordBox', L.rewrite[0], Date.now() % 97, () => { if (ft) { const s = S.lv[id]; s.firstOk = (s.firstOk || []).concat(today()); } reviewDone(id); }); $('ordBox').addEventListener('click', e => { if (e.target.id === 'ordReset') ft = false; }); return; }
+  app.innerHTML = `<div class="card review"><h2>复习：${L.badge} ${L.name}</h2><div class="ex">${L.learn[0]}</div><div>${R.p}</div><input type="text" id="ri">${VOICE_TIP}<button class="btn" id="rb">检查</button><div id="rf"></div></div>`;
+  let firstTry = true;
   $('rb').onclick = () => {
     const t = $('ri').value.trim(), r = runChecks(t, R.checks, R.need), len = hanLen(t), ok = r.pass && len >= (R.min || 0);
+    if (firstTry && ok) { const s = S.lv[id]; s.firstOk = (s.firstOk || []).concat(today()); }
+    firstTry = false;
     $('rf').innerHTML = `<div class="fb ${ok ? 'good' : 'warn'}">${fbHtml(r, R.min || 0, len)}${ok ? '复习完成！（+1 ⭐）' : '再改改。'}</div>`;
     if (ok) reviewDone(id);
   };
 }
-function reviewDone(id) { const s = S.lv[id]; s.review = (s.review || []).filter(d => d > today()); s.reviewed = (s.reviewed || []).concat(today()); star(1); $('rf').insertAdjacentHTML('beforeend', '<a class="btn" href="#home">回首页</a>'); }
+function reviewDone(id) { if ($('rf').querySelector('a.btn')) return; const s = S.lv[id]; s.review = (s.review || []).filter(d => d > today()); s.reviewed = (s.reviewed || []).concat(today()); star(1); $('rf').insertAdjacentHTML('beforeend', '<a class="btn" href="#home">回首页</a>'); }
 
 /* ============ 四维星级评价 ============ */
 const RT = {};
@@ -599,7 +623,7 @@ function workshop() {
     const lo = W.cv.indexOf(Math.min(...W.cv)), hi = W.cv.indexOf(Math.max(...W.cv));
     const tip = G ? `<div class="ex">招式提醒：<b>${G.tag}</b>。${G.learn[0]}</div>` : '';
     const box = (k, label, hint) => `<div class="row"><label>${label}</label><div class="small">${hint}</div><textarea class="mid" oninput="wsField('parts.${k}',this.value)">${esc(W.parts[k])}</textarea></div>`;
-    h += `<h3>4. 分段写</h3>${tip}<div class="tip">🎤 不想打字，可以用手机输入法的语音输入，说完再改错字。</div>`
+    h += `<h3>4. 分段写</h3>${W.mood ? '' : moodRow('workshop', 'wsMood')}${tip}${VOICE_TIP}`
       + box('open', '开头', '写事前的心情：' + esc(W.ct[0] || W.three.b || '期待、好奇还是紧张？'))
       + box('s1', '镜头一', '最难的时候：' + esc(W.ct[lo] || '') + '。写看到、听到、身体、有人说、我做了。')
       + box('s2', '镜头二', '转折或最开心的时候：' + esc(W.ct[hi] || '') + '。')
@@ -700,7 +724,7 @@ function lines() {
 
 /* ============ 徽章 / 兑换 ============ */
 function badges() {
-  app.innerHTML = `<div class="card"><h2>🏅 徽章墙</h2><div class="grid3">${LEVELS.map(L => { const d = (S.lv[L.id] || {}).done; return `<div class="badge ${d ? '' : 'off'}"><div class="em">${L.badge}</div>${L.name}</div>`; }).join('')}</div><div class="tip">已得 ${LEVELS.filter(L => (S.lv[L.id] || {}).done).length} / ${LEVELS.length} 枚</div><a class="btn" href="#home">回首页</a></div>`;
+  app.innerHTML = `<div class="card"><h2>🏅 徽章墙</h2><div class="grid3">${LEVELS.map(L => { const d = (S.lv[L.id] || {}).done; return `<div class="badge ${d ? '' : 'off'}"><div class="em">${L.badge}</div>${L.name}<div class="small">${d ? MASTER[mastery(L.id)] + ' ' + MASTER_NAME[mastery(L.id)] : ''}</div></div>`; }).join('')}</div><div class="tip">已得 ${LEVELS.filter(L => (S.lv[L.id] || {}).done).length} / ${LEVELS.length} 枚</div><a class="btn" href="#home">回首页</a></div>`;
 }
 function shop() {
   const R = S.rewards;
@@ -723,7 +747,7 @@ function parent() {
   const R = { easy: '😊', ok: '😐', hard: '😣' };
   const rows = LEVELS.map(L => { const s = S.lv[L.id]; if (!s) return ''; const m = s.end && s.start ? Math.round((s.end - s.start) / 60000) + ' 分' : '-'; return `<tr><td>${L.badge} ${L.name}</td><td>${s.done ? '✅' : '第 ' + (s.step + 1) + ' 步'}</td><td>${s.tries || 0}</td><td>${m}</td><td>${R[s.rate] || '-'}</td><td>${s.mode === 'solo' ? '自己' : s.mode ? '爸爸陪' : '-'}</td></tr>`; }).join('');
   const rat = S.ratings.slice(-5).reverse().map(r => `<tr><td>${r.d}</td><td>${r.where === 'workshop' ? '工坊' : (L_(r.where) || {}).name || r.where}</td>${DIMS.map(d => `<td>${r.self[d[0]] || '-'}${r.dad ? ' / ' + (r.dad[d[0]] || '-') : ''}</td>`).join('')}</tr>`).join('');
-  app.innerHTML = `<div class="card"><h2>给爸爸妈妈</h2>
+  app.innerHTML = `<div class="card"><h2>给爸爸妈妈</h2>${weekSummary()}<a class="btn" href="#report">看成长报告</a>
   <div class="small">共得 ${S.stars} 星，已兑换 ${S.spent} 星；连续打卡 ${streak()} 天；整篇作文 ${S.essays.length} 篇</div>
   <h3>闯关记录</h3><div class="scroll"><table><tr><th>关卡</th><th>进度</th><th>重试</th><th>用时</th><th>难度</th><th>方式</th></tr>${rows || '<tr><td colspan="6">还没开始</td></tr>'}</table></div>
   <h3>最近的四维评价（自评 / 爸爸评）</h3><div class="scroll"><table><tr><th>日期</th><th>练习</th>${DIMS.map(d => `<th>${d[1]}</th>`).join('')}</tr>${rat || '<tr><td colspan="6">还没有评价</td></tr>'}</table></div>
@@ -732,6 +756,7 @@ function parent() {
   <input type="text" id="rwName" placeholder="奖励名称，比如：周末多看半小时动画"><input type="text" id="rwCost" placeholder="需要几颗星，比如 30" inputmode="numeric" style="margin-top:8px"><button class="btn" onclick="addReward()">添加奖励</button>
   ${S.redeem.length ? '<div class="small">兑换记录：' + S.redeem.map(x => `${x.d} ${esc(x.name)}（${x.cost}）`).join('；') + '</div>' : ''}
   <h3>问孩子的时候</h3><ul><li><b>一次只问一个问题</b>，问完心里默数 10 秒，不催</li><li>卡住了就降难度：开放题 → 二选一 → 问画面（“那一下你的脚停了没有？”）</li><li><b>先问身体，再问心里</b></li><li>不问“有什么印象深刻的”“有什么感受”，问“哪一刻、谁、说了什么、你做了什么”</li><li>只夸具体的一句，只改一处；只跟她自己比</li></ul>
+  ${offlineCard()}
   <h3>数据</h3><button class="btn" onclick="exportRec()">导出练习记录（发给 AI 助手）</button><button class="btn alt" onclick="backup()">备份全部进度</button><button class="btn alt" onclick="restoreUI()">恢复进度</button><div id="exp"></div>
   <h3>更新记录</h3><ul>${CHANGELOG.map(c => `<li><b>${c[0]}</b>：${c[1]}</li>`).join('')}</ul>
   <button class="btn alt" onclick="if(confirm('确定清空所有进度？此操作不能撤销。')){localStorage.removeItem(KEY);location.hash='#home';location.reload()}">清空进度</button></div>`;
@@ -757,6 +782,267 @@ function route() {
   if (p === 'lv') level(id); else if (p === 'review') review(id); else (PAGES[p] || home)();
   window.scrollTo(0, 0);
 }
+window.addEventListener('hashchange', route);
+
+/* ===== v1.1 第二批：微挑战 / 语音提示 / 录音 / 屏幕外卡 / 掌握度与评估 ===== */
+function defaults2(s) {
+  s.micro = s.micro || { d: '', n: 0 }; s.microLog = s.microLog || []; s.moodLog = s.moodLog || [];
+  s.assess = s.assess || []; s.seenVoice = !!s.seenVoice;
+  return s;
+}
+defaults2(S);
+const _defaults1 = defaults;
+defaults = function (s) { return defaults2(_defaults1(s)); };
+
+/* ---------- 语音输入提示 ---------- */
+const VOICE_TIP = '<div class="voice">🎤 可以用手机输入法的语音输入：点输入框 → 按键盘上的麦克风 → 说完再改错字。</div>';
+function voiceGuide() {
+  if (S.seenVoice) return '';
+  S.seenVoice = true; save();
+  return '<div class="fb guide"><b>小提示：不想打字，可以“说”出来！</b><br>点一下输入框，键盘上有个 🎤 麦克风，按住说话，文字就出来了。说完自己读一遍，把错字改掉——改错字也是在练修改哦。</div>';
+}
+
+/* ---------- 心情打点 ---------- */
+const MOODS = [['bad', '😟 不想写'], ['mid', '😐 还行'], ['good', '😊 想写']];
+function moodRow(where, cbName) {
+  return `<div class="moodRow"><b>现在想写吗？点一个：</b><br>${MOODS.map(m => `<button class="btn alt mood" data-m="${m[0]}" onclick="pickMood(this,'${where}',${cbName ? `'${cbName}'` : 'null'})">${m[1]}</button>`).join('')}</div>`;
+}
+let MOOD_NOW = null;
+function pickMood(b, where, cb) {
+  MOOD_NOW = b.dataset.m; S.moodLog.push({ d: today(), where, v: MOOD_NOW }); save();
+  b.parentNode.querySelectorAll('.mood').forEach(x => x.classList.toggle('go', x === b));
+  if (b.dataset.m === 'bad') b.parentNode.insertAdjacentHTML('beforeend', '<div class="tip">没关系，今天只写一小段就好。写不出来就先说给自己听。</div>');
+  if (cb && window[cb]) window[cb]();
+}
+
+/* ---------- 录音回放（只在内存，不保存） ---------- */
+let REC = null, REC_URL = null, REC_CHUNKS = [];
+const canRecord = () => !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+function recHtml() {
+  if (!canRecord()) return '';
+  return `<div class="rec"><b>🎙️ 录下来听一听</b><div class="tip">${S.mode === 'solo' ? '录下来，听一遍自己读，哪里卡住就圈出来。' : '读给爸爸听之前，也可以先录一遍自己听。'}录音只留在这台手机上，刷新就没了。</div><button class="btn" id="recBtn" onclick="recToggle()">开始录音</button><button class="btn alt" id="playBtn" onclick="recPlay()" disabled>回放</button><audio id="recAudio" style="display:none"></audio></div>`;
+}
+function recToggle() {
+  const btn = $('recBtn');
+  if (REC && REC.state === 'recording') { REC.stop(); btn.textContent = '开始录音'; return; }
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(st => {
+    REC_CHUNKS = []; REC = new MediaRecorder(st);
+    REC.ondataavailable = e => REC_CHUNKS.push(e.data);
+    REC.onstop = () => { st.getTracks().forEach(t => t.stop()); if (REC_URL) URL.revokeObjectURL(REC_URL); REC_URL = URL.createObjectURL(new Blob(REC_CHUNKS)); $('playBtn').disabled = false; };
+    REC.start(); btn.textContent = '停止录音';
+  }).catch(() => { const r = document.querySelector('.rec'); if (r) r.innerHTML = '<div class="tip">没有打开麦克风，也没关系，直接小声读给自己听就好。</div>'; });
+}
+function recPlay() { if (!REC_URL) return; const a = $('recAudio'); a.src = REC_URL; a.play(); }
+
+/* ---------- 掌握度四级 ---------- */
+const MASTER = ['', '🌱', '🌿', '🌳', '🏆'];
+const MASTER_NAME = ['未学', '学过', '会用', '熟练', '内化'];
+function innerCount(L) {
+  const texts = S.essays.map(e => e.v2 || e.v1).concat(S.assess.filter(a => a.text).map(a => a.text));
+  return texts.filter(t => detectUsed(L, t)).length;
+}
+function mastery(id) {
+  const L = L_(id), s = S.lv[id];
+  if (!s || !s.done) return 0;
+  let m = 1; const dd = s.doneD || (s.end ? fmt(new Date(s.end)) : today());
+  const firsts = s.firstOk || [];
+  if (firsts.some(d => d >= addDays(dd, 3))) m = 2;
+  const ml = S.microLog.filter(x => x.lv === id).slice(-5);
+  const rate = ml.length ? ml.filter(x => x.ok).length / ml.length : 0;
+  if (m >= 2 && firsts.some(d => d >= addDays(dd, 7)) && ml.length >= 3 && rate >= 0.8) m = 3;
+  if (innerCount(L) >= 2) m = 4;
+  return m;
+}
+
+/* ---------- 微挑战 ---------- */
+function microAvail() { return LEVELS.filter(L => (S.lv[L.id] || {}).done); }
+function microPick() {
+  const pool = microAvail(); if (!pool.length) return null;
+  const weekAgo = addDays(today(), -7);
+  const fresh = pool.filter(L => !S.microLog.some(x => x.lv === L.id && x.d >= weekAgo));
+  const arr = fresh.length ? fresh : pool, L = arr[Math.floor(Math.random() * arr.length)];
+  const types = ['quiz', 'rewrite'].concat(L.rewrite.some(r => r.type === 'order') ? ['order'] : []);
+  const t = types[(S.microLog.length) % types.length];
+  return { L, t };
+}
+function micro() {
+  const P = microPick();
+  if (!P) { app.innerHTML = '<div class="card"><h2>⚡ 今天 3 分钟</h2><div class="tip">先过一关，就能做微挑战啦。</div><a class="btn" href="#home">回首页</a></div>'; return; }
+  const { L, t } = P, left = S.micro.d === today() ? 3 - S.micro.n : 3;
+  let h = `<div class="card"><h2>⚡ 今天 3 分钟 · ${L.badge} ${L.name}</h2><div class="small">今天还能拿 ${Math.max(0, left)} 次星星</div><div id="mc"></div></div>`;
+  app.innerHTML = h;
+  const box = $('mc');
+  if (t === 'quiz') {
+    const Q = L.quiz[Math.floor(Math.random() * L.quiz.length)];
+    box.innerHTML = `<div><b>${Q.q}</b></div>` + Q.o.map((o, k) => `<button class="opt" data-k="${k}">${o}</button>`).join('') + '<div id="mf"></div>';
+    box.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+      const ok = +b.dataset.k === Q.a; box.querySelectorAll('.opt').forEach(x => { x.disabled = true; if (+x.dataset.k === Q.a) x.classList.add('right'); }); if (!ok) b.classList.add('wrong');
+      microDone(L.id, ok, Q.e);
+    });
+  } else if (t === 'order') {
+    const R = L.rewrite.find(r => r.type === 'order'); let first = true;
+    box.innerHTML = '<div id="mo"></div><div id="mf"></div>';
+    orderWidget('mo', R, Date.now() % 97, () => { microDone(L.id, first, '顺序对了！'); });
+    box.addEventListener('click', e => { if (e.target.id === 'ordReset') first = false; });
+  } else {
+    const cand = L.rewrite.filter(r => r.type !== 'order'), R = cand[Math.floor(Math.random() * cand.length)];
+    box.innerHTML = `<div>${R.p}</div><input type="text" id="mi">${VOICE_TIP}<button class="btn" id="mb">检查</button><div id="mf"></div>`;
+    $('mb').onclick = () => { const v = $('mi').value.trim(), r = runChecks(v, R.checks, R.need), ok = r.pass && hanLen(v) >= (R.min || 0); $('mb').disabled = true; microDone(L.id, ok, fbHtml(r, R.min || 0, hanLen(v))); };
+  }
+}
+function microDone(id, ok, msg) {
+  if (S.micro.d !== today()) S.micro = { d: today(), n: 0 };
+  S.microLog.push({ d: today(), lv: id, ok });
+  let got = '';
+  if (S.micro.n < 3) { S.micro.n++; star(1); got = '（+1 ⭐）'; } else { markActive(); save(); got = '（今天的星星拿满啦，练习照样算数）'; }
+  $('mf').innerHTML = `<div class="fb ${ok ? 'good' : 'warn'}">${ok ? '做对了！' : '这次没做对，看看：'}${got}<br>${msg || ''}</div><a class="btn" href="#micro" onclick="setTimeout(route,0)">再来一题</a><a class="btn alt" href="#home">回首页</a>`;
+}
+
+/* ---------- 测评（摸底 / 月测） ---------- */
+function baseQuiz() {
+  const out = [];
+  LEVELS.filter(l => l.group === 'root').forEach((L, i) => { out.push({ lv: L.id, q: L.quiz[0] }); if (i < 4) out.push({ lv: L.id, q: L.quiz[1] }); });
+  return out;
+}
+let AS = null;
+function assess() {
+  const base = !S.assess.some(a => a.type === 'base');
+  if (!AS) {
+    const last = S.assess.length ? S.assess[S.assess.length - 1].d : null;
+    app.innerHTML = `<div class="card"><h2>📏 ${base ? '摸底测评' : '月度测评'}</h2><div class="tip">${base ? '先做 10 道小题，再写一篇作文。这一次<b>没有任何提示</b>，写成什么样都没关系，是用来以后和自己比的。' : '写一篇作文，这次<b>没有任何提示</b>，和以前的自己比一比。'}</div>${last ? `<div class="small">上次测评：${last}</div>` : ''}<button class="btn go" onclick="assessStart(${base})">开始</button><button class="btn alt" onclick="location.hash='#home'">以后再说</button></div>`;
+    return;
+  }
+  if (AS.phase === 'quiz') {
+    const Q = AS.qs[AS.i];
+    app.innerHTML = `<div class="card"><h2>📏 摸底小题 ${AS.i + 1} / ${AS.qs.length}</h2><div><b>${Q.q.q}</b></div>${Q.q.o.map((o, k) => `<button class="opt" data-k="${k}">${o}</button>`).join('')}</div>`;
+    app.querySelectorAll('.opt').forEach(b => b.onclick = () => { const ok = +b.dataset.k === Q.q.a; AS.quiz[Q.lv] = (AS.quiz[Q.lv] || 0) + (ok ? 1 : 0); AS.i++; if (AS.i >= AS.qs.length) { AS.phase = 'mood'; } assess(); });
+    return;
+  }
+  if (AS.phase === 'mood') { app.innerHTML = `<div class="card"><h2>📏 测评作文</h2>${moodRow('assess', 'assessWrite')}</div>`; return; }
+  if (AS.phase === 'write') {
+    app.innerHTML = `<div class="card assessCard"><h2>📏 测评作文</h2><div class="big">题目：${esc(AS.title)}</div><div class="small">已用时 <span id="asT">0</span> 分钟</div><textarea id="asText" style="min-height:300px"></textarea><button class="btn go" onclick="assessSubmit()">写完了</button></div>`;
+    AS.timer = setInterval(() => { const e = $('asT'); if (e) e.textContent = Math.round((Date.now() - AS.start) / 60000); else clearInterval(AS.timer); }, 15000);
+    return;
+  }
+  if (AS.phase === 'rate') {
+    app.innerHTML = `<div class="card"><h2>📏 给这篇打打星</h2>${ratingHtml('as')}<button class="btn go" onclick="assessSave()">完成测评</button></div>`;
+  }
+}
+function assessStart(base) { AS = { base, phase: base ? 'quiz' : 'mood', qs: base ? baseQuiz() : [], i: 0, quiz: {}, title: TOPICS[Math.floor(Math.random() * TOPICS.length)] }; assess(); }
+function assessWrite() { AS.phase = 'write'; AS.start = Date.now(); assess(); }
+function assessSubmit() {
+  const t = $('asText').value.trim(); if (zhLen(t) < 30) { alert('再多写一点吧，写多少都行，但至少写几句。'); return; }
+  clearInterval(AS.timer); AS.text = t; AS.min = Math.max(1, Math.round((Date.now() - AS.start) / 60000)); AS.phase = 'rate'; assess();
+}
+function textMetrics(t) {
+  const items = essayItems(t, ''), n = zhLen(t), sents = t.split(/[。！？!?\n]/).filter(s => s.trim());
+  const body = sents.filter(s => BODY_LIST.some(w => s.includes(w))).length;
+  return { chars: n, pass: items.filter(x => x[1]).length, total: items.length, cliche: clicheIn(t).length, density: n ? Math.round(body * 1000 / n) / 10 : 0, used: LEVELS.filter(L => detectUsed(L, t)).map(L => L.id) };
+}
+function assessSave() {
+  const rec = saveRating('as', 'assess'), m = textMetrics(AS.text);
+  S.assess.push(Object.assign({ type: AS.base ? 'base' : 'month', d: today(), title: AS.title, text: AS.text, min: AS.min, quiz: AS.quiz, rating: rec }, m));
+  AS = null; star(3); location.hash = '#report';
+}
+function assessDue() { if (!S.assess.length) return microAvail().length === 0 ? 'base' : null; const last = S.assess[S.assess.length - 1].d; return addDays(last, 28) <= today() ? 'month' : null; }
+
+/* ---------- 推荐最弱招式 ---------- */
+function weakest() {
+  const doneL = LEVELS.filter(L => (S.lv[L.id] || {}).done);
+  if (!doneL.length) return LEVELS.find(L => unlocked(L)) || null;
+  const cand = doneL;
+  const base = S.assess.find(a => a.type === 'base');
+  let best = null, score = 1e9;
+  cand.forEach(L => {
+    let sc = mastery(L.id) * 10;
+    if (base && base.quiz && base.quiz[L.id] !== undefined) sc += base.quiz[L.id];
+    if (sc < score) { score = sc; best = L; }
+  });
+  return best;
+}
+
+/* ---------- 指标与报告 ---------- */
+function daysIn(n) { const from = addDays(today(), -(n - 1)); return S.days.filter(d => d >= from).length; }
+function weekKey(d) { const p = d.split('-').map(Number), x = new Date(p[0], p[1] - 1, p[2]); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return fmt(x); }
+function moodWeekly() {
+  const g = {}; S.moodLog.forEach(m => { const k = weekKey(m.d); g[k] = g[k] || { t: 0, good: 0 }; g[k].t++; if (m.v === 'good') g[k].good++; });
+  return Object.keys(g).sort().map(k => ({ w: k, pct: Math.round(100 * g[k].good / g[k].t) }));
+}
+function calib() {
+  const R = S.ratings.filter(r => r.dad);
+  if (!R.length) return null;
+  const out = {}; DIMS.forEach(d => { const v = R.filter(r => r.self[d[0]] && r.dad[d[0]]).map(r => Math.abs(r.self[d[0]] - r.dad[d[0]])); out[d[0]] = v.length ? Math.round(10 * v.reduce((a, b) => a + b, 0) / v.length) / 10 : null; });
+  return out;
+}
+function works() { return S.assess.filter(a => a.text).map(a => ({ d: a.d, k: a.type === 'base' ? '摸底' : '月测', min: a.min, chars: a.chars, cliche: a.cliche, density: a.density })).concat(S.essays.map(e => { const m = textMetrics(e.v2 || e.v1); return { d: e.d, k: '工坊', min: e.min, chars: m.chars, cliche: m.cliche, density: m.density }; })).sort((a, b) => a.d < b.d ? -1 : 1); }
+function radarSvg(series) {
+  const cx = 150, cy = 130, R = 95, n = DIMS.length, pt = (i, v) => { const a = -Math.PI / 2 + 2 * Math.PI * i / n; return [cx + Math.cos(a) * R * v / 3, cy + Math.sin(a) * R * v / 3]; };
+  let g = '';
+  [1, 2, 3].forEach(l => { g += `<polygon points="${DIMS.map((_, i) => pt(i, l).join(',')).join(' ')}" fill="none" stroke="#ddd"/>`; });
+  DIMS.forEach((d, i) => { const p = pt(i, 3.45); g += `<text x="${p[0]}" y="${p[1]}" font-size="13" text-anchor="middle">${d[1]}</text>`; });
+  series.forEach(s => { if (!s.v) return; g += `<polygon points="${DIMS.map((d, i) => pt(i, s.v[d[0]] || 0).join(',')).join(' ')}" fill="${s.c}33" stroke="${s.c}" stroke-width="2"/>`; });
+  return `<svg viewBox="0 0 300 260" class="chart">${g}</svg><div class="small">${series.filter(s => s.v).map(s => `<span style="color:${s.c}">■</span> ${s.n}`).join('　')}</div>`;
+}
+function lineSvg(pts, label, unit) {
+  if (!pts.length) return `<div class="tip">${label}：还没有数据</div>`;
+  const W = 320, H = 140, max = Math.max(...pts.map(p => p.v), 1), step = pts.length > 1 ? (W - 50) / (pts.length - 1) : 0;
+  const xy = pts.map((p, i) => [30 + i * step, H - 25 - (H - 45) * p.v / max]);
+  return `<div class="small"><b>${label}</b></div><svg viewBox="0 0 ${W} ${H}" class="chart"><line x1="25" y1="${H - 25}" x2="${W - 10}" y2="${H - 25}" stroke="#ddd"/><polyline points="${xy.map(a => a.join(',')).join(' ')}" fill="none" stroke="#1e5aa8" stroke-width="3"/>${xy.map((a, i) => `<circle cx="${a[0]}" cy="${a[1]}" r="4" fill="#c62828"/><text x="${a[0]}" y="${a[1] - 8}" font-size="11" text-anchor="middle">${pts[i].v}${unit}</text><text x="${a[0]}" y="${H - 8}" font-size="10" text-anchor="middle">${pts[i].l}</text>`).join('')}</svg>`;
+}
+function report() {
+  const base = S.assess.find(a => a.type === 'base'), last = S.assess.filter(a => a.rating).slice(-1)[0];
+  const W = works(), mw = moodWeekly(), cb = calib();
+  const roots = LEVELS.filter(L => L.group === 'root'), doneL = LEVELS.filter(L => (S.lv[L.id] || {}).done);
+  const first = doneL.length ? Math.round(100 * doneL.filter(L => !(S.lv[L.id].tries)).length / doneL.length) : 0;
+  let h = `<div class="card"><h2>📈 成长报告</h2>
+  <div class="kpis"><div><b>${daysIn(7)}</b><span>近 7 天练习天数</span></div><div><b>${daysIn(30)}</b><span>近 30 天</span></div><div><b>${streak()}</b><span>连续打卡</span></div><div><b>${first}%</b><span>一次通过率</span></div></div>
+  <h3>招式等级墙</h3><div class="wall">${LEVELS.map(L => { const m = mastery(L.id); return `<div class="wcell m${m}"><span>${L.badge}</span>${L.name}<b>${MASTER[m] || '·'} ${MASTER_NAME[m]}</b></div>`; }).join('')}</div><div class="small">🌱学过 → 🌿会用（第 3 天复习一次做对）→ 🌳熟练（第 7 天复习 + 微挑战 ≥80%）→ 🏆内化（2 篇整篇作文里不提示也用上）</div>
+  <h3>四维评价</h3>${base || last ? radarSvg([{ n: '摸底', c: '#888888', v: base && base.rating && base.rating.self }, { n: '最近一次测评', c: '#c62828', v: last && last !== base && last.rating && last.rating.self }]) : '<div class="tip">做一次测评后显示。</div>'}
+  ${lineSvg(W.map(x => ({ l: x.d.slice(5), v: x.min })), '整篇用时（目标 ≤ 40 分钟）', '分')}
+  ${lineSvg(W.map(x => ({ l: x.d.slice(5), v: x.chars })), '字数', '')}
+  ${lineSvg(mw.map(x => ({ l: x.w.slice(5), v: x.pct })), '写作心情：😊 想写 的占比（按周）', '%')}
+  <h3>自我校准（自评和爸爸评差多少，越小越好）</h3>${cb ? '<ul>' + DIMS.map(d => `<li>${d[1]}：相差 ${cb[d[0]] == null ? '-' : cb[d[0]]} 颗星</li>`).join('') + '</ul>' : '<div class="tip">爸爸陪练模式下评过星后显示。</div>'}
+  <h3>测评记录</h3>${S.assess.length ? '<div class="scroll"><table><tr><th>日期</th><th>类型</th><th>字数</th><th>用时</th><th>自查</th><th>套话</th><th>感受句/百字</th><th>用上的招式</th></tr>' + S.assess.map(a => `<tr><td>${a.d}</td><td>${a.type === 'base' ? '摸底' : '月测'}</td><td>${a.chars}</td><td>${a.min} 分</td><td>${a.pass}/${a.total}</td><td>${a.cliche}</td><td>${a.density}</td><td>${a.used.map(id => L_(id).badge).join('')}</td></tr>`).join('') + '</table></div>' : '<div class="tip">还没有测评。</div>'}
+  <a class="btn go" href="#assess">${S.assess.length ? '做一次月测' : '做摸底测评'}</a><button class="btn" onclick="copyReport()">复制成长报告</button><div id="exp"></div></div>`;
+  app.innerHTML = h;
+}
+function reportText() {
+  const W = works(), mw = moodWeekly(), cb = calib(), wk = weakest();
+  const lines = [`作文成长报告（${today()}，版本 ${VERSION}）`,
+    `练习：近 7 天 ${daysIn(7)} 天，近 30 天 ${daysIn(30)} 天，连续打卡 ${streak()} 天，共得 ${S.stars} 星。`,
+    '招式等级：' + LEVELS.map(L => `${L.name}${MASTER_NAME[mastery(L.id)]}`).join('、') + '。',
+    W.length ? '整篇作文：' + W.map(x => `${x.d}${x.k}${x.chars}字/${x.min}分钟/套话${x.cliche}/感受句每百字${x.density}`).join('；') + '。' : '整篇作文：暂无。',
+    mw.length ? '写作心情（想写占比，按周）：' + mw.map(x => `${x.w}起 ${x.pct}%`).join('；') + '。' : '写作心情：暂无记录。',
+    cb ? '自评与爸爸评差距：' + DIMS.map(d => `${d[1]}${cb[d[0]] == null ? '-' : cb[d[0]]}`).join('，') + '。' : '自评与爸爸评差距：暂无。',
+    wk ? `下周建议练：${wk.name}。` : ''];
+  return lines.filter(Boolean).join('\n');
+}
+function copyReport() { showText(reportText(), '复制下面的文字，发给 AI 助手：'); }
+function weekSummary() {
+  const from = addDays(today(), -6), lastFrom = addDays(today(), -13);
+  const ups = LEVELS.filter(L => { const s = S.lv[L.id] || {}; return (s.doneD && s.doneD >= from) || (s.firstOk || []).some(d => d >= from); }).map(L => L.name);
+  const best = S.lines.filter(l => l.d >= from).slice(-1)[0];
+  const pct = (a, b) => { const m = S.moodLog.filter(x => x.d >= a && x.d <= b); return m.length ? Math.round(100 * m.filter(x => x.v === 'good').length / m.length) : null; };
+  const now = pct(from, today()), prev = pct(lastFrom, addDays(from, -1)), wk = weakest();
+  return `<div class="fb"><b>本周小结</b><br>练了 ${daysIn(7)} 天；有进展的招式：${ups.length ? ups.join('、') : '暂无'}；<br>本周最好的一句：${best ? '“' + esc(best.t) + '”' : '暂无'}；<br>写作心情（想写占比）：${now == null ? '暂无' : now + '%'}${prev == null || now == null ? '' : '（上周 ' + prev + '%）'}；<br><b>下周建议练：${wk ? wk.badge + ' ' + wk.name : '先完成摸底测评'}</b></div>`;
+}
+
+/* ---------- 屏幕外练习卡 ---------- */
+function offlineCard() {
+  return `<div class="printcard"><h3>屏幕外练习卡（不用手机也能练）</h3><ul>
+  <li><b>晚饭三句话</b>：“这件事是……／我的心情从……变成……／我发现了……”</li>
+  <li><b>坐车改句子</b>：家长说一句“我很着急”，孩子口头改成身体动作</li>
+  <li><b>出去玩当天</b>：回家画一张心情过山车，找出最低点和最高点</li>
+  <li><b>睡前一个镜头</b>：说一说今天最难忘的一个瞬间：看到、听到、身体、有人说、我做了</li></ul>
+  <table><tr><th>周一</th><th>周二</th><th>周三</th><th>周四</th><th>周五</th><th>周末</th></tr><tr><td>学＋辨</td><td>改</td><td>写（语音输入）</td><td>复习</td><td>休息</td><td>工坊整篇</td></tr><tr><td>晚饭三句话</td><td>坐车改句子</td><td>晚饭三句话</td><td>坐车改句子</td><td>晚饭三句话</td><td>出去玩画过山车</td></tr></table>
+  <button class="btn" onclick="window.print()">打印这一页</button></div>`;
+}
+
+function wsMood() { S.ws.mood = MOOD_NOW; save(); workshop(); }
+Object.assign(PAGES, { micro, assess, report });
+const _route1 = route;
+route = function () { if (location.hash.slice(1).split('/')[0] !== 'assess' && AS && AS.timer) clearInterval(AS.timer); _route1(); };
+window.removeEventListener('hashchange', _route1);
 window.addEventListener('hashchange', route);
 save(); route();
 </script>
