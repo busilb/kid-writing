@@ -745,6 +745,104 @@ const TOPIC_PARSER = [
  {q:'写完以后，我这一篇只用哪一招？', tip:'一次只练一招。这一篇就盯着那一招改，其他的下一篇再说。'}
 ];
 
+/* ============ 奖励桥接（和妙妙学堂共享） ============
+ *
+ * 作文站和妙妙学堂同在 busilb.github.io（同源），可以共用一份 localStorage。
+ * 这里只做一件事：孩子在作文站拿到星星时，往一个**约定好的 key** 里塞一条
+ * 「待领取奖励」，妙妙学堂下次打开就把它换成宝石（宝石能去零食店买吃的喂宠物）。
+ *
+ * 约定（两边必须一致，改了要同步改妙妙学堂 apps/web/src/lib/writingBridge.ts）：
+ *   key   : csf-writing-rewards-v1      —— 设备级，不带 @档案 后缀
+ *   value : { v:1, day:'YYYY-MM-DD', dayGems:Number, items:[ ... ] }
+ *   item  : { id, ts, date, stars, gems, source, label }
+ *            id     唯一（w-<时间戳>-<随机>），妙妙学堂靠它防重复领取
+ *            stars  作文站这边的原始星数
+ *            gems   折算后的宝石数（已按当日上限裁剪，可能小于 stars*2）
+ *            source 机器可读的来源，如 lv:say / essay / micro / bank
+ *            label  给孩子看的中文来源名
+ *
+ * 刻意的设计：
+ *   - 作文站**不依赖**妙妙学堂的任何代码，妙妙学堂没装也不影响作文站自己跑；
+ *   - 写失败（隐私模式 / 配额满）一律吞掉，绝不让闯关流程因为桥接挂掉；
+ *   - 队列有条数上限和每日宝石上限，防止孩子反复刷同一关换宝石。
+ */
+
+/** 两边约定的 key，别改 */
+const BRIDGE_KEY = 'csf-writing-rewards-v1';
+const BRIDGE_VER = 1;
+/** 1 颗星换几颗宝石（妙妙学堂一节课 3~33 颗，这里取 2 让作文不至于太划算也不至于白干） */
+const BRIDGE_GEMS_PER_STAR = 2;
+/** 每天最多能从作文站带走多少宝石（防刷：大概等于两节课） */
+const BRIDGE_DAILY_GEM_CAP = 40;
+/** 队列最多留多少条（孩子很久没开妙妙学堂时，丢最旧的） */
+const BRIDGE_MAX_ITEMS = 50;
+
+/** 本地时区的 YYYY-MM-DD（不用 app.js 的 today()，让这个文件能独立搬走） */
+function bridgeToday() {
+  const x = new Date(), p = n => (n < 10 ? '0' : '') + n;
+  return x.getFullYear() + '-' + p(x.getMonth() + 1) + '-' + p(x.getDate());
+}
+
+/** 读队列；任何异常/脏数据都当成空队列，不往外抛 */
+function bridgeRead() {
+  const empty = { v: BRIDGE_VER, day: bridgeToday(), dayGems: 0, items: [] };
+  let raw = null;
+  try { raw = localStorage.getItem(BRIDGE_KEY); } catch (e) { return empty; }
+  if (!raw) return empty;
+  let o = null;
+  try { o = JSON.parse(raw); } catch (e) { return empty; }
+  if (!o || typeof o !== 'object' || o.v !== BRIDGE_VER) return empty;
+  const day = typeof o.day === 'string' ? o.day : empty.day;
+  const t = bridgeToday();
+  return {
+    v: BRIDGE_VER,
+    // 跨天了：当日额度重新开始算
+    day: day === t ? day : t,
+    dayGems: day === t && typeof o.dayGems === 'number' && o.dayGems > 0 ? Math.floor(o.dayGems) : 0,
+    items: Array.isArray(o.items) ? o.items.filter(x => x && typeof x.id === 'string') : [],
+  };
+}
+
+function bridgeWrite(q) {
+  try { localStorage.setItem(BRIDGE_KEY, JSON.stringify(q)); } catch (e) { /* 写不进去就算了 */ }
+}
+
+/** 今天还能带走多少宝石（给首页提示用） */
+function bridgeRemainToday() {
+  return Math.max(0, BRIDGE_DAILY_GEM_CAP - bridgeRead().dayGems);
+}
+
+/** 还没被妙妙学堂领走的宝石总数（给首页提示用） */
+function bridgePending() {
+  return bridgeRead().items.reduce((n, x) => n + (typeof x.gems === 'number' ? x.gems : 0), 0);
+}
+
+/**
+ * 记一笔待领取奖励。stars<=0 或当日额度用完就什么都不做。
+ * 返回实际入队的宝石数（0 表示没记）。
+ */
+function pushWritingReward(stars, source, label) {
+  const n = Math.floor(Number(stars) || 0);
+  if (n <= 0) return 0;
+  const q = bridgeRead();
+  const gems = Math.min(n * BRIDGE_GEMS_PER_STAR, BRIDGE_DAILY_GEM_CAP - q.dayGems);
+  if (gems <= 0) return 0;
+  const ts = Date.now();
+  q.items.push({
+    id: 'w-' + ts + '-' + Math.random().toString(36).slice(2, 6),
+    ts,
+    date: q.day,
+    stars: n,
+    gems,
+    source: String(source || 'practice'),
+    label: String(label || '作文练习'),
+  });
+  if (q.items.length > BRIDGE_MAX_ITEMS) q.items = q.items.slice(-BRIDGE_MAX_ITEMS);
+  q.dayGems += gems;
+  bridgeWrite(q);
+  return gems;
+}
+
 /* 作文招式闯关 · 应用逻辑 */
 const VERSION = '1.2';
 const KEY = 'kidWriting.v1';
@@ -776,7 +874,10 @@ function save() {
 }
 const avail = () => S.stars - S.spent;
 function markActive() { const t = today(); if (!S.days.includes(t)) S.days.push(t); }
-function star(n) { if (n > 0) { S.stars += n; markActive(); } save(); }
+/* 所有加星都从这里过，所以奖励桥接也挂在这儿：
+   星星照旧记在作文站自己的存档里，同时往妙妙学堂的「待领取」队列塞一条（见 bridge.js）。
+   src / label 可以不传，默认记成「作文练习」。 */
+function star(n, src, label) { if (n > 0) { S.stars += n; markActive(); pushWritingReward(n, src, label); } save(); }
 function streak() {
   let d = S.days.includes(today()) ? today() : addDays(today(), -1), n = 0;
   while (S.days.includes(d)) { n++; d = addDays(d, -1); }
@@ -856,6 +957,10 @@ function home() {
   if (microAvail().length) h += `<a class="card micro" href="#micro"><b>⚡ 今天 3 分钟</b><div class="tip">只做 1 题。累的时候也能做。今天还能拿 ${S.micro.d === today() ? Math.max(0, 3 - S.micro.n) : 3} 次星星。</div></a>`;
   h += `<div class="card"><b>第 ${n} 阶 · ${STAGE_NAME[n]}</b>${ladderStrip()}</div>`;
   h += `<a class="card map" href="#map"><b>🗺️ 学习地图</b><div class="tip">17 关都在这儿：走到亮着的那个点就行。⭐ ${S.stars}（可用 ${avail()}）· ${rankInfo().name}</div></a>`;
+  // 💎 奖励桥接提示：星星会变成妙妙学堂的宝石（同一个网站地址下，数据是通的）
+  const bp = bridgePending(), br = bridgeRemainToday();
+  if (bp > 0) h += `<div class="card"><b>💎 有 ${bp} 颗宝石在妙妙学堂等你领</b><div class="tip">打开妙妙学堂首页就会自动到账，拿去零食店买吃的喂宠物。${br > 0 ? `今天还能再赚 ${br} 颗。` : '今天的宝石已经拿满啦，星星照样算数。'}</div><a class="btn go" href="/">去妙妙学堂领</a></div>`;
+  else if (br <= 0) h += `<div class="card"><div class="tip">💎 今天换给妙妙学堂的宝石已经拿满啦，星星照样算数，明天再来。</div></div>`;
   h += `<div class="card homefoot"><nav class="tools"><a href="#tools">🧰 工具箱</a><a href="#bank">📚 句子银行</a><a href="#workshop">✍️ 整篇工坊</a><a href="#essays">📖 作文本</a><a href="#report">📈 成长报告</a><a href="#parent">👨‍👩‍👧 给爸爸妈妈</a></nav><div class="small">今天怎么练？<button class="btn ${S.mode === 'dad' ? 'go' : 'alt'} sm" onclick="setMode('dad')">爸爸陪我</button><button class="btn ${S.mode === 'solo' ? 'go' : 'alt'} sm" onclick="setMode('solo')">我自己练</button></div></div><div class="small" style="text-align:center">版本 ${VERSION}</div>`;
   app.innerHTML = h;
 }
@@ -908,7 +1013,7 @@ function finish(id) {
   if (b && b.trim()) S.lines.push({ lv: id, t: b.trim(), d: today() });
   s.done = true; s.step = 5; s.end = Date.now(); s.mode = S.mode; const t = today(); s.doneD = t;
   s.review = [addDays(t, 1), addDays(t, 3), addDays(t, 7)];
-  star(1); level(id);
+  star(1, 'lv:' + id, L_(id) ? L_(id).name : '招式过关'); level(id);
 }
 function rate(id, v) { lvState(id).rate = v; save(); level(id); }
 
@@ -917,7 +1022,7 @@ function quiz(L, i, right) {
   if (i >= L.quiz.length) {
     const ok = right >= L.quiz.length - 1;
     box.innerHTML = `<div class="fb ${ok ? 'good' : 'warn'}">答对 ${right} / ${L.quiz.length} 题。${ok ? '很好，下一步！' : '再试一次，看看解析。'}</div>` + (ok ? `<button class="btn" onclick="next('${L.id}',2)">下一步：改一改</button>` : `<button class="btn alt" onclick="quiz(L_('${L.id}'),0,0)">再试一次</button>`);
-    if (ok) star(right); else tryFail(L.id);
+    if (ok) star(right, 'quiz:' + L.id, L.name + '·辨一辨'); else tryFail(L.id);
     return;
   }
   const Q = L.quiz[i];
@@ -958,14 +1063,14 @@ function rewrite(L, i) {
   if (!R) { box.innerHTML = `<div class="fb good">改得好！</div><button class="btn" onclick="next('${L.id}',3)">下一步：写一写</button>`; return; }
   if (R.type === 'order') {
     box.innerHTML = `<div class="small">第 ${i + 1} / ${L.rewrite.length} 题</div><div id="ordBox"></div><div id="rf"></div>`;
-    orderWidget('ordBox', Object.assign({ lv: L.id }, R), i + L.id.length, () => { star(2); $('rf').innerHTML = '<button class="btn" id="rn">下一题</button>'; $('rn').onclick = () => rewrite(L, i + 1); });
+    orderWidget('ordBox', Object.assign({ lv: L.id }, R), i + L.id.length, () => { star(2, 'order:' + L.id, L.name + '·排顺序'); $('rf').innerHTML = '<button class="btn" id="rn">下一题</button>'; $('rn').onclick = () => rewrite(L, i + 1); });
     return;
   }
   box.innerHTML = `<div class="small">第 ${i + 1} / ${L.rewrite.length} 题</div><div>${R.p}</div><input type="text" id="ri">${VOICE_TIP}<button class="btn" id="rb">检查</button><div id="rf"></div>`;
   $('rb').onclick = () => {
     const t = $('ri').value.trim(), r = runChecks(t, R.checks, R.need), len = hanLen(t), ok = r.pass && len >= (R.min || 0);
     $('rf').innerHTML = `<div class="fb ${ok ? 'good' : 'warn'}">${fbHtml(r, R.min || 0, len)}${ok ? '<b>改得好！（+2 ⭐）</b>' : '差一点，按没打勾的地方再改改。'}</div>` + (ok ? '<button class="btn" id="rn">下一题</button>' : '');
-    if (ok) { star(2); $('rn').onclick = () => rewrite(L, i + 1); } else tryFail(L.id);
+    if (ok) { star(2, 'rewrite:' + L.id, L.name + '·改一改'); $('rn').onclick = () => rewrite(L, i + 1); } else tryFail(L.id);
   };
 }
 function checkWrite(id) {
@@ -975,7 +1080,7 @@ function checkWrite(id) {
     logPost(id);
     h += rhetAdvice(t) + pbRecheck(id, t) + fillerHtml(t) + compareHtml(id) + speakBtn("$('wt').value");
     h += ratingHtml('lv_' + id) + `<button class="btn" onclick="saveRating('lv_${id}','${id}');next('${id}',4)">下一步：${S.mode === 'solo' ? '读一读' : '讲一讲'}</button>`;
-    star(3); lvState(id).text = t; save();
+    star(3, 'write:' + id, L.name + '·写一写'); lvState(id).text = t; save();
   } else tryFail(id);
   $('wf').innerHTML = h;
 }
@@ -992,7 +1097,7 @@ function review(id) {
     if (ok) reviewDone(id);
   };
 }
-function reviewDone(id) { if ($('rf').querySelector('a.btn')) return; const s = S.lv[id]; s.review = (s.review || []).filter(d => d > today()); s.reviewed = (s.reviewed || []).concat(today()); star(1); $('rf').insertAdjacentHTML('beforeend', '<a class="btn" href="#home">回首页</a>'); }
+function reviewDone(id) { if ($('rf').querySelector('a.btn')) return; const s = S.lv[id]; s.review = (s.review || []).filter(d => d > today()); s.reviewed = (s.reviewed || []).concat(today()); star(1, 'review:' + id, '复习巩固'); $('rf').insertAdjacentHTML('beforeend', '<a class="btn" href="#home">回首页</a>'); }
 
 /* ============ 四维星级评价 ============ */
 const RT = {};
@@ -1071,13 +1176,13 @@ function wsAssemble() {
 function wsSecond(fi) {
   const W = S.ws, v2 = $('v2').value.trim(); W.v2 = v2; save();
   let msg = '';
-  if (fi >= 0) { const ok = essayItems(v2, W.genre)[fi][1]; msg = ok ? '<div class="fb good">这一处改好了！（+2 ⭐）</div>' : '<div class="fb warn">这一处还没改到，再看看提示。也可以先保存，下次再改。</div>'; if (ok) star(2); }
+  if (fi >= 0) { const ok = essayItems(v2, W.genre)[fi][1]; msg = ok ? '<div class="fb good">这一处改好了！（+2 ⭐）</div>' : '<div class="fb warn">这一处还没改到，再看看提示。也可以先保存，下次再改。</div>'; if (ok) star(2, 'essayfix', '整篇作文·改一处'); }
   $('v2fb').innerHTML = msg + `<div class="cmp2"><div><b>改前</b><div class="essay">${esc(W.v1).replace(/\n/g, '<br>')}</div></div><div><b>改后</b><div class="essay">${esc(v2).replace(/\n/g, '<br>')}</div></div></div><button class="btn" onclick="wsGo(6)">下一步：打星</button>`;
 }
 function wsSave() {
   const W = S.ws, rec = saveRating('ws', 'workshop'), text = W.v2 || W.v1, items = essayItems(text, W.genre);
   S.essays.push({ id: Date.now(), d: today(), genre: W.genre, title: W.title, v1: W.v1, v2: W.v2, chars: zhLen(text), min: Math.round((Date.now() - W.start) / 60000), pass: items.filter(x => x[1]).length, total: items.length, rating: rec });
-  S.ws = null; star(5);
+  S.ws = null; star(5, 'essay', '整篇作文完成');
   location.hash = '#essays';
 }
 function essays() {
@@ -1111,7 +1216,7 @@ function doneC() {
   const lo = v.indexOf(Math.min(...v)), hi = v.indexOf(Math.max(...v));
   if (Math.max(...v) === Math.min(...v)) { $('co').innerHTML = '<div class="fb warn">过山车是一条直线哦。哪一刻最难受？哪一刻最开心？拉开一点。</div>'; return; }
   if (t.filter(Boolean).length < 3) { $('co').innerHTML = '<div class="fb warn">至少写 3 句“这时候我在做什么”。</div>'; return; }
-  star(2);
+  star(2, 'coaster', '心情过山车');
   $('co').innerHTML = `<div class="fb good"><b>你的作文骨架（+2 ⭐）</b><br><b>开头：</b>${esc(t[0]) || '（写写事前的心情）'}<br><b>镜头一（${PTS[lo]}）：</b>${esc(t[lo]) || '（补一句）'}<br><b>镜头二（${PTS[hi]}）：</b>${esc(t[hi]) || '（补一句）'}<br><b>结尾：</b>心情从“${MOOD[v[0]]}”到“${MOOD[v[lo]]}”，最后是“${MOOD[v[4]]}”，再加一句感悟。</div>`;
 }
 
@@ -1126,7 +1231,8 @@ function doCheck() {
   let h = '<div class="fb"><ul>' + it.map(x => `<li>${x[1] ? '✅' : '⬜'} ${x[0]}</li>`).join('') + '</ul></div>';
   if (cl.length) h += `<div class="fb warn">套话：${cl.join('、')}，换成你自己的话。</div>`;
   h += f ? `<div class="fb warn"><b>这次只改一处：</b>${f[2]}</div>` : '<div class="fb good"><b>全部通过！</b>读给爸爸妈妈听吧。</div>';
-  star(pass); $('eo').innerHTML = h + `<div class="small">本次 +${pass} ⭐</div>`;
+  star(pass, 'selfcheck', '作文自查');
+  $('eo').innerHTML = h + `<div class="small">本次 +${pass} ⭐</div>`;
 }
 function topic() {
   app.innerHTML = `<div class="card"><h2>抽个题目</h2><div id="tt" class="big">点按钮抽一个</div><button class="btn" onclick="$('tt').textContent=TOPICS[Math.floor(Math.random()*TOPICS.length)]">抽题目</button><a class="btn go" href="#workshop">去工坊写</a>
@@ -1310,7 +1416,7 @@ function microDone(id, ok, msg) {
   if (S.micro.d !== today()) S.micro = { d: today(), n: 0 };
   S.microLog.push({ d: today(), lv: id, ok });
   let got = '';
-  if (S.micro.n < 3) { S.micro.n++; star(1); got = '（+1 ⭐）'; } else { markActive(); save(); got = '（今天的星星拿满啦，练习照样算数）'; }
+  if (S.micro.n < 3) { S.micro.n++; star(1, 'micro:' + id, '3 分钟微挑战'); got = '（+1 ⭐）'; } else { markActive(); save(); got = '（今天的星星拿满啦，练习照样算数）'; }
   $('mf').innerHTML = `<div class="fb ${ok ? 'good' : 'warn'}">${ok ? '做对了！' : '这次没做对，看看：'}${got}<br>${msg || ''}</div><a class="btn" href="#micro" onclick="setTimeout(route,0)">再来一题</a><a class="btn alt" href="#home">回首页</a>`;
 }
 
@@ -1358,7 +1464,7 @@ function textMetrics(t) {
 function assessSave() {
   const rec = saveRating('as', 'assess'), m = textMetrics(AS.text);
   S.assess.push(Object.assign({ type: AS.base ? 'base' : 'month', d: today(), title: AS.title, text: AS.text, min: AS.min, quiz: AS.quiz, rating: rec }, m));
-  AS = null; star(3); location.hash = '#report';
+  AS = null; star(3, 'assess', '月度测评'); location.hash = '#report';
 }
 function assessDue() { if (!S.assess.length) return microAvail().length === 0 ? 'base' : null; const last = S.assess[S.assess.length - 1].d; return addDays(last, 28) <= today() ? 'month' : null; }
 
@@ -1847,7 +1953,7 @@ function bankUseAll(text, essayId) {
     const r = usedCheck(it, text, essayId);
     if (r.ok) { it.used = (it.used || []).concat({ essayId: essayId, d: today() }); graduateCheck(it); out.push(it.id); }
   });
-  if (out.length) { star(Math.min(4, out.length * 2)); save(); }
+  if (out.length) { star(Math.min(4, out.length * 2), 'bank:used', '好句子用进作文'); save(); }
   return out;
 }
 const bankWeekDone = it => (it.tags || []).length >= 1 && (it.mimic || []).length >= 1;
@@ -1884,7 +1990,7 @@ function bankAdd() {
   if (S.bankDay.n >= 5) { BANK_MSG = '<div class="fb warn">今天已经摘了 5 句，够啦。明天再来。</div>'; bank(); return; }
   const src = ($('bkSrc') || {}).value || 'book';
   S.bank.push({ id: 'b' + Date.now().toString(36), t, src, tags: [], d: today(), mimic: [], used: [], graduated: false, rv: '' });
-  S.bankDay.n++; star(1); BANK_MSG = '<div class="fb good">摘进来了！（+1 ⭐）下一步：给它贴个标签。</div>';
+  S.bankDay.n++; star(1, 'bank:add', '句子银行·摘句子'); BANK_MSG = '<div class="fb good">摘进来了！（+1 ⭐）下一步：给它贴个标签。</div>';
   bank();
 }
 function bankTag(id, tag) {
@@ -1894,7 +2000,7 @@ function bankTag(id, tag) {
   if (it.tags.length >= 3) { BANK_MSG = '<div class="fb warn">最多选 3 个标签。</div>'; bank(); return; }
   it.tags.push(tag);
   if (!bankTagOk(tag, it.t)) { it.tagsManual = true; BANK_MSG = `<div class="fb warn">再看看，这一句里的${tag}在哪儿？你要是确定，就留着。</div>`; }
-  else { if (it.tags.length === 1) star(1); BANK_MSG = '<div class="fb good">标好了！下一步：照它的句式写一句自己的。</div>'; }
+  else { if (it.tags.length === 1) star(1, 'bank:tag', '句子银行·贴标签'); BANK_MSG = '<div class="fb good">标好了！下一步：照它的句式写一句自己的。</div>'; }
   save(); bank();
 }
 function bankMimic(id, btn) {
@@ -1905,14 +2011,14 @@ function bankMimic(id, btn) {
   if (maxOverlap(it.t, v) >= 6) { BANK_MSG = '<div class="fb warn">这是抄下来的。换成你自己的事，句式照着它就行。</div>'; bank(); return; }
   const rt = it.tags.filter(x => TAG_KIND[x]);
   if (rt.length && !rt.some(x => bankTagOk(x, v))) { BANK_MSG = `<div class="fb warn">仿写里还没看见${rt[0]}。再改一处。</div>`; bank(); return; }
-  it.mimic = (it.mimic || []).concat({ t: v.slice(0, 120), d: today() }); star(2);
+  it.mimic = (it.mimic || []).concat({ t: v.slice(0, 120), d: today() }); star(2, 'bank:mimic', '句子银行·仿写');
   BANK_MSG = '<div class="fb good">仿得好！（+2 ⭐）下一步：写整篇的时候把这一招用进去。</div>';
   save(); bank();
 }
 function bankManualUse(id) {
   const it = S.bank.find(x => x.id === id); if (!it) return;
   it.used = (it.used || []).concat({ essayId: 'manual' + ((it.used || []).length + 1), d: today(), manual: true });
-  graduateCheck(it); star(2); BANK_MSG = '<div class="fb good">记上了！（+2 ⭐）</div>'; save(); bank();
+  graduateCheck(it); star(2, 'bank:manual', '好句子用进作文'); BANK_MSG = '<div class="fb good">记上了！（+2 ⭐）</div>'; save(); bank();
 }
 function bankStep4(it) {
   const on = [1, (it.tags || []).length >= 1, (it.mimic || []).length >= 1, (it.used || []).length >= 1];
